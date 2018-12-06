@@ -1,5 +1,12 @@
 # Voyager
 
+## Prerequisites
+- Node.js & npm
+- Vue CLI
+
+### Recommended
+- Visual Studio Code (with extensions: Vetur, TSLint, Chrome debugger)
+
 ## Project setup
 ```
 npm install
@@ -7,7 +14,7 @@ npm install
 
 ### Compiles and hot-reloads for development
 ```
-npm run serve
+npm start
 ```
 
 ### Compiles and minifies for production

@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home text-center">
     <img alt="Logo" src="../assets/logo.png">
     <HomeContent msg="Welcome to Voyager"/>
   </div>
