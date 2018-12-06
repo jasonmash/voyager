@@ -5,11 +5,11 @@ workflow "Workflow" {
 
 action "Install" {
   uses = "actions/npm@6309cd9"
-  runs = "install"
+  args = "install"
 }
 
 action "Test" {
   uses = "actions/npm@6309cd9"
-  runs = "run test:ci"
+  args = "run test:ci"
   needs = ["Install"]
 }
