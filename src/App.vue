@@ -1,8 +1,8 @@
 <template>
   <div>
     <b-navbar toggleable="md" type="light" variant="light" id="nav" fixed="top">
-      <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
       <b-navbar-brand tag="h1" class="mb-0">Voyager</b-navbar-brand>
+      <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 
       <b-collapse is-nav id="nav_collapse">
         <b-navbar-nav>
@@ -25,4 +25,5 @@
   h1 {
     font-weight: 700;
   }
+
 </style>
