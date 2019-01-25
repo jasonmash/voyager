@@ -1,7 +1,7 @@
 <template>
   <div class="home text-center">
     <img alt="Logo" src="../assets/logo.png">
-    <HomeContent msg="Project (codename voyager)"/>
+    <HomeContent msg="Project Voyager"/>
   </div>
 </template>
 

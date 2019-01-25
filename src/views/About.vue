@@ -1,15 +1,8 @@
 <template>
-  <div class="about">
-    <h1>Demo</h1>
+  <div>
     <b-row>
       <b-col md="7">
-        <b-card header-tag="header" no-body style="min-height: 450px">
-          <header slot="header">
-            <b>Graph Title</b>
-            <small><b-link @click="downloadGraph(700, 700, 'png')" class="pt-1 m-0 float-right">Export</b-link></small>
-          </header>
-          <div id="plot"></div>
-        </b-card>
+        <Surface3DPlot />
       </b-col>
       <b-col>
         <b-card title="Metrics">
