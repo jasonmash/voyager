@@ -13,6 +13,7 @@
     "indent": [true, "spaces", 2],
     "interface-name": false,
     "ordered-imports": false,
+    "no-var-keyword": true,
     "object-literal-sort-keys": false,
     "no-consecutive-blank-lines": false,
     "trailing-comma": [true, {"multiline": "never", "singleline": "never"}]
