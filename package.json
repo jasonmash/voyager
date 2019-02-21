@@ -12,9 +12,11 @@
   "dependencies": {
     "bootstrap": "^4.3.1",
     "bootstrap-vue": "^2.0.0-rc.13",
-    "plotly.js-dist": "^1.44.4",
+    "echarts": "^4.1.0",
+    "echarts-gl": "^1.1.1",
     "vue": "^2.6.6",
     "vue-class-component": "^6.0.0",
+    "vue-echarts": "^4.0.1",
     "vue-property-decorator": "^7.3.0",
     "vue-router": "^3.0.1"
   },
