@@ -7,5 +7,5 @@ import Surface3DPlot from "@/components/graphs/Surface3DPlot.vue";
     Surface3DPlot
   }
 })
-export default class About extends Vue {
+export default class Demo extends Vue {
 }
