@@ -1,6 +1,6 @@
 export interface Message {
   content: string;
-  duration: number;
+  duration?: number;
   type?: string;
   id?: number;
   show?: boolean;

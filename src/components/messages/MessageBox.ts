@@ -12,7 +12,6 @@ export default class MessageBox extends Vue {
 
   public add(message: Message) {
     if (!message.id) { message.id = Date.now(); }
-    if (!message.duration) { message.duration = 3000; }
     message.show = true;
     this.messages.push(message);
     this.setTimer(message);
@@ -29,7 +28,8 @@ export default class MessageBox extends Vue {
   }
 
   private setTimer(message: Message) {
+    if (!message.duration) { message.duration = 10000; }
     setTimeout((id: number) => { this.fadeOut(id); }, message.duration, message.id);
-    setTimeout((id: number) => { this.remove(id); }, message.duration + 500, message.id);
+    setTimeout((id: number) => { this.remove(id); }, message.duration + 1000, message.id);
   }
 }
