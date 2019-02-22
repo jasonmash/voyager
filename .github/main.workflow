@@ -1,7 +1,8 @@
 workflow "Workflow" {
   on = "push"
   resolves = [
-    "Test",
+    "Test:Unit",
+    "Test:E2E",
     "Lint",
   ]
 }
@@ -12,10 +13,17 @@ action "Install" {
   args = "install"
 }
 
-action "Test" {
+action "Test:E2E" {
   uses = "docker://cypress/browsers:chrome69"
   needs = ["Install"]
   args = "run test:ci"
+  runs = "npm"
+}
+
+action "Test:Unit" {
+  uses = "docker://cypress/browsers:chrome69"
+  needs = ["Install"]
+  args = "run test:unit"
   runs = "npm"
 }
 
