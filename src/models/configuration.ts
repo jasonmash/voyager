@@ -11,7 +11,7 @@ export class Configuration {
     this.id = id;
   }
 
-  public addGraphData(graphData: any) {
+  public setGraph(graphData: any) {
     this.graph = graphData;
     this.graph.forEach((component: GraphComponent) => {
       Object.keys(component).forEach((key: string) => {
@@ -22,12 +22,12 @@ export class Configuration {
     });
   }
 
-  public addAttributeData(valueList: object[]) {
+  public setAttributes(attributeList: object[]) {
     const output: AttributeSet = {};
 
-    valueList.forEach((inputInfo: any) => {
-      Object.keys(inputInfo).forEach((key: string) => {
-        output[key] = parseFloat(inputInfo[key]);
+    attributeList.forEach((attribute: any) => {
+      Object.keys(attribute).forEach((key: string) => {
+        output[key] = parseFloat(attribute[key]);
       });
     });
 

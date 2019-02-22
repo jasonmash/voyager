@@ -7,19 +7,21 @@ export default class Main extends Vue {
   public configurations: Configuration[] = [];
 
   public uploadFile(event: any) {
-    // Reference to the DOM input element
     const input = event.target;
-    // Ensure file is selected
     if (!input.files || !input.files[0]) { return; }
 
     const reader = new FileReader();
-    reader.onload = () => this.processInputFile(reader);
+    reader.onload = () => this.processInputFile(reader, input.files[0]);
     reader.readAsText(input.files[0]);
   }
 
-  private processInputFile(reader: FileReader) {
+  private processInputFile(reader: FileReader, file: File) {
     if (typeof reader.result !== "string" || reader.result.length === 0) {
-      console.error("Not a valid .json file.");
+      this.$message({
+        content: `Invalid file uploaded: '${file.name}'`,
+        type: "danger",
+        duration: 4000
+      });
       return;
     }
 
@@ -31,10 +33,10 @@ export default class Main extends Vue {
           Object.keys(config).forEach((id: string) => {
             const index = this.configurations.findIndex((c: Configuration) => c.id === id);
             if (index >= 0) {
-              this.configurations[index].addAttributeData(config[id]);
+              this.configurations[index].setAttributes(config[id]);
             } else {
               const c = new Configuration(id);
-              c.addAttributeData(config[id]);
+              c.setAttributes(config[id]);
               this.configurations.push(c);
             }
           });
@@ -42,19 +44,31 @@ export default class Main extends Vue {
       } else if (typeof inputData === "object" && !!inputData.id && !!inputData.graph) {
         const index = this.configurations.findIndex((c: Configuration) => c.id === inputData.id);
         if (index >= 0) {
-          this.configurations[index].addGraphData(inputData.graph);
+          this.configurations[index].setGraph(inputData.graph);
         } else {
           const c = new Configuration(inputData.id);
-          c.addGraphData(inputData.graph);
+          c.setGraph(inputData.graph);
           this.configurations.push(c);
         }
       } else {
-        console.error("Unknown format");
+        this.$message({
+          content: `Data within '${file.name}' is incorrectly formatted`,
+          type: "danger",
+          duration: 4000
+        });
+        return;
       }
-
-      console.log(this.configurations);
+      this.$message({
+        content: `Successfully imported data from '${file.name}'`,
+        type: "success",
+        duration: 2500
+      });
     } catch (err) {
-      console.error("Not a valid .json file: " + err);
+      this.$message({
+        content: `Unable to process '${file.name}': ${err}`,
+        type: "danger",
+        duration: 4000
+      });
       return;
     }
   }

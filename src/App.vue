@@ -15,6 +15,7 @@
     <b-container fluid id="app">
       <router-view class="py-4"/>
     </b-container>
+    <message-box />
   </div>
 </template>
 
@@ -28,3 +29,15 @@
   }
 
 </style>
+
+<script lang="ts">
+import { Component, Vue } from "vue-property-decorator";
+import MessageBox from "@/components/messages/MessageBox.vue";
+
+@Component({
+  components: {
+    messageBox: MessageBox
+  }
+})
+export default class App extends Vue { }
+</script>
