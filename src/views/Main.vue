@@ -14,8 +14,7 @@
       </b-col>
       <b-col>
         <h4>Import</h4>
-        <b-form-file v-model="file" :state="Boolean(file)" placeholder="Choose a file..." drop-placeholder="Drop file here..." @change="uploadFile"/>
-        <div class="mt-3">Selected file: {{ file ? file.name : '' }}</div>
+        <b-form-file ref="fileinput" v-model="files" multiple accept=".json" placeholder="Choose a file..." drop-placeholder="Drop file here..." @change="uploadFile"/>
       </b-col>
     </b-row>
   </div>

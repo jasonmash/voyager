@@ -3,24 +3,28 @@ import { Configuration } from "@/models/configuration";
 
 @Component
 export default class Main extends Vue {
-  public file: File | null = null;
+  public files: File[] | null = null;
   public configurations: Configuration[] = [];
 
   public uploadFile(event: any) {
     const input = event.target;
-    if (!input.files || !input.files[0]) { return; }
+    if (!input.files || input.files.length < 1) { return; }
 
-    const reader = new FileReader();
-    reader.onload = () => this.processInputFile(reader, input.files[0]);
-    reader.readAsText(input.files[0]);
+    for (const file of input.files) {
+      const reader = new FileReader();
+      reader.onload = () => this.processInputFile(reader, file);
+      reader.readAsText(file);
+    }
+
+    const fileInput: any = this.$refs.fileinput;
+    fileInput.reset();
   }
 
   private processInputFile(reader: FileReader, file: File) {
     if (typeof reader.result !== "string" || reader.result.length === 0) {
       this.$message({
         content: `Invalid file uploaded: '${file.name}'`,
-        type: "danger",
-        duration: 4000
+        type: "danger"
       });
       return;
     }
@@ -53,21 +57,18 @@ export default class Main extends Vue {
       } else {
         this.$message({
           content: `Data within '${file.name}' is incorrectly formatted`,
-          type: "danger",
-          duration: 4000
+          type: "danger"
         });
         return;
       }
       this.$message({
         content: `Successfully imported data from '${file.name}'`,
-        type: "success",
-        duration: 2500
+        type: "success"
       });
     } catch (err) {
       this.$message({
         content: `Unable to process '${file.name}': ${err}`,
-        type: "danger",
-        duration: 4000
+        type: "danger"
       });
       return;
     }
