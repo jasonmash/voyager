@@ -27,7 +27,12 @@
   h1 {
     font-weight: 700;
   }
-
+  #nav {
+    box-shadow: 0px 1px 8px rgba(0,0,0,0.2);
+  }
+  body {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
+  }
 </style>
 
 <script lang="ts">

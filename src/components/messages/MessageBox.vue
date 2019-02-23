@@ -9,7 +9,7 @@
 
 <style>
   .message-box {
-    position: absolute;
+    position: fixed;
     width: 300px;
     right: 20px;
     bottom: 0;
