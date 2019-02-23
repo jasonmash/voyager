@@ -6,7 +6,7 @@
       <div class="list-panel col-md-4 d-md-block" v-bind:class="{ 'd-none': $route.params.id }">
         <list-pane />
       </div>
-      <div class="details-panel col pt-3">
+      <div class="details-panel col py-3">
         <details-pane v-if="$route.params.id" v-bind:id="$route.params.id"/>
         <import-pane v-else/>
       </div>
@@ -15,6 +15,10 @@
 </template>
 
 <style>
+
+.list-details-view {
+  margin-top: -15px;
+}
 @media (min-width: 768px) {
   .list-details-view {
     position: fixed;
@@ -22,6 +26,7 @@
     height: calc(100% - 56px);
     background: white;
     left: 15px;
+    margin-top: 0;
     padding-top: 0 !important;
   }
 
@@ -53,9 +58,13 @@
   .list-details-view .list-content {
     position: absolute;
     bottom: 0;
-    top: 130px;
+    top: 8rem;
     width: 100%;
     overflow-y: auto;
+  }
+
+  .list-details-view .list-header {
+    height: 8rem;
   }
 }
 
@@ -69,7 +78,6 @@
 
 .list-details-view .list-group-item {
   transition: all 0.05s ease-in-out;
-  margin-top: -1px;
 }
 
 .list-details-view .list-group-item.router-link-exact-active {

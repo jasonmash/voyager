@@ -5,7 +5,7 @@ export interface Attribute {
 
 export interface AttributeInfo {
   key: string;
-  friendlyName?: string;
+  friendlyName: string;
   maxValue: number;
   minValue: number;
   scaleMin: number;

@@ -23,7 +23,8 @@ const mutations = {
         maxValue: attribute.value,
         minValue: attribute.value,
         scaleMax: Math.ceil(attribute.value),
-        scaleMin: Math.floor(attribute.value)
+        scaleMin: Math.floor(attribute.value),
+        friendlyName: _.startCase(attribute.key)
       });
     } else {
       const attrInfo = state.data[index];

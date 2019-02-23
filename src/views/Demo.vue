@@ -3,14 +3,14 @@
     <b-row>
       <b-col md="5">
         <e-chart
-          :options="radarData"
-          :init-options="{renderer: 'svg'}"
+          :options="data"
+          :init-options="{renderer: 'canvas'}"
           autoresize
         />
       </b-col>
       <b-col md="5">
         <e-chart
-          :options="data3d"
+          :options="data2"
           :init-options="{renderer: 'canvas'}"
           autoresize
         />
