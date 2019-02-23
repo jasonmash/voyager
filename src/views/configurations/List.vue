@@ -11,13 +11,12 @@
         <small class="pt-2">Showing {{list.length}} of {{totalCount}} configurations</small>
       </p>
     </div>
-    <div class="list-content">
+    <div class="list-content" @keydown.up.down="onKeyUp">
       <b-list-group flush>
-        <b-list-group-item v-for="(item, index) in list" :key="index" v-bind:to="'/configurations/' + item.id" :replace="!!$route.params.id" class="px-3">
+        <b-list-group-item :ref="`i-${index}`" v-for="(item, index) in list" :key="index" @click="setSelectedIndex(index)" v-bind:to="'/configurations/' + item.id" :replace="!!$route.params.id" class="px-3">
           <p class="mb-0 h6">
             {{item.id}}
           </p>
-          <small class="mb-0">{{item.components.length}} components</small>
         </b-list-group-item>
       </b-list-group>
     </div>
