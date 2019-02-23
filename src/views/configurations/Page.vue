@@ -40,7 +40,7 @@
     overflow-y: auto;
     box-shadow: 1px 0px 6px rgba(0,0,0,0.5);
     z-index: 2;
-    background-color: #f8f9fa;
+    background-color: #f7f8fb;
   }
 
   .list-details-view .list-panel .list-group {
@@ -77,13 +77,15 @@
 }
 
 .list-details-view .list-group-item {
-  transition: all 0.05s ease-in-out;
+  border-left: transparent 3px solid;
 }
 
 .list-details-view .list-group-item.router-link-exact-active {
   z-index: 3;
-  background-color: #f8f9fa;
-  box-shadow: 1px 0px 4px rgba(0,0,0,0.4);
+  background-color: #f7f8fb;
+  box-shadow: 0px 1px 4px rgba(0,0,0,0.4);
   border-color: transparent;
+  border-left: #0056da 3px solid;
+  color: #0056da;
 }
 </style>

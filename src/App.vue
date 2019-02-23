@@ -30,9 +30,10 @@
   }
   #nav {
     box-shadow: 0px 1px 8px rgba(0,0,0,0.2);
+    background-color: #0c3067 !important;
   }
   #nav > div > .navbar-nav {
-    margin-bottom: -3px;
+    margin-bottom: -2px;
   }
   body {
     font-size: 0.9rem;
