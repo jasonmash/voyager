@@ -7,20 +7,10 @@ export default new Router({
   mode: "history",
   base: process.env.BASE_URL,
   routes: [
-    {
-      path: "/",
-      name: "main",
-      component: () => import(/* webpackChunkName: "demo" */ "./views/Main.vue")
-    },
-    {
-      path: "/demo",
-      name: "demo",
-      component: () => import(/* webpackChunkName: "demo" */ "./views/Demo.vue")
-    },
-    {
-      path: "/about",
-      name: "about",
-      component: () => import(/* webpackChunkName: "about" */ "./views/About.vue")
-    }
+    { path: "/", component: () => import("./views/Main.vue")},
+    { path: "/demo", component: () => import("./views/Demo.vue")},
+    { path: "/about", component: () => import("./views/About.vue") },
+    { path: "/configurations", component: () => import("./views/configurations/Page.vue")},
+    { path: "/configurations/:id", component: () => import("./views/configurations/Page.vue")}
   ]
 });

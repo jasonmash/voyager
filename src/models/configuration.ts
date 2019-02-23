@@ -1,3 +1,5 @@
+import { Attribute } from "./attribute";
+
 export class Configuration {
   public id: string = "";
   public graph: GraphComponent[] = [];
@@ -5,7 +7,7 @@ export class Configuration {
   public connections: string[] = [];
   public components: string[] = [];
 
-  public attributes: AttributeSet = {};
+  public attributes: Attribute[] = [];
 
   constructor(id: string) {
     this.id = id;
@@ -22,12 +24,17 @@ export class Configuration {
     });
   }
 
-  public setAttributes(attributeList: object[]) {
-    const output: AttributeSet = {};
+  public setAttributes(attributeList: object[], store: any) {
+    const output: Attribute[] = [];
 
     attributeList.forEach((attribute: any) => {
       Object.keys(attribute).forEach((key: string) => {
-        output[key] = parseFloat(attribute[key]);
+        const newAttribute: Attribute = {
+          key,
+          value: parseFloat(attribute[key])
+        };
+        store.dispatch("processAttribute", newAttribute);
+        output.push(newAttribute);
       });
     });
 
@@ -41,8 +48,4 @@ export interface GraphComponent {
 
 export interface GraphConnector {
   [key: string]: string;
-}
-
-export interface AttributeSet {
-  [key: string]: number;
 }
