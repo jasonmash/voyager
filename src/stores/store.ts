@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import createPersistedState from "vuex-persistedstate";
 
 import { attributes } from "./attributes";
 import { configurations } from "./configurations";
@@ -11,5 +12,6 @@ export default new Vuex.Store({
     attributes,
     configurations
   },
+  plugins: [createPersistedState()],
   strict: true
 });

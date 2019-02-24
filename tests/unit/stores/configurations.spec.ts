@@ -70,7 +70,7 @@ describe("Store: Configurations", () => {
     const state = { data: [existingConfig] };
 
     // apply mutation
-    const configToUpdate = new Configuration("id1")
+    const configToUpdate = new Configuration("id1");
     configToUpdate.attributes = [{ key: "attribute", value: 2 }];
     updateConfiguration(state, configToUpdate);
 
