@@ -10,8 +10,8 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 
 import "@/assets/fonts/Inter/inter.css";
-
 import "@fortawesome/fontawesome-free/css/all.css";
+import "@/styles/list-details.css";
 
 import Message from "./components/messages/MessagePlugin";
 import App from "./App.vue";
