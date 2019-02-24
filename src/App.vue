@@ -8,7 +8,6 @@
         <b-navbar-nav>
           <b-nav-item to="/">Home</b-nav-item>
           <b-nav-item to="/overview">Explorer</b-nav-item>
-          <b-nav-item to="/demo">Demo</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>

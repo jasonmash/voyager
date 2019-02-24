@@ -1,21 +1,11 @@
 <template>
   <div>
-    <b-row>
-      <b-col md="5">
-        <e-chart
-          :options="data"
-          :init-options="{renderer: 'canvas'}"
-          autoresize
-        />
-      </b-col>
-      <b-col md="5">
-        <e-chart
-          :options="data2"
-          :init-options="{renderer: 'canvas'}"
-          autoresize
-        />
-      </b-col>
-    </b-row>
+    <h1 class="mb-3">Solution Explorer</h1>
+    <e-chart
+      :options="data"
+      :init-options="{renderer: 'canvas'}"
+      autoresize
+    />
   </div>
 </template>
 

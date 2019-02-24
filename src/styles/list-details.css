@@ -37,13 +37,13 @@
   .list-details-view .list-content {
     position: absolute;
     bottom: 0;
-    top: 6.5rem;
+    top: 3.75rem;
     width: 100%;
     overflow-y: auto;
   }
 
   .list-details-view .list-header {
-    height: 6.5rem;
+    height: 3.75rem;
   }
 }
 

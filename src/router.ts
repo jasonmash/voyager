@@ -1,19 +1,39 @@
 import Vue from "vue";
 import Router from "vue-router";
 
+import Page from "./views/Page.vue";
+
 Vue.use(Router);
 
 export default new Router({
   mode: "history",
   base: process.env.BASE_URL,
   routes: [
-    { path: "/", component: () => import("./views/About.vue")},
-    { path: "/demo", component: () => import("./views/Demo.vue")},
-    { path: "/overview", component: () => import("./views/configurations/Page.vue")},
-    { path: "/configurations/:id", component: () => import("./views/configurations/Page.vue")},
-    { path: "/attributes", component: () => import("./views/configurations/Page.vue")},
-    { path: "/compare", component: () => import("./views/configurations/Page.vue")},
-    { path: "/solutions", component: () => import("./views/configurations/Page.vue")},
-    { path: "/reports", component: () => import("./views/configurations/Page.vue")}
+    { path: "/", component: () => import("./views/About.vue") },
+    {
+      path: "/overview", component: Page,
+      children: [{ path: "", component: () => import("./views/configurations/Import.vue") }]
+    },
+    {
+      path: "/attributes", component: Page,
+      children: [{ path: "", component: () => import("./views/attributes/Attributes.vue") }]
+    },
+    {
+      path: "/compare", component: Page,
+      children: [{ path: "", component: () => import("./views/configurations/Import.vue") }]
+    },
+    {
+      path: "/solutions", component: Page,
+      children: [{ path: "", component: () => import("./views/Demo.vue") }]
+    },
+    {
+      path: "/reports", component: Page,
+      children: [{ path: "", component: () => import("./views/About.vue") }]
+    },
+    {
+      path: "/configurations/:id", component: Page,
+      children: [{ path: "", component: () => import("./views/configurations/Details.vue") }]
+    },
+    { path: "*", component: () => import("./views/404.vue") }
   ]
 });
