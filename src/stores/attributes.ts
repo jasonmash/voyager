@@ -41,11 +41,7 @@ const mutations = {
   }
 } as MutationTree<State>;
 
-const actions = {
-  processAttribute: (store: ActionContext<State, any>, attribute: Attribute) => {
-    store.commit("processAttribute", attribute);
-  }
-} as ActionTree<State, any>;
+const actions = {} as ActionTree<State, any>;
 
 export const attributes = {
   actions,

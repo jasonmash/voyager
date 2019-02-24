@@ -20,7 +20,7 @@ export default class DetailsComponent extends Vue {
 
   public deleteConfiguration(): void {
     if (confirm("Are you sure you wish to delete this configuration?")) {
-      this.$store.dispatch("deleteConfiguration", this.value);
+      this.$store.commit("deleteConfiguration", this.value);
     }
   }
 

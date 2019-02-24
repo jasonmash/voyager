@@ -38,20 +38,7 @@ const mutations = {
   }
 } as MutationTree<State>;
 
-const actions = {
-  addConfiguration: (store: ActionContext<State, any>, configuration: Configuration) => {
-    store.commit("addConfiguration", configuration);
-  },
-  addConfigurations: (store: ActionContext<State, any>, configuration: Configuration[]) => {
-    store.commit("addConfigurations", configuration);
-  },
-  deleteConfiguration: (store: ActionContext<State, any>, configuration: Configuration) => {
-    store.commit("deleteConfiguration", configuration);
-  },
-  updateConfiguration: async (store: ActionContext<State, any>, configuration: Configuration) => {
-    store.commit("updateConfiguration", configuration);
-  }
-} as ActionTree<State, any>;
+const actions = {} as ActionTree<State, any>;
 
 export const configurations = {
   actions,

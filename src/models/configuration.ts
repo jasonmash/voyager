@@ -33,7 +33,7 @@ export class Configuration {
           key,
           value: parseFloat(attribute[key])
         };
-        store.dispatch("processAttribute", newAttribute);
+        store.commit("processAttribute", newAttribute);
         output.push(newAttribute);
       });
     });

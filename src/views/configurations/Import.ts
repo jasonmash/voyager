@@ -62,7 +62,7 @@ export default class ImportComponent extends Vue {
         });
         return;
       }
-      this.$store.dispatch("addConfigurations", updatedConfigurations);
+      this.$store.commit("addConfigurations", updatedConfigurations);
       this.$message({
         content: `Successfully imported data from '${file.name}'`,
         type: "success"
