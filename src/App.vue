@@ -7,9 +7,8 @@
       <b-collapse is-nav id="nav_collapse">
         <b-navbar-nav>
           <b-nav-item to="/">Home</b-nav-item>
-          <b-nav-item to="/configurations">Configurations</b-nav-item>
+          <b-nav-item to="/overview">Explorer</b-nav-item>
           <b-nav-item to="/demo">Demo</b-nav-item>
-          <b-nav-item to="/about">About</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>

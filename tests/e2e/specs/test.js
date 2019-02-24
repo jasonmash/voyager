@@ -6,9 +6,9 @@ describe('My First Test', () => {
     cy.contains('.navbar-brand', 'Voyager');
   });
 
-  it('Visits the configuration page', () => {
+  it('Visits the explorer page', () => {
     cy.visit('/');
-    cy.contains('Configuration').click();
-    cy.contains('h2', 'Configurations');
+    cy.contains('Explorer').click();
+    cy.contains('h1', 'Overview');
   });
 });

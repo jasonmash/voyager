@@ -7,10 +7,13 @@ export default new Router({
   mode: "history",
   base: process.env.BASE_URL,
   routes: [
-    { path: "/", component: () => import("./views/Main.vue")},
+    { path: "/", component: () => import("./views/About.vue")},
     { path: "/demo", component: () => import("./views/Demo.vue")},
-    { path: "/about", component: () => import("./views/About.vue") },
-    { path: "/configurations", component: () => import("./views/configurations/Page.vue")},
-    { path: "/configurations/:id", component: () => import("./views/configurations/Page.vue")}
+    { path: "/overview", component: () => import("./views/configurations/Page.vue")},
+    { path: "/configurations/:id", component: () => import("./views/configurations/Page.vue")},
+    { path: "/attributes", component: () => import("./views/configurations/Page.vue")},
+    { path: "/compare", component: () => import("./views/configurations/Page.vue")},
+    { path: "/solutions", component: () => import("./views/configurations/Page.vue")},
+    { path: "/reports", component: () => import("./views/configurations/Page.vue")}
   ]
 });

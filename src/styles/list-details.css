@@ -26,28 +26,24 @@
     background-color: #f7f8fb;
   }
 
-  .list-details-view .list-panel .list-group {
-    overflow-x: hidden;
-  }
-
   .list-details-view .list-panel > .h-100 {
     overflow-y: hidden;
   }
 
   .list-details-view .list-panel {
-    max-width: 400px;
+    max-width: 300px;
   }
 
   .list-details-view .list-content {
     position: absolute;
     bottom: 0;
-    top: 8rem;
+    top: 6.5rem;
     width: 100%;
     overflow-y: auto;
   }
 
   .list-details-view .list-header {
-    height: 8rem;
+    height: 6.5rem;
   }
 }
 
