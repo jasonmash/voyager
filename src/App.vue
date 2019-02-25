@@ -40,6 +40,14 @@
   .number-text {
     font-feature-settings: 'cv01' 1, 'cv02' 1, 'cv03' 1, 'cv04' 1, 'cv09' 1, 'tnum' 1;
   }
+  .card {
+    box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.1);
+  }
+  .card-header {
+    font-weight: 700;
+    font-size: 1.0rem;
+    padding: 0.75rem 1.25rem 0.5rem;
+  }
 </style>
 
 <script lang="ts">
