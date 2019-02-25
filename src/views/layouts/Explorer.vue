@@ -1,4 +1,4 @@
-<script lang="ts" src="./Page.ts"/>
+<script lang="ts" src="./Explorer.ts"/>
 
 <template>
   <div class="list-details-view">

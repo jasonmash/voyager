@@ -44,7 +44,7 @@
     box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.1);
   }
   .card-header {
-    font-weight: 700;
+    font-weight: 600;
     font-size: 1.0rem;
     padding: 0.75rem 1.25rem 0.5rem;
   }

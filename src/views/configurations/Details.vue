@@ -5,11 +5,11 @@
     <b-button size="sm" variant="outline-danger" class="mt-2 float-right" @click="deleteConfiguration">Delete</b-button>
     <h1 class="mb-3">{{ value.id }}</h1>
     <b-row>
-      <b-col lg="6">
+      <b-col xl="6">
         <b-card no-body header="Attributes" class="mb-3">
           <b-list-group flush>
             <b-list-group-item v-for="attribute in value.attributes" :key="`attr-${attribute.key}`">
-              <span>{{getAttrFriendlyName(attribute.key)}}:</span>
+              <span><router-link :to="'/attributes/' + attribute.key">{{getAttrFriendlyName(attribute.key)}}</router-link>:</span>
               <span class="float-right number-text">{{attribute.value}}</span>
             </b-list-group-item>
           </b-list-group>
@@ -18,7 +18,7 @@
           <e-chart :options="radarData" :init-options="{renderer: 'svg'}" autoresize style="width:auto" />
         </b-card>
       </b-col>
-      <b-col lg="6">
+      <b-col xl="6">
         <b-card header="JSON" no-body class="mb-3">
           <b-card-body>
             <code>

@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 
-import Page from "./views/Page.vue";
+import Page from "./views/layouts/Explorer.vue";
 
 Vue.use(Router);
 
@@ -16,7 +16,17 @@ export default new Router({
     },
     {
       path: "/attributes", component: Page,
-      children: [{ path: "", component: () => import("./views/attributes/Attributes.vue") }]
+      children: [
+        { path: "", component: () => import("./views/attributes/SplitView.vue") },
+        { path: "*", component: () => import("./views/attributes/SplitView.vue") }
+      ]
+    },
+    {
+      path: "/configurations", component: Page,
+      children: [
+        { path: "", component: () => import("./views/configurations/SplitView.vue") },
+        { path: "*", component: () => import("./views/configurations/SplitView.vue") }
+      ]
     },
     {
       path: "/compare", component: Page,
@@ -30,10 +40,10 @@ export default new Router({
       path: "/reports", component: Page,
       children: [{ path: "", component: () => import("./views/About.vue") }]
     },
-    {
+  /*  {
       path: "/configurations/:id", component: Page,
       children: [{ path: "", component: () => import("./views/configurations/Details.vue") }]
-    },
+    }, */
     { path: "*", component: () => import("./views/404.vue") }
   ]
 });
