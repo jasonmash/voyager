@@ -10,4 +10,5 @@ export interface AttributeInfo {
   minValue: number;
   scaleMin: number;
   scaleMax: number;
+  isHigherBetter?: boolean;
 }

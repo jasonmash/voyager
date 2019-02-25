@@ -37,9 +37,3 @@
     </b-row>
   </div>
 </template>
-
-<style>
-  .number-text {
-    font-feature-settings: 'cv01' 1, 'cv02' 1, 'cv03' 1, 'cv04' 1, 'cv09' 1, 'tnum' 1;
-  }
-</style>

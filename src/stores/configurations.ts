@@ -10,7 +10,7 @@ export class State {
 
 const getters = {
   configurations: (state: State): Configuration[] => {
-    return state.data;
+    return _.sortBy(state.data, ["id"]);
   }
 } as GetterTree<State, any>;
 

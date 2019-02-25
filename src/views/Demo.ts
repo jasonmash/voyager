@@ -40,6 +40,9 @@ export default class Demo extends Vue {
         projection: "orthographic"
       }
     },
+    textStyle: {
+      fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif"
+    },
     xAxis3D: {
       scale: true,
       name: this.dataSet[0][1]

@@ -13,12 +13,11 @@ export default class ListComponent extends Vue {
     const data: Configuration[] = this.$store.getters.configurations;
 
     // Filter list based on searchQuery, look in email and name fields
-    let result: Configuration[] = data.filter((item) => {
+    const result: Configuration[] = data.filter((item) => {
       const inName = item.id ? item.id.toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1 : false;
       return inName;
     });
 
-    result = _.sortBy(result, ["id"]);
     return result;
   }
 
@@ -37,7 +36,7 @@ export default class ListComponent extends Vue {
     this.$router.replace("/configurations/" + this.list[this.selectedIndex].id);
     const listItem: any = this.$refs[`i-${this.selectedIndex}`];
     if (listItem[0].$el.scrollIntoViewIfNeeded) {
-      listItem[0].$el.scrollIntoViewIfNeeded();
+      listItem[0].$el.scrollIntoViewIfNeeded(true);
     } else {
       listItem[0].$el.scrollIntoView();
     }
