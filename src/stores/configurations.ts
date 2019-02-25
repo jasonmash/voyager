@@ -35,6 +35,9 @@ const mutations = {
   updateConfiguration: (state: State, payload: Configuration) => {
     const index = _.findIndex(state.data, (d) => d.id === payload.id);
     state.data[index] = payload;
+  },
+  resetConfigurations: (state: State) => {
+    state.data = [];
   }
 } as MutationTree<State>;
 

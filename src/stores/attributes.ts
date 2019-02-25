@@ -47,6 +47,9 @@ const mutations = {
   updateAttribute: (state: State, attribute: Attribute) => {
     const index = _.findIndex(state.data, (f: AttributeInfo) => f.key === attribute.key);
     Vue.set(state.data, index, _.merge(state.data[index], attribute));
+  },
+  resetAttributes: (state: State) => {
+    state.data = [];
   }
 } as MutationTree<State>;
 

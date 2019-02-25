@@ -12,6 +12,14 @@ export default class OverviewComponent extends Vue {
     button.href = dataUri;
   }
 
+  public reset() {
+    const result = confirm("Are you sure you wish to remove all stored data?");
+    if (result) {
+      this.$store.commit("resetConfigurations");
+      this.$store.commit("resetAttributes");
+    }
+  }
+
   public uploadFile(event: any) {
     const input = event.target;
     if (!input.files || input.files.length < 1) { return; }
