@@ -2,9 +2,15 @@ import { Component, Vue } from "vue-property-decorator";
 import { Configuration } from "@/models/configuration";
 
 @Component
-export default class ImportComponent extends Vue {
+export default class OverviewComponent extends Vue {
   public files: File[] | null = null;
   public configurations: Configuration[] = [];
+
+  public mounted() {
+    const dataUri = "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.$store.state));
+    const button: any = this.$refs.exportButton;
+    button.href = dataUri;
+  }
 
   public uploadFile(event: any) {
     const input = event.target;

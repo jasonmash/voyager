@@ -40,7 +40,8 @@ export default class DetailsComponent extends Vue {
       tooltip: {},
       animation: false,
       textStyle: {
-        fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif"
+        fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+        color: "black"
       },
       radar: {
         indicator: data.map(({ name, min, max }) => {

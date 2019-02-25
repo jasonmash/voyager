@@ -12,7 +12,7 @@ export default new Router({
     { path: "/", component: () => import("./views/About.vue") },
     {
       path: "/overview", component: Page,
-      children: [{ path: "", component: () => import("./views/configurations/Import.vue") }]
+      children: [{ path: "", component: () => import("./views/overview/Overview.vue") }]
     },
     {
       path: "/attributes", component: Page,
@@ -20,7 +20,7 @@ export default new Router({
     },
     {
       path: "/compare", component: Page,
-      children: [{ path: "", component: () => import("./views/configurations/Import.vue") }]
+      children: [{ path: "", component: () => import("./views/compare/Compare.vue") }]
     },
     {
       path: "/solutions", component: Page,
