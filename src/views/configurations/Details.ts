@@ -76,14 +76,14 @@ export default class DetailsComponent extends Vue {
         {
           type: "graph",
           layout: "force",
-          symbolSize: 55,
+          symbolSize: 50,
           symbol: "circle",
           animation: false,
           label: {
             normal: {
               show: true,
               textStyle: {
-                fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',sans-serif",
+                fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',sans-serif"
               }
             }
           },
@@ -99,7 +99,8 @@ export default class DetailsComponent extends Vue {
           force: {
             initLayout: "circular",
             repulsion: 0.15,
-            edgeLength: 0.3,
+            gravity: 0.3,
+            edgeLength: 0.5,
             layoutAnimation: false
           },
           edgeSymbol: ["arrow"],
