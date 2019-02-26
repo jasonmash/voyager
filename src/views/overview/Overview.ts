@@ -1,23 +1,19 @@
 import { Component, Vue } from "vue-property-decorator";
 import { Configuration } from "@/models/configuration";
+import DataManagement from "@/utils/data-management";
 
 @Component
 export default class OverviewComponent extends Vue {
   public files: File[] | null = null;
   public configurations: Configuration[] = [];
 
-  public mounted() {
-    const dataUri = "data:application/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.$store.state));
-    const button: any = this.$refs.exportButton;
-    button.href = dataUri;
+  public exportData() {
+    DataManagement.exportAllData(this.$store);
   }
 
   public reset() {
     const result = confirm("Are you sure you wish to remove all stored data?");
-    if (result) {
-      this.$store.commit("resetConfigurations");
-      this.$store.commit("resetAttributes");
-    }
+    if (result) { DataManagement.resetAllData(this.$store); }
   }
 
   public uploadFile(event: any) {

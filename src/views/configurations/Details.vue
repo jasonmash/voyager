@@ -28,7 +28,7 @@
         </b-card>
         <b-card header="Components" no-body class="mb-3">
           <b-list-group flush>
-            <b-list-group-item v-for="component in value.graph.components" :key="`comp-${component}`">
+            <b-list-group-item v-for="component in value.structure.components" :key="`comp-${component}`">
               <span>{{component}}</span>
             </b-list-group-item>
           </b-list-group>
