@@ -67,7 +67,7 @@ export default class DetailsComponent extends Vue {
     });
 
     const links = this.value.structure.connections.map((c) => {
-      return { source: c.from, target: c.to, label: { formatter: c.label, show: true, fontSize: 10 } };
+      return { target: c.from, source: c.to, label: { formatter: c.label, show: true, fontSize: 10 } };
     });
 
     return {

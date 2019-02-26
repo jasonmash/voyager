@@ -13,7 +13,9 @@ const getters = {
    * Get list of all configurations, sorted by id
    */
   configurations: (state: State): Configuration[] => {
-    return _.sortBy(state.data, ["id"]);
+    return state.data.map((a) => a).sort((a: Configuration, b: Configuration) => {
+      return +a.id.split(/(\d+)/)[1] - +b.id.split(/(\d+)/)[1];
+    });
   }
 } as GetterTree<State, any>;
 
