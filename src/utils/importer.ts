@@ -16,6 +16,8 @@ export default class Importer {
       this.processDataArray(data, $store);
     } else if (typeof data === "object" && !!data.id && !!data.graph) {
       this.processConfigurationObject(data, $store);
+    } else if (typeof data === "object" && !!data.attributes && !!data.configurations) {
+      this.processStoreObject(data, $store);
     } else {
       return false;
     }
@@ -24,7 +26,6 @@ export default class Importer {
 
   /**
    * Process an array of configurations with attribute values
-   *
    * @private
    * @static
    * @param {object[]} data Data to process
@@ -50,7 +51,6 @@ export default class Importer {
 
   /**
    * Process a configuration object with structural(graph) values
-   *
    * @private
    * @static
    * @param {object[]} data Data to process
@@ -68,5 +68,19 @@ export default class Importer {
       configurations.push(c);
     }
     $store.commit("addConfigurations", configurations);
+  }
+
+  /**
+   * Process a previously exported object with vuex store data
+   * @private
+   * @static
+   * @param {object[]} inputData Data to process
+   * @param {Store<any>} $store Reference to vuex store
+   * @memberof Importer
+   */
+  private static processStoreObject(inputData: any, $store: Store<any>) {
+    // Load new data
+    $store.commit("addConfigurations", inputData.configurations.data);
+    $store.commit("addAttributes", inputData.attributes.data);
   }
 }

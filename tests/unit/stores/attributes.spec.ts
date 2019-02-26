@@ -43,6 +43,35 @@ describe("Store: Attributes", () => {
     expect(state.data[1].friendlyName).to.equal("New Attribute Key");
   });
 
+  it("Mutation: addConfigurations", () => {
+    // mock state
+    const existing: Attribute = {
+      key: "attributeKey",
+      maxValue: 10,
+      minValue: 5,
+      scaleMax: 10,
+      scaleMin: 4,
+      friendlyName: "Attribute Key"
+    };
+    const state = { data: [existing] };
+
+    // create object
+    const toAdd = { key: "newAttributeKey" };
+    const toUpdate = { key: "attributeKey", scaleMax: 12 };
+
+    // apply mutation
+    attributes.mutations.addAttributes(state, [toAdd, toUpdate]);
+
+    // assert result
+    expect(state.data.length).to.equal(2);
+    expect(state.data).to.contain(toAdd);
+
+    const updated = state.data.find((f) => f.key === "attributeKey");
+    expect(updated).to.not.be.equal(undefined);
+    if (!updated) { return; }
+    expect(updated.scaleMax).to.equal(12);
+  });
+
   it("Mutation: resetAttributes", () => {
     // mock state
     const existing: Attribute = {

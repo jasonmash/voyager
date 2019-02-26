@@ -64,6 +64,22 @@ const mutations = {
   },
 
   /**
+   * Add list of attributes
+   * @param {*} state Reference to state to update
+   * @param {Attribute} attributes Attributes to add
+   */
+  addAttributes: (state: State, payload: Attribute[]) => {
+    payload.forEach((c: Attribute) => {
+      const index = _.findIndex(state.data, (d) => d.key === c.key);
+      if (index > -1) {
+        Vue.set(state.data, index, _.merge(state.data[index], c));
+      } else {
+        state.data.push(c);
+      }
+    });
+  },
+
+  /**
    * Clear all data from attribute store
    * @param {*} state Reference to state to update
    */
