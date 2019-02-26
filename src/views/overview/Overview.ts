@@ -1,6 +1,8 @@
 import { Component, Vue } from "vue-property-decorator";
+
 import { Configuration } from "@/models/configuration";
 import DataManagement from "@/utils/data-management";
+import Importer from "@/utils/importer";
 
 @Component
 export default class OverviewComponent extends Vue {
@@ -20,14 +22,21 @@ export default class OverviewComponent extends Vue {
     const input = event.target;
     if (!input.files || input.files.length < 1) { return; }
 
-    for (const file of input.files) {
-      const reader = new FileReader();
-      reader.onload = () => this.processInputFile(reader, file);
-      reader.readAsText(file);
-    }
+    this.$message({
+      content: `Importing data...`,
+      type: "info"
+    });
 
-    const fileInput: any = this.$refs.fileinput;
-    fileInput.reset();
+    setTimeout(async () => {
+      for (const file of input.files) {
+        const reader = new FileReader();
+        reader.onload = () => this.processInputFile(reader, file);
+        reader.readAsText(file);
+      }
+
+      const fileInput: any = this.$refs.fileinput;
+      fileInput.reset();
+    }, 500);
   }
 
   private processInputFile(reader: FileReader, file: File) {
@@ -41,48 +50,25 @@ export default class OverviewComponent extends Vue {
 
     try {
       const inputData = JSON.parse(reader.result);
-      const updatedConfigurations: Configuration[] = [];
-
-      if (Array.isArray(inputData)) {
-        inputData.forEach((config: any) => {
-          Object.keys(config).forEach((id: string) => {
-            const index = updatedConfigurations.findIndex((c: Configuration) => c.id === id);
-            if (index >= 0) {
-              updatedConfigurations[index].setAttributes(config[id], this.$store);
-            } else {
-              const c = new Configuration(id);
-              c.setAttributes(config[id], this.$store);
-              updatedConfigurations.push(c);
-            }
-          });
+      const result = Importer.importFile(inputData, this.$store);
+      if (result) {
+        this.$message({
+          content: `Successfully imported data from '${file.name}'`,
+          type: "success"
         });
-      } else if (typeof inputData === "object" && !!inputData.id && !!inputData.graph) {
-        const index = updatedConfigurations.findIndex((c: Configuration) => c.id === inputData.id);
-        if (index >= 0) {
-          updatedConfigurations[index].setGraph(inputData.graph);
-        } else {
-          const c = new Configuration(inputData.id);
-          c.setGraph(inputData.graph);
-          updatedConfigurations.push(c);
-        }
       } else {
         this.$message({
           content: `Data within '${file.name}' is incorrectly formatted`,
-          type: "danger"
+          type: "danger",
+          duration: 8000
         });
-        return;
       }
-      this.$store.commit("addConfigurations", updatedConfigurations);
-      this.$message({
-        content: `Successfully imported data from '${file.name}'`,
-        type: "success"
-      });
     } catch (err) {
       this.$message({
         content: `Unable to process '${file.name}': ${err}`,
-        type: "danger"
+        type: "danger",
+        duration: 8000
       });
-      return;
     }
   }
 }
