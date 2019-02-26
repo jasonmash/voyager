@@ -32,7 +32,7 @@ export default class Importer {
    * @memberof Importer
    */
   private static processDataArray(data: object[], $store: Store<any>) {
-    const configurations: Configuration[] = $store.getters.configurations;
+    const configurations: Configuration[] = [];
     data.forEach((config: any) => {
       Object.keys(config).forEach((id: string) => {
         const index = configurations.findIndex((c: Configuration) => c.id === id);
@@ -58,7 +58,7 @@ export default class Importer {
    * @memberof Importer
    */
   private static processConfigurationObject(data: any, $store: Store<any>) {
-    const configurations: Configuration[] = $store.getters.configurations;
+    const configurations: Configuration[] = [];
     const index = configurations.findIndex((c: Configuration) => c.id === data.id);
     if (index >= 0) {
       configurations[index].setGraph(data.graph);
