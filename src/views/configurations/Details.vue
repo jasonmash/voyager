@@ -14,24 +14,20 @@
             </b-list-group-item>
           </b-list-group>
         </b-card>
-        <b-card header="Radar chart" no-body class="mb-3">
+        <b-card header="Radar chart" no-body class="mb-3" v-if="value.attributes.length > 0">
           <e-chart :options="radarData" :init-options="{renderer: 'svg'}" autoresize style="width:auto" />
         </b-card>
       </b-col>
-      <b-col xl="6">
+      <b-col xl="6" v-if="value.structure.components.length > 0">
+        <b-card header="Structure" no-body class="mb-3">
+          <e-chart :options="graphData" :init-options="{}" autoresize style="width:auto" />
+        </b-card>
         <b-card header="JSON" no-body class="mb-3">
           <b-card-body>
             <code>
               {{JSON.stringify(value)}}
             </code>
           </b-card-body>
-        </b-card>
-        <b-card header="Components" no-body class="mb-3">
-          <b-list-group flush>
-            <b-list-group-item v-for="component in value.structure.components" :key="`comp-${component}`">
-              <span>{{component}}</span>
-            </b-list-group-item>
-          </b-list-group>
         </b-card>
       </b-col>
     </b-row>

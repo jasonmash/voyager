@@ -76,17 +76,35 @@ export class Configuration {
    * @memberof Configuration
    */
   public setGraph(graphData: any) {
-    graphData.forEach((component: object) => {
+    graphData.forEach((component: any) => {
       Object.keys(component).forEach((key: string) => {
         if (!this.structure.components.includes(key)) {
           this.structure.components.push(key);
         }
+
+        component[key].forEach((c: any) => {
+          Object.keys(c).forEach((label: string) => {
+            const connection: StructureConnection = {
+              label,
+              from: key,
+              to: c[label]
+            };
+            this.structure.connections.push(connection);
+          });
+        });
       });
     });
   }
 }
 
 export interface ConfigurationStructure {
-  connections: string[];
+  connections: StructureConnection[];
   components: string[];
 }
+
+export interface StructureConnection {
+  label: string;
+  from: string;
+  to: string;
+}
+

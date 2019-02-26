@@ -55,5 +55,6 @@ describe("Utils: Importer", () => {
     expect(config1).to.have.property("structure");
     expect(config1.structure.components).to.include("MS10");
     expect(config1.structure.components).to.include("TASWorkflow0");
+    expect(config1.structure.connections.length).to.equal(3);
   });
 });
