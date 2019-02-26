@@ -7,7 +7,7 @@ import { Configuration } from "@/models/configuration";
 
 @Component
 export default class AttributesComponent extends Vue {
-  get attribute(): Attribute[] {
+  get attribute(): Attribute {
     return this.$store.getters.attributes.find((a: Attribute) => a.key === this.$route.params.pathMatch);
   }
 
@@ -63,6 +63,19 @@ export default class AttributesComponent extends Vue {
           trigger: "axis",
           position: (pt: any) => [pt[0], "10%"]
       }
+    };
+  }
+
+  get tableData() {
+    const data = this.configurationsFor(this.attribute);
+    return {
+      sortBy: "value",
+      sortDesc: false,
+      fields: [
+        { key: "id", sortable: true },
+        { key: "value", sortable: true }
+      ],
+      items: data.data
     };
   }
 }

@@ -25,22 +25,10 @@
             <span class="float-right" v-show="$route.path == '/configurations'"><i class="fa fa-chevron-right"></i></span>
           </p>
         </b-list-group-item>
-        <b-list-group-item @click="setSelectedIndex(-1)" v-bind:to="'/compare'" :replace="!!$route.params.id" class="px-3 py-2">
-          <p class="mb-0">
-            Compare
-            <span class="float-right" v-show="$route.path == '/compare'"><i class="fa fa-chevron-right"></i></span>
-          </p>
-        </b-list-group-item>
         <b-list-group-item @click="setSelectedIndex(-1)" v-bind:to="'/solutions'" :replace="!!$route.params.id" class="px-3 py-2">
           <p class="mb-0">
             Solution Explorer
             <span class="float-right" v-show="$route.path == '/solutions'"><i class="fa fa-chevron-right"></i></span>
-          </p>
-        </b-list-group-item>
-        <b-list-group-item @click="setSelectedIndex(-1)" v-bind:to="'/reports'" :replace="!!$route.params.id" class="px-3 py-2">
-          <p class="mb-0">
-            Reports
-            <span class="float-right" v-show="$route.path == '/reports'"><i class="fa fa-chevron-right"></i></span>
           </p>
         </b-list-group-item>
       </div>

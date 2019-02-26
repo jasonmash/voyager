@@ -30,16 +30,8 @@ export default new Router({
       ]
     },
     {
-      path: "/compare", component: Page,
-      children: [{ path: "", component: () => import("./views/compare/Compare.vue") }]
-    },
-    {
       path: "/solutions", component: Page,
       children: [{ path: "", component: () => import("./views/Demo.vue") }]
-    },
-    {
-      path: "/reports", component: Page,
-      children: [{ path: "", component: () => import("./views/About.vue") }]
     },
     { path: "*", component: () => import("./views/404.vue") }
   ]

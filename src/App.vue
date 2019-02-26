@@ -48,6 +48,14 @@
     font-size: 1.0rem;
     padding: 0.75rem 1.25rem 0.5rem;
   }
+  .card-deck {
+    flex-flow: column;
+  }
+  @media (min-width : 1300px) {
+    .card-deck {
+      flex-flow: row wrap;
+    }
+  }
 </style>
 
 <script lang="ts">

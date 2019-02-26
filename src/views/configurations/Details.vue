@@ -17,7 +17,7 @@
           </b-list-group>
         </b-card>
         <b-card header="Structure" no-body class="mb-3" v-if="value.structure.components.length > 0">
-          <e-chart :options="graphData" :init-options="{}" autoresize style="width:auto; height: 100%;" />
+          <e-chart :options="graphData" :init-options="{}" autoresize style="width:auto; height: 100%; min-height: 400px" />
         </b-card>
         <b-card header="JSON" class="mb-3" v-else>
           <code>{{JSON.stringify(value)}}</code>
