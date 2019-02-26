@@ -1,6 +1,6 @@
 import _ from "lodash";
 import Vue from "vue";
-import { ActionContext, ActionTree, GetterTree, MutationTree } from "vuex";
+import { ActionTree, GetterTree, MutationTree } from "vuex";
 
 import { Configuration } from "@/models/configuration";
 
@@ -9,15 +9,30 @@ export class State {
 }
 
 const getters = {
+  /**
+   * Get list of all configurations, sorted by id
+   */
   configurations: (state: State): Configuration[] => {
     return _.sortBy(state.data, ["id"]);
   }
 } as GetterTree<State, any>;
 
 const mutations = {
+
+  /**
+   * Add a single configuration
+   * @param {*} state Reference to state to update
+   * @param {Configuration} payload Configuration to add
+   */
   addConfiguration: (state: State, payload: Configuration) => {
     state.data.push(payload);
   },
+
+  /**
+   * Add a list of configurations
+   * @param {*} state Reference to state to update
+   * @param {Configuration[]} payload Configurations to add
+   */
   addConfigurations: (state: State, payload: Configuration[]) => {
     payload.forEach((c: Configuration) => {
       const index = _.findIndex(state.data, (d) => d.id === c.id);
@@ -28,14 +43,31 @@ const mutations = {
       }
     });
   },
+
+  /**
+   * Delete a configuration
+   * @param {*} state Reference to state to update
+   * @param {Configuration} payload Configuration to delete
+   */
   deleteConfiguration: (state: State, payload: Configuration) => {
     const index = _.findIndex(state.data, (d) => d.id === payload.id);
     state.data.splice(index, 1);
   },
+
+  /**
+   * Update configuration
+   * @param {*} state Reference to state to update
+   * @param {Configuration} payload Configuration to update
+   */
   updateConfiguration: (state: State, payload: Configuration) => {
     const index = _.findIndex(state.data, (d) => d.id === payload.id);
-    state.data[index] = payload;
+    Vue.set(state.data, index, _.merge(state.data[index], payload));
   },
+
+  /**
+   * Clear all data from configuration store
+   * @param {*} state Reference to state to update
+   */
   resetConfigurations: (state: State) => {
     state.data = [];
   }

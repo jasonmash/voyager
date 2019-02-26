@@ -1,7 +1,7 @@
 import { expect } from "chai";
 
 import { Configuration } from "@/models/configuration";
-import { Attribute } from "@/models/attribute";
+import { AttributeValue } from "@/models/attribute";
 
 describe("Configuration", () => {
   it("creates new object when constructor is used", () => {
@@ -12,7 +12,7 @@ describe("Configuration", () => {
 
   it("loads graph properties from provided data", () => {
     const configuration: Configuration = new Configuration("configuration_id");
-    expect(configuration.components).to.be.length(0);
+    expect(configuration.structure.components).to.be.length(0);
 
     const graphData = [
       { TASWorkflow0: [
@@ -30,7 +30,7 @@ describe("Configuration", () => {
 
     configuration.setGraph(graphData);
 
-    expect(configuration.components).to.be.length(4);
+    expect(configuration.structure.components).to.be.length(4);
   });
 
   it("loads attributes from provided data", () => {
@@ -39,8 +39,8 @@ describe("Configuration", () => {
 
     const attributeList = [{ cost: "10.7" }];
 
-    const commit = (mutation: string, attribute: Attribute) => {
-      expect(mutation).to.be.equal("processAttribute");
+    const commit = (mutation: string, attribute: AttributeValue) => {
+      expect(mutation).to.be.equal("processAttributeValue");
       expect(attribute.key).to.be.equal("cost");
       expect(attribute.value).to.be.equal(10.7);
     };

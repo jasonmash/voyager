@@ -5,6 +5,7 @@ import Page from "./views/layouts/Explorer.vue";
 
 Vue.use(Router);
 
+// Initialise route list (determines what each URL does)
 export default new Router({
   mode: "history",
   base: process.env.BASE_URL,
@@ -40,10 +41,6 @@ export default new Router({
       path: "/reports", component: Page,
       children: [{ path: "", component: () => import("./views/About.vue") }]
     },
-  /*  {
-      path: "/configurations/:id", component: Page,
-      children: [{ path: "", component: () => import("./views/configurations/Details.vue") }]
-    }, */
     { path: "*", component: () => import("./views/404.vue") }
   ]
 });

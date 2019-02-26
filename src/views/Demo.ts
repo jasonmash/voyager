@@ -1,6 +1,6 @@
 import { Component, Vue } from "vue-property-decorator";
 
-import { AttributeInfo, Attribute } from "@/models/attribute";
+import { Attribute, AttributeValue } from "@/models/attribute";
 import { Configuration } from "@/models/configuration";
 
 @Component
@@ -10,7 +10,7 @@ export default class Demo extends Vue {
     return this.$store.getters.configurations;
   }
 
-  get attributeInfo(): AttributeInfo[] {
+  get attributeInfo(): Attribute[] {
     return this.$store.getters.attributes;
   }
 
@@ -18,13 +18,13 @@ export default class Demo extends Vue {
     const result: any[] = [];
     result.push(["id"]);
 
-    this.attributeInfo.forEach((a: AttributeInfo) => {
+    this.attributeInfo.forEach((a: Attribute) => {
       result[0].push(a.key);
     });
 
     this.configurations.forEach((c: Configuration) => {
       const r = [0, 0, 0];
-      c.attributes.forEach((a: Attribute) => {
+      c.attributes.forEach((a: AttributeValue) => {
         const index = result[0].findIndex((k: string) => k === a.key);
         r[index] = a.value;
       });

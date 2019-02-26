@@ -23,14 +23,14 @@
     overflow-y: auto;
     box-shadow: 1px 0px 6px rgba(0,0,0,0.5);
     z-index: 2;
-    background-color: #f7f8fb;
+    background-color: #fdfdff;
   }
 
   .list-details-view .list-panel > .h-100 {
     overflow-y: hidden;
   }
 
-  .list-details-view .list-panel {
+  .list-details-view > div > .list-panel {
     max-width: 250px;
   }
 
@@ -61,7 +61,7 @@
 
 .list-details-view .list-group-item.router-link-active {
   z-index: 3;
-  background-color: #f7f8fb;
+  background-color: #fdfdff;
   box-shadow: 0px 1px 4px rgba(0,0,0,0.4);
   border-color: transparent;
   border-left: #007bff 3px solid;
@@ -78,7 +78,7 @@
     position: fixed;
     height: calc(100% - 56px);
     width: calc(100% - 280px);
-    background: #f7f8fb;
+    background: #fdfdff;
   }
 
   .split-view  > .row,
@@ -91,7 +91,8 @@
     overflow-y: auto;
     box-shadow: 1px 0px 6px rgba(0,0,0,0.5);
     z-index: 2;
-    background-color: #eef0f5;
+    background-color: #f7f8fb;
+    top: -1px;
   }
 
   .split-view .list-panel > .h-100 {
@@ -99,8 +100,11 @@
   }
 
   .split-view .list-panel {
-    max-width: 300px;
     min-width: 300px;
+  }
+
+  .split-view.open .list-panel {
+    max-width: 350px;
   }
 
   .split-view .list-content {
@@ -129,10 +133,16 @@
   border-left: transparent 3px solid;
   background: transparent;
 }
+.split-view .list-group-item-action:hover {
+  background: rgba(0,0,0,0.02);
+}
+.split-view .list-group-item-action:active {
+  background: rgba(0,0,0,0.05);
+}
 
 .split-view .list-group-item.router-link-exact-active {
   z-index: 3;
-  background-color: #eef0f5;
+  background-color: #f7f8fb;
   box-shadow: 0px 1px 4px rgba(0,0,0,0.4);
   border-color: transparent;
   border-left: #007bff 3px solid;

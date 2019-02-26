@@ -5,7 +5,7 @@
     <div class="list-header px-3 pt-3">
       <h1 class="h4">Data Explorer</h1>
     </div>
-    <b-list-group flush class="list-content">
+    <b-list-group flush class="list-content pl-1">
       <div class="pt-1 border-bottom">
         <b-list-group-item @click="setSelectedIndex(-1)" v-bind:to="'/overview'" :replace="!!$route.params.id" class="px-3 py-2">
           <p class="mb-0">

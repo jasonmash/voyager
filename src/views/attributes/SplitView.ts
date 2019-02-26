@@ -2,7 +2,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 
 import AttributesComponent from "./AttributeDetails.vue";
-import { AttributeInfo } from "@/models/attribute";
+import { Attribute } from "@/models/attribute";
 
 @Component({
   components: {
@@ -14,10 +14,10 @@ export default class SplitViewComponent extends Vue {
   public selectedIndex: number = -1;
 
   get list() {
-    const data: AttributeInfo[] = this.$store.getters.attributes;
+    const data: Attribute[] = this.$store.getters.attributes;
 
     // Filter list based on searchQuery, look in email and name fields
-    const result: AttributeInfo[] = data.filter((item) => {
+    const result: Attribute[] = data.filter((item) => {
       const inName = item.key ? item.key.toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1 : false;
       return inName;
     });

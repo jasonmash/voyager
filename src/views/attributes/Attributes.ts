@@ -2,16 +2,16 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import _ from "lodash";
 
-import { Attribute, AttributeInfo } from "@/models/attribute";
+import { AttributeValue, Attribute } from "@/models/attribute";
 import { Configuration } from "@/models/configuration";
 
 @Component
 export default class AttributesComponent extends Vue {
-  get attributeList(): AttributeInfo[] {
+  get attributeList(): Attribute[] {
     return this.$store.getters.attributes;
   }
 
-  public configurationsFor(attribute: AttributeInfo) {
+  public configurationsFor(attribute: Attribute) {
     const configurations: Configuration[] = this.$store.getters.configurations;
 
     let result: any = [];
@@ -34,11 +34,11 @@ export default class AttributesComponent extends Vue {
     };
   }
 
-  public change(attribute: AttributeInfo, value: boolean) {
+  public change(attribute: Attribute, value: boolean) {
     this.$store.commit("updateAttribute", { key: attribute.key, isHigherBetter: value });
   }
 
-  public barData(attribute: AttributeInfo): any {
+  public barData(attribute: Attribute): any {
     const result = this.configurationsFor(attribute);
     return {
       animation: false,

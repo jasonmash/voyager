@@ -1,9 +1,9 @@
 <script lang="ts" src="./SplitView.ts"/>
 
 <template>
-  <div class="split-view">
+  <div class="split-view" v-bind:class="{ 'open': !!$route.params.pathMatch}">
     <b-row>
-      <div class="list-panel col-md-4 d-none d-md-block">
+      <div class="list-panel" v-bind:class="{ 'col': !$route.params.pathMatch, 'col-md-4 d-none d-md-block': $route.params.pathMatch }">
         <div class="h-100">
           <div class="list-header px-3 pt-3">
             <small class="float-right pt-2">{{list.length}} of {{totalCount}}</small>
@@ -24,7 +24,7 @@
           </b-list-group>
         </div>
       </div>
-      <div class="details-panel col py-3">
+      <div class="details-panel col py-3" v-if="!!$route.params.pathMatch">
         <attributes-panel />
       </div>
     </b-row>

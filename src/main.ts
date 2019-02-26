@@ -20,8 +20,9 @@ import store from "./stores/store";
 
 Vue.config.productionTip = false;
 
-Vue.use(BootstrapVue);
+// Load plugins and dependencies
 Vue.component("e-chart", ECharts);
+Vue.use(BootstrapVue);
 Vue.use(Message);
 
 new Vue({

@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 
-import { Attribute, AttributeInfo } from "@/models/attribute";
+import { AttributeValue, Attribute } from "@/models/attribute";
 import { Configuration } from "@/models/configuration";
 
 @Component
@@ -10,7 +10,7 @@ export default class DetailsComponent extends Vue {
     return this.$store.getters.configurations.find((v: Configuration) => v.id === this.$route.params.pathMatch);
   }
 
-  get attributeInfo(): AttributeInfo[] {
+  get attributeInfo(): Attribute[] {
     return this.$store.getters.attributes;
   }
 
@@ -29,7 +29,7 @@ export default class DetailsComponent extends Vue {
     const configuration = this.value;
     const data: any[] = [];
 
-    configuration.attributes.forEach((a: Attribute) => {
+    configuration.attributes.forEach((a: AttributeValue) => {
       const info = this.attributeInfo.find((i) => i.key === a.key);
       if (info) {
         data.push({ name: info.friendlyName, min: info.minValue, max: info.maxValue, value: a.value });

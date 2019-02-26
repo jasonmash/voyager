@@ -1,22 +1,30 @@
 import _ from "lodash";
 import Vue from "vue";
-import { ActionContext, ActionTree, GetterTree, MutationTree } from "vuex";
+import { ActionTree, GetterTree, MutationTree } from "vuex";
 
-import { Attribute, AttributeInfo } from "@/models/attribute";
+import { AttributeValue, Attribute } from "@/models/attribute";
 
 export class State {
-  public data: AttributeInfo[] = [];
+  public data: Attribute[] = [];
 }
 
 const getters = {
-  attributes: (state: State): AttributeInfo[] => {
+  /**
+   * Get list of all attributes
+   */
+  attributes: (state: State): Attribute[] => {
     return state.data;
   }
 } as GetterTree<State, any>;
 
 const mutations = {
-  processAttribute: (state: State, attribute: Attribute) => {
-    const index = _.findIndex(state.data, (f: AttributeInfo) => f.key === attribute.key);
+  /**
+   * Process attribute values, updating min/max values and scales as necessary
+   * @param {*} state Reference to state to update
+   * @param {AttributeValue} attribute Attribute value to process
+   */
+  processAttributeValue: (state: State, attribute: AttributeValue) => {
+    const index = _.findIndex(state.data, (f: Attribute) => f.key === attribute.key);
 
     const ceil = Math.ceil(attribute.value * Math.pow(10, 2)) / Math.pow(10, 2);
     const floor = Math.floor(attribute.value * Math.pow(10, 2)) / Math.pow(10, 2);
@@ -44,10 +52,21 @@ const mutations = {
       Vue.set(state.data, index, attrInfo);
     }
   },
+
+  /**
+   * Update attribute info
+   * @param {*} state Reference to state to update
+   * @param {Attribute} attribute Attribute to update
+   */
   updateAttribute: (state: State, attribute: Attribute) => {
-    const index = _.findIndex(state.data, (f: AttributeInfo) => f.key === attribute.key);
+    const index = _.findIndex(state.data, (f: Attribute) => f.key === attribute.key);
     Vue.set(state.data, index, _.merge(state.data[index], attribute));
   },
+
+  /**
+   * Clear all data from attribute store
+   * @param {*} state Reference to state to update
+   */
   resetAttributes: (state: State) => {
     state.data = [];
   }
