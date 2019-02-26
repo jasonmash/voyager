@@ -4,9 +4,6 @@ import { Configuration } from "@/models/configuration";
 
 import { configurations } from "@/stores/configurations";
 
-// destructure assign `mutations`
-const { addConfiguration, addConfigurations, deleteConfiguration, updateConfiguration } = configurations.mutations;
-
 describe("Store: Configurations", () => {
   it("Mutation: addConfiguration", () => {
     // mock state
@@ -17,7 +14,7 @@ describe("Store: Configurations", () => {
     const newConfiguration = new Configuration("id2");
 
     // apply mutation
-    addConfiguration(state, newConfiguration);
+    configurations.mutations.addConfiguration(state, newConfiguration);
 
     // assert result
     expect(state.data.length).to.equal(2);
@@ -36,7 +33,7 @@ describe("Store: Configurations", () => {
     configToUpdate.attributes = [{ key: "attribute", value: 2 }];
 
     // apply mutation
-    addConfigurations(state, [configToAdd, configToUpdate]);
+    configurations.mutations.addConfigurations(state, [configToAdd, configToUpdate]);
 
     // assert result
     expect(state.data.length).to.equal(2);
@@ -56,7 +53,7 @@ describe("Store: Configurations", () => {
     const state = { data: [existingConfig, configToDelete] };
 
     // apply mutation
-    deleteConfiguration(state, configToDelete);
+    configurations.mutations.deleteConfiguration(state, configToDelete);
 
     // assert result
     expect(state.data.length).to.equal(1);
@@ -72,13 +69,26 @@ describe("Store: Configurations", () => {
     // apply mutation
     const configToUpdate = new Configuration("id1");
     configToUpdate.attributes = [{ key: "attribute", value: 2 }];
-    updateConfiguration(state, configToUpdate);
+    configurations.mutations.updateConfiguration(state, configToUpdate);
 
     // assert result
     expect(state.data.length).to.equal(1);
     expect(state.data[0].attributes.length).to.equal(1);
     expect(state.data[0].attributes[0].key).to.equal("attribute");
     expect(state.data[0].attributes[0].value).to.equal(2);
+  });
+
+  it("Mutation: resetConfigurations", () => {
+    // mock state
+    const existingConfig = new Configuration("id1");
+    const state = { data: [existingConfig] };
+    expect(state.data.length).to.equal(1);
+
+    // apply mutation
+    configurations.mutations.resetConfigurations(state, null);
+
+    // assert result
+    expect(state.data.length).to.equal(0);
   });
 
   it("Getter: configurations", () => {

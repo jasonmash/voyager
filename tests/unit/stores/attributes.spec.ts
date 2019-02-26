@@ -43,6 +43,27 @@ describe("Store: Attributes", () => {
     expect(state.data[1].friendlyName).to.equal("New Attribute Key");
   });
 
+  it("Mutation: resetAttributes", () => {
+    // mock state
+    const existing: Attribute = {
+      key: "attributeKey",
+      maxValue: 10,
+      minValue: 5,
+      scaleMax: 10,
+      scaleMin: 4,
+      friendlyName: "Attribute Key"
+    };
+    const state = { data: [existing] };
+    expect(state.data.length).to.equal(1);
+
+    // apply mutation
+    attributes.mutations.resetAttributes(state, null);
+
+    // assert result
+    expect(state.data.length).to.equal(0);
+  });
+
+
   it("Getter: attributes", () => {
     // mock state
     const existing: Attribute = {
