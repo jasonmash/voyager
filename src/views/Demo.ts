@@ -53,7 +53,6 @@ export default class Demo extends Vue {
     },
     zAxis3D: {
       scale: true,
-      max: 1,
       name: this.dataSet[0][3]
     },
     tooltip: {},

@@ -1,8 +1,8 @@
 <script lang="ts" src="./Details.ts"/>
 
 <template>
-  <div v-if="value">
-    <b-button size="sm" variant="outline-danger" class="mt-2 float-right" @click="deleteConfiguration">Delete</b-button>
+  <b-container fluid v-if="value" class="py-3">
+    <b-button size="sm" variant="outline-secondary" class="mt-2 float-right" replace to="/configurations"><i class="fa fa-fw fa-times"></i></b-button>
     <h1 class="mb-3">{{ value.id }}</h1>
     <b-card-group deck>
         <b-card no-body header="Attributes" class="mb-3">
@@ -30,5 +30,5 @@
         </b-card>
       </b-col>
     </b-row>
-  </div>
+  </b-container>
 </template>

@@ -2,67 +2,52 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import _ from "lodash";
 
-import { AttributeValue, Attribute } from "@/models/attribute";
-import { Configuration } from "@/models/configuration";
+import AttributesComponent from "./Details.vue";
+import { Attribute } from "@/models/attribute";
 
-@Component
-export default class AttributesComponent extends Vue {
-  get attributeList(): Attribute[] {
-    return this.$store.getters.attributes;
+@Component({
+  components: {
+    "attribute-details": AttributesComponent
   }
+})
+export default class SplitViewComponent extends Vue {
+  public searchQuery: string = "";
+  public selectedIndex: number = -1;
 
-  public configurationsFor(attribute: Attribute) {
-    const configurations: Configuration[] = this.$store.getters.configurations;
+  get list() {
+    const data: Attribute[] = this.$store.getters.attributes;
 
-    let result: any = [];
-    configurations.forEach((c: Configuration) => {
-      const attr = c.attributes.find((a) => a.key === attribute.key);
-      if (attr) {
-        result.push({ id: c.id, value: attr.value });
-      }
+    // Filter list based on searchQuery, look in email and name fields
+    const result: Attribute[] = data.filter((item) => {
+      const inName = item.key ? item.key.toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1 : false;
+      return inName;
     });
 
-    result = _.sortBy(result, ["value"]);
-
-    const bestValue = attribute.isHigherBetter ? result[result.length - 1].value : result[0].value;
-    const bestConfigurations = result.filter((r: any) => r.value === bestValue);
-
-    return {
-      data: result,
-      bestConfigurations,
-      bestValue
-    };
+    return result;
   }
 
-  public change(attribute: Attribute, value: boolean) {
-    this.$store.commit("updateAttribute", { key: attribute.key, isHigherBetter: value });
+  get totalCount() {
+    return this.$store.getters.attributes.length;
   }
 
-  public barData(attribute: Attribute): any {
-    const result = this.configurationsFor(attribute);
-    return {
-      animation: false,
-      textStyle: {
-        fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif"
-      },
-      xAxis: {
-        type: "category",
-        data: result.data.map((c: any) => c.id)
-      },
-      yAxis: {
-        type: "value",
-        min: attribute.scaleMin,
-        max: attribute.scaleMax
-      },
-      series: [{
-        data: result.data.map((c: any) => c.value),
-        type: "line",
-        showAllSymbol: true
-      }],
-      tooltip: {
-          trigger: "axis",
-          position: (pt: any) => [pt[0], "10%"]
-      }
-    };
+  public onKeyUp(event: any) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (event.keyCode === 38) { // up
+      if (this.selectedIndex > 0) { this.selectedIndex -= 1; }
+    } else if (event.keyCode === 40) { // down
+      if (this.selectedIndex < (this.list.length - 1)) { this.selectedIndex += 1; }
+    }
+    this.$router.replace("/attributes/" + this.list[this.selectedIndex].key);
+    const listItem: any = this.$refs[`i-${this.selectedIndex}`];
+    if (listItem[0].$el.scrollIntoViewIfNeeded) {
+      listItem[0].$el.scrollIntoViewIfNeeded(true);
+    } else {
+      listItem[0].$el.scrollIntoView();
+    }
+  }
+
+  public setSelectedIndex(index: number) {
+    this.selectedIndex = index;
   }
 }

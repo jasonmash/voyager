@@ -43,7 +43,7 @@ describe("Store: Attributes", () => {
     expect(state.data[1].friendlyName).to.equal("New Attribute Key");
   });
 
-  it("Mutation: addConfigurations", () => {
+  it("Mutation: addAttributes", () => {
     // mock state
     const existing: Attribute = {
       key: "attributeKey",

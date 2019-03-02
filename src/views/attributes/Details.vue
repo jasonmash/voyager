@@ -1,7 +1,7 @@
-<script lang="ts" src="./AttributeDetails.ts"/>
+<script lang="ts" src="./Details.ts"/>
 
 <template>
-  <div v-if="attribute">
+  <b-container fluid v-if="attribute" class="py-3">
     <h1 class="mb-3">{{attribute.friendlyName}}</h1>
     <b-card-group deck>
       <b-card no-body header="Properties" class="mb-3">
@@ -55,6 +55,6 @@
         </div>
       </b-card>
     </b-card-group>
-  </div>
+  </b-container>
 </template>
 

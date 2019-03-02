@@ -8,7 +8,7 @@ import { Configuration } from "@/models/configuration";
 export default class DetailsComponent extends Vue {
 
   get value(): Configuration {
-    return this.$store.getters.configurations.find((v: Configuration) => v.id === this.$route.params.pathMatch);
+    return this.$store.getters.configurations.find((v: Configuration) => v.id === this.$route.params.id);
   }
 
   get attributeInfo(): Attribute[] {

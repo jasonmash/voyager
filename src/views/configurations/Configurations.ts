@@ -2,20 +2,42 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import _ from "lodash";
 
+import { Attribute } from "@/models/attribute";
 import { Configuration } from "@/models/configuration";
 
-@Component
-export default class ListComponent extends Vue {
+import DetailsComponent from "./Details.vue";
+
+@Component({
+  components: {
+    "configuration-details": DetailsComponent
+  }
+})
+export default class ConfigurationsComponent extends Vue {
   public searchQuery: string = "";
   public selectedIndex: number = -1;
 
+  public attributes: any = [];
+
+  public mounted() {
+    const data: Attribute[] = this.$store.getters.attributes;
+    this.attributes =  data.map((attr: Attribute) => {
+      return { attribute: attr, minValue: attr.scaleMin, maxValue: attr.scaleMax };
+    });
+  }
+
   get list() {
     const data: Configuration[] = this.$store.getters.configurations;
+    const attributes = this.attributes;
 
     // Filter list based on searchQuery, look in email and name fields
     const result: Configuration[] = data.filter((item) => {
       const inName = item.id ? item.id.toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1 : false;
-      return inName;
+      let validAttributes = true;
+      attributes.forEach((a: any) => {
+        const val = _.find(item.attributes, ["key", a.attribute.key]);
+        if (val && val.value > a.maxValue) { validAttributes = false; }
+      });
+      return inName && validAttributes;
     });
 
     return result;

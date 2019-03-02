@@ -1,71 +1,47 @@
 <template>
-  <div>
-    <b-navbar toggleable="md" type="dark" variant="dark" id="nav" fixed="top">
-      <b-navbar-brand tag="h1" class="mb-0">Voyager</b-navbar-brand>
-      <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
+  <div id="app">
+    <sidebar />
 
-      <b-collapse is-nav id="nav_collapse">
-        <b-navbar-nav>
-          <b-nav-item to="/">Home</b-nav-item>
-          <b-nav-item to="/overview">Explorer</b-nav-item>
-        </b-navbar-nav>
-      </b-collapse>
-    </b-navbar>
-    <b-container fluid id="app">
-      <router-view class="pt-3"/>
-    </b-container>
+    <main id="main" role="main">
+      <router-view />
+    </main>
+
     <message-box />
   </div>
 </template>
 
-<style>
-  #app {
-    max-width: 1200px;
-    padding-top: 56px;
-  }
-  h1 {
-    font-weight: 700;
-  }
-  #nav {
-    box-shadow: 0px 1px 8px rgba(0,0,0,0.2);
-    background-color: #0c3067 !important;
-  }
-  #nav > div > .navbar-nav {
-    margin-bottom: -2px;
-  }
-  body {
-    font-size: 0.9rem;
-    font-family: "Inter", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif
-  }
-  .number-text {
-    font-feature-settings: 'cv01' 1, 'cv02' 1, 'cv03' 1, 'cv04' 1, 'cv09' 1, 'tnum' 1;
-  }
-  .card {
-    box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.1);
-  }
-  .card-header {
-    font-weight: 600;
-    font-size: 1.0rem;
-    padding: 0.75rem 1.25rem 0.5rem;
-  }
-  .card-deck {
-    flex-flow: column;
-  }
-  @media (min-width : 1300px) {
-    .card-deck {
-      flex-flow: row wrap;
-    }
-  }
-</style>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import Sidebar from "@/components/Sidebar.vue";
 import MessageBox from "@/components/messages/MessageBox.vue";
 
-@Component({
-  components: {
-    messageBox: MessageBox
-  }
-})
-export default class App extends Vue { }
+@Component({ components: { Sidebar, MessageBox }})
+export default class App extends Vue {}
 </script>
+
+<style>
+#app {
+  min-width: 1000px;
+}
+
+body {
+  font-size: .875rem;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+}
+
+.number-text {
+  font-feature-settings: 'cv01' 1, 'cv02' 1, 'cv03' 1, 'cv04' 1, 'cv09' 1, 'tnum' 1;
+}
+
+#main {
+  top: 0;
+  bottom: 0;
+  left: 220px;
+  width: calc(100% - 220px);
+  min-width: calc(1000px - 220px);
+  overflow-y: auto;
+  position: absolute;
+}
+
+</style>

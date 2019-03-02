@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="p-3">
     <h1 class="mb-3">Solution Explorer</h1>
     <e-chart
       :options="data"
