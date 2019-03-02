@@ -6,10 +6,12 @@ import { Attribute } from "@/models/attribute";
 import { Configuration } from "@/models/configuration";
 
 import DetailsComponent from "./Details.vue";
+import RangeSlider from "@/components/RangeSlider.vue";
 
 @Component({
   components: {
-    "configuration-details": DetailsComponent
+    "configuration-details": DetailsComponent,
+    "range-slider": RangeSlider
   }
 })
 export default class ConfigurationsComponent extends Vue {
@@ -18,7 +20,7 @@ export default class ConfigurationsComponent extends Vue {
 
   public attributes: any = [];
 
-  public mounted() {
+  public created() {
     const data: Attribute[] = this.$store.getters.attributes;
     this.attributes =  data.map((attr: Attribute) => {
       return { attribute: attr, minValue: attr.scaleMin, maxValue: attr.scaleMax };
@@ -35,7 +37,7 @@ export default class ConfigurationsComponent extends Vue {
       let validAttributes = true;
       attributes.forEach((a: any) => {
         const val = _.find(item.attributes, ["key", a.attribute.key]);
-        if (val && val.value > a.maxValue) { validAttributes = false; }
+        if (val && (val.value > a.maxValue || val.value < a.minValue)) { validAttributes = false; }
       });
       return inName && validAttributes;
     });
@@ -66,5 +68,10 @@ export default class ConfigurationsComponent extends Vue {
 
   public setSelectedIndex(index: number) {
     this.selectedIndex = index;
+  }
+
+  public onRangeChange(attr: any, event: any) {
+    attr.minValue = parseFloat(event.min);
+    attr.maxValue = parseFloat(event.max);
   }
 }

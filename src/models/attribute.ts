@@ -46,6 +46,13 @@ export interface Attribute {
   scaleMax: number;
 
   /**
+   * Increment size of attribute value (e.g. 0.1 for steps of 1, 1.1, 1.2...)
+   * @type {number}
+   * @memberof Attribute
+   */
+  step: number;
+
+  /**
    * Boolean indicating whether attribute should be optimised for maximum or minimum value
    * @type {boolean}
    * @memberof Attribute

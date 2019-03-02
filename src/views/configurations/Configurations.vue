@@ -25,16 +25,15 @@
     <div class="detail-col" v-else>
       <b-container fluid class="py-3">
         <h3>Overview</h3>
-        <h4>Filter</h4>
+        <h5>Filter</h5>
         <div v-for="(attr, i) in attributes" :key="attr.attribute.key" class="mb-3">
           <label :for="'range-' + i">{{attr.attribute.friendlyName}}</label>
+          
+          <range-slider :min="attr.attribute.scaleMin" :max="attr.attribute.scaleMax" :step="attr.attribute.step" @change="onRangeChange(attr, $event)" :maxValue="attr.maxValue" :minValue="attr.minValue"/>
 
-          <b-input-group :prepend="attr.attribute.scaleMin.toString()" :append="attr.attribute.scaleMax.toString()" size="sm">
-            <b-form-input type="range" :id="'range-' + i" v-model="attr.maxValue" :min="attr.attribute.scaleMin" :max="attr.attribute.scaleMax" />
-          </b-input-group>
           <div class="mt-2">Value: {{ attr.minValue }} - {{ attr.maxValue }}</div>
         </div>
-        <h4>Order By</h4>
+        <h5>Order By</h5>
 
       </b-container>
     </div>

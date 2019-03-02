@@ -26,28 +26,35 @@ const mutations = {
   processAttributeValue: (state: State, attribute: AttributeValue) => {
     const index = _.findIndex(state.data, (f: Attribute) => f.key === attribute.key);
 
-    const ceil = Math.ceil(attribute.value * Math.pow(10, 2)) / Math.pow(10, 2);
-    const floor = Math.floor(attribute.value * Math.pow(10, 2)) / Math.pow(10, 2);
-
     if (index === -1) {
       state.data.push({
         key: attribute.key,
         maxValue: attribute.value,
         minValue: attribute.value,
-        scaleMax: ceil,
-        scaleMin: floor,
+        scaleMax: attribute.value,
+        scaleMin: attribute.value,
         isHigherBetter: true,
-        friendlyName: _.startCase(attribute.key)
+        friendlyName: _.startCase(attribute.key),
+        step: 1
       });
     } else {
       const attrInfo = state.data[index];
       if (attrInfo.maxValue < attribute.value) {
         attrInfo.maxValue = attribute.value;
-        attrInfo.scaleMax = ceil;
       }
       if (attrInfo.minValue > attribute.value) {
         attrInfo.minValue = attribute.value;
-        attrInfo.scaleMin = floor;
+      }
+      const magnitude = Math.floor(Math.log((attrInfo.maxValue + attrInfo.minValue) / 2) / Math.LN10 + 0.000000001);
+      attrInfo.step = Math.pow(10, magnitude - 2);
+
+      const precision = Math.floor(Math.log(attrInfo.maxValue - attrInfo.minValue) / Math.LN10 + 0.000000001);
+      if (Math.abs(precision) > 2) {
+        attrInfo.scaleMax = parseFloat((attrInfo.maxValue + attrInfo.step).toPrecision(Math.abs(precision) + 1));
+        attrInfo.scaleMin = parseFloat((attrInfo.minValue - attrInfo.step).toPrecision(Math.abs(precision) + 1));
+      } else {
+        attrInfo.scaleMax = parseFloat((attrInfo.maxValue + attrInfo.step).toPrecision(2));
+        attrInfo.scaleMin = parseFloat((attrInfo.minValue - attrInfo.step).toPrecision(2));
       }
       Vue.set(state.data, index, attrInfo);
     }
