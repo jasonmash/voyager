@@ -23,11 +23,16 @@ import { Component, Vue } from "vue-property-decorator";
   }
 })
 export default class RangeSlider extends Vue {
-  public value1: number = this.$props.minValue;
-  public value2: number = this.$props.maxValue;
+  public value1: number = 0;
+  public value2: number = 0;
 
   public percent1: number = 0;
   public percent2: number = 100;
+
+  public mounted() {
+    this.value1 = this.$props.minValue;
+    this.value2 = this.$props.maxValue;
+  }
 
   get percentStyle() {
     this.percent1 = 100 * ((this.value1 - this.$props.min) / (this.$props.max - this.$props.min));
@@ -36,7 +41,7 @@ export default class RangeSlider extends Vue {
     const percentLow = this.percent1 > this.percent2 ? this.percent2 : this.percent1;
     const percentHigh = this.percent1 > this.percent2 ? this.percent1 : this.percent2;
 
-    return `--low:${percentLow + 1}%; --high:${percentHigh - 1}%;`;
+    return `--low:${percentLow + 0.5}%; --high:${percentHigh - 0.5}%;`;
   }
 
   public onChange() {
