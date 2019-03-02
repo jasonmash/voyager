@@ -13,6 +13,7 @@ describe("Store: Attributes", () => {
       minValue: 5,
       scaleMax: 10,
       scaleMin: 4,
+      step: 1,
       friendlyName: "Attribute Key"
     };
     const state = { data: [existing] };
@@ -51,6 +52,7 @@ describe("Store: Attributes", () => {
       minValue: 5,
       scaleMax: 10,
       scaleMin: 4,
+      step: 1,
       friendlyName: "Attribute Key"
     };
     const state = { data: [existing] };
@@ -80,6 +82,7 @@ describe("Store: Attributes", () => {
       minValue: 5,
       scaleMax: 10,
       scaleMin: 4,
+      step: 1,
       friendlyName: "Attribute Key"
     };
     const state = { data: [existing] };
@@ -101,6 +104,7 @@ describe("Store: Attributes", () => {
       minValue: 5,
       scaleMax: 10,
       scaleMin: 4,
+      step: 1,
       friendlyName: "Attribute Key"
     };
     const state = { data: [existing] };

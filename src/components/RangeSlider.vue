@@ -23,15 +23,15 @@ import { Component, Vue } from "vue-property-decorator";
   }
 })
 export default class RangeSlider extends Vue {
-  public value1: number = this.minValue;
-  public value2: number = this.maxValue;
+  public value1: number = this.$props.minValue;
+  public value2: number = this.$props.maxValue;
 
   public percent1: number = 0;
   public percent2: number = 100;
 
   get percentStyle() {
-    this.percent1 = 100 * ((this.value1 - this.min) / (this.max - this.min));
-    this.percent2 = 100 * ((this.value2 - this.min) / (this.max - this.min));
+    this.percent1 = 100 * ((this.value1 - this.$props.min) / (this.$props.max - this.$props.min));
+    this.percent2 = 100 * ((this.value2 - this.$props.min) / (this.$props.max - this.$props.min));
 
     const percentLow = this.percent1 > this.percent2 ? this.percent2 : this.percent1;
     const percentHigh = this.percent1 > this.percent2 ? this.percent1 : this.percent2;
