@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 
-import { AttributeValue, Attribute } from "@/models/attribute";
+import { Attribute } from "@/models/attribute";
 import { Configuration } from "@/models/configuration";
 
 @Component
@@ -30,11 +30,13 @@ export default class DetailsComponent extends Vue {
     const configuration = this.value;
     const data: any[] = [];
 
-    configuration.attributes.forEach((a: AttributeValue) => {
-      const info = this.attributeInfo.find((i) => i.key === a.key);
-      if (info) {
-        data.push({ name: info.friendlyName, min: info.minValue, max: info.maxValue, value: a.value });
-      }
+    this.attributeInfo.forEach((a: Attribute) => {
+      data.push({
+        name: a.friendlyName,
+        min: a.minValue,
+        max: a.maxValue,
+        value: configuration.attributes[a.key]
+      });
     });
 
     return {

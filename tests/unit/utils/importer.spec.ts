@@ -28,12 +28,10 @@ describe("Utils: Importer", () => {
     const config1 = store.state.configurations.data.find((c: Configuration) => c.id === "config1");
     expect(config1).to.be.an("object");
     expect(config1).to.have.property("attributes");
-    expect(config1.attributes.length).to.equal(2);
-    expect(config1.attributes[0].key).to.equal("attr1");
-    expect(config1.attributes[0].value).to.equal(10);
+    expect(config1.attributes.attr1).to.equal(10);
   });
 
-  it("Imports a configuration object with attribute values", () => {
+  it("Imports a configuration object with structural properties", () => {
 
     const data: any = {
       id: "config1",
@@ -64,7 +62,7 @@ describe("Utils: Importer", () => {
       configurations: {
         data: [{
           id: "config1",
-          attributes: [{ key: "cost", value: 10 }],
+          attributes: { cost: 10 },
           structure: {
             connections: [{ label: "WorkflowBinding", from: "AS10", to: "TASWorkflow0" }],
             components: ["AS10", "TASWorkflow0"]
@@ -96,9 +94,7 @@ describe("Utils: Importer", () => {
     const config1 = store.state.configurations.data.find((c: Configuration) => c.id === "config1");
     expect(config1).to.be.an("object");
     expect(config1).to.have.property("attributes");
-    expect(config1.attributes.length).to.equal(1);
-    expect(config1.attributes[0].key).to.equal("cost");
-    expect(config1.attributes[0].value).to.equal(10);
+    expect(config1.attributes.cost).to.equal(10);
     expect(config1).to.have.property("structure");
     expect(config1.structure.components).to.include("AS10");
     expect(config1.structure.components).to.include("TASWorkflow0");

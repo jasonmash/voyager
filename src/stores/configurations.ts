@@ -27,7 +27,7 @@ const mutations = {
    * @param {Configuration} payload Configuration to add
    */
   addConfiguration: (state: State, payload: Configuration) => {
-    state.data.push(payload);
+    state.data.push(new Configuration(payload));
   },
 
   /**
@@ -41,7 +41,7 @@ const mutations = {
       if (index > -1) {
         Vue.set(state.data, index, _.merge(state.data[index], c));
       } else {
-        state.data.push(c);
+        state.data.push(new Configuration(c));
       }
     });
   },

@@ -7,9 +7,9 @@
     <b-card-group deck>
         <b-card no-body header="Attributes" class="mb-3">
           <b-list-group flush>
-            <b-list-group-item v-for="attribute in value.attributes" :key="`attr-${attribute.key}`">
+            <b-list-group-item v-for="attribute in attributeInfo" :key="`attr-${attribute.key}`">
               <span><router-link :to="'/attributes/' + attribute.key">{{getAttrFriendlyName(attribute.key)}}</router-link>:</span>
-              <span class="float-right number-text">{{attribute.value}}</span>
+              <span class="float-right number-text">{{value.attributes[attribute.key]}}</span>
             </b-list-group-item>
             <b-list-group-item class="pt-5">
               <e-chart :options="radarData" :init-options="{renderer: 'svg'}" autoresize style="width:auto; height: 250px;" />

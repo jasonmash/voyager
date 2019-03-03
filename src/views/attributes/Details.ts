@@ -16,9 +16,8 @@ export default class AttributesComponent extends Vue {
 
     let result: any = [];
     configurations.forEach((c: Configuration) => {
-      const attr = c.attributes.find((a) => a.key === attribute.key);
-      if (attr) {
-        result.push({ id: c.id, value: attr.value });
+      if (c.attributes[attribute.key]) {
+        result.push({ id: c.id, value: c.attributes[attribute.key] });
       }
     });
 

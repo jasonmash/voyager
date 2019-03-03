@@ -36,8 +36,8 @@ export default class ConfigurationsComponent extends Vue {
       const inName = item.id ? item.id.toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1 : false;
       let validAttributes = true;
       attributes.forEach((a: any) => {
-        const val = _.find(item.attributes, ["key", a.attribute.key]);
-        if (val && (val.value > a.maxValue || val.value < a.minValue)) { validAttributes = false; }
+        const val = item.attributes[a.attribute.key];
+        if (val && (val > a.maxValue || val < a.minValue)) { validAttributes = false; }
       });
       return inName && validAttributes;
     });

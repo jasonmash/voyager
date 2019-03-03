@@ -62,21 +62,9 @@ export interface Attribute {
 
 
 /**
- * Describes an attribute value, linking an attribute via its key to a number
- * @interface AttributeValue
+ * Describes a set of attribute values, linking an attribute via its key to a number
+ * @interface AttributeValues
  */
-export interface AttributeValue {
-  /**
-   * Attribute key, used to identify which Attribute this refers to
-   * @type {string}
-   * @memberof AttributeValue
-   */
-  key: string;
-
-  /**
-   * Value of attribute
-   * @type {number}
-   * @memberof AttributeValue
-   */
-  value: number;
+export interface AttributeValues {
+  [key: string]: number;
 }

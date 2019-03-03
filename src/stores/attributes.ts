@@ -2,7 +2,7 @@ import _ from "lodash";
 import Vue from "vue";
 import { ActionTree, GetterTree, MutationTree } from "vuex";
 
-import { AttributeValue, Attribute } from "@/models/attribute";
+import { Attribute } from "@/models/attribute";
 
 export class State {
   public data: Attribute[] = [];
@@ -21,9 +21,9 @@ const mutations = {
   /**
    * Process attribute values, updating min/max values and scales as necessary
    * @param {*} state Reference to state to update
-   * @param {AttributeValue} attribute Attribute value to process
+   * @param {{ key: string, value: number }} attribute Attribute value to process
    */
-  processAttributeValue: (state: State, attribute: AttributeValue) => {
+  processAttributeValue: (state: State, attribute: { key: string, value: number }) => {
     const index = _.findIndex(state.data, (f: Attribute) => f.key === attribute.key);
 
     if (index === -1) {

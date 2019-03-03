@@ -1,17 +1,16 @@
 import { expect } from "chai";
 
 import { Configuration } from "@/models/configuration";
-import { AttributeValue } from "@/models/attribute";
 
 describe("Configuration", () => {
   it("creates new object when constructor is used", () => {
     const id = "configuration_id";
-    const configuration: Configuration = new Configuration(id);
+    const configuration: Configuration = new Configuration({id});
     expect(configuration.id).to.equal(id);
   });
 
   it("loads graph properties from provided data", () => {
-    const configuration: Configuration = new Configuration("configuration_id");
+    const configuration: Configuration = new Configuration({id: "configuration_id"});
     expect(configuration.structure.components).to.be.length(0);
 
     const graphData = [
@@ -34,21 +33,18 @@ describe("Configuration", () => {
   });
 
   it("loads attributes from provided data", () => {
-    const configuration: Configuration = new Configuration("configuration_id");
-    expect(configuration.attributes).to.be.length(0);
+    const configuration: Configuration = new Configuration({ id: "configuration_id" });
 
     const attributeList = [{ cost: "10.7" }];
 
-    const commit = (mutation: string, attribute: AttributeValue) => {
+    const commit = (mutation: string, attribute: any) => {
       expect(mutation).to.be.equal("processAttributeValue");
       expect(attribute.key).to.be.equal("cost");
       expect(attribute.value).to.be.equal(10.7);
     };
 
     configuration.setAttributes(attributeList, { commit });
-    expect(configuration.attributes.length).to.be.equal(1);
-    expect(configuration.attributes[0].key).to.be.equal("cost");
-    expect(configuration.attributes[0].value).to.be.equal(10.7);
+    expect(configuration.attributes.cost).to.be.equal(10.7);
   });
 
   /*

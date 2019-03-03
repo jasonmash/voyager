@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-import { AttributeValue, Attribute } from "@/models/attribute";
+import { Attribute } from "@/models/attribute";
 
 import { attributes } from "@/stores/attributes";
 
@@ -19,7 +19,7 @@ describe("Store: Attributes", () => {
     const state = { data: [existing] };
 
     // Process new attribute with lowest value so far
-    const newAttribute1: AttributeValue = { key: "attributeKey", value: 2 };
+    const newAttribute1 = { key: "attributeKey", value: 2 };
     attributes.mutations.processAttributeValue(state, newAttribute1);
 
     expect(state.data[0].minValue).to.equal(2);
@@ -28,7 +28,7 @@ describe("Store: Attributes", () => {
     expect(state.data[0].scaleMax).to.equal(10);
 
     // Process new attribute with highest value so far
-    const newAttribute2: AttributeValue = { key: "attributeKey", value: 11 };
+    const newAttribute2 = { key: "attributeKey", value: 11 };
     attributes.mutations.processAttributeValue(state, newAttribute2);
 
     expect(state.data[0].minValue).to.equal(2);
@@ -37,7 +37,7 @@ describe("Store: Attributes", () => {
     expect(state.data[0].scaleMax).to.equal(11);
 
     // Process new attribute where key doesn't exist
-    const newAttribute3: AttributeValue = { key: "newAttributeKey", value: 5 };
+    const newAttribute3 = { key: "newAttributeKey", value: 5 };
     attributes.mutations.processAttributeValue(state, newAttribute3);
 
     expect(state.data.length).to.equal(2);

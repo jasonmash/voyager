@@ -40,7 +40,7 @@ export default class Importer {
         if (index >= 0) {
           configurations[index].setAttributes(config[id], $store);
         } else {
-          const c = new Configuration(id);
+          const c = new Configuration({ id });
           c.setAttributes(config[id], $store);
           configurations.push(c);
         }
@@ -63,7 +63,7 @@ export default class Importer {
     if (index >= 0) {
       configurations[index].setGraph(data.graph);
     } else {
-      const c = new Configuration(data.id);
+      const c = new Configuration({id: data.id});
       c.setGraph(data.graph);
       configurations.push(c);
     }

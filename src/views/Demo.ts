@@ -1,6 +1,6 @@
 import { Component, Vue } from "vue-property-decorator";
 
-import { Attribute, AttributeValue } from "@/models/attribute";
+import { Attribute } from "@/models/attribute";
 import { Configuration } from "@/models/configuration";
 
 @Component
@@ -23,11 +23,7 @@ export default class Demo extends Vue {
     });
 
     this.configurations.forEach((c: Configuration) => {
-      const r = [0, 0, 0];
-      c.attributes.forEach((a: AttributeValue) => {
-        const index = result[0].findIndex((k: string) => k === a.key);
-        r[index] = a.value;
-      });
+      const r = [c.attributes[result[0][1]], c.attributes[result[0][2]], c.attributes[result[0][3]]];
       result.push(r);
     });
     return result;
