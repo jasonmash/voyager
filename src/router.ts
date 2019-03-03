@@ -17,7 +17,7 @@ export default new Router({
     { path: "/attributes/:id", component: () => import("./views/attributes/Attributes.vue") },
     { path: "/configurations", component: () => import("./views/configurations/Configurations.vue") },
     { path: "/configurations/:id", component: () => import("./views/configurations/Configurations.vue") },
-    { path: "/solutions", component: () => import("./views/Demo.vue") },
+    { path: "/reports/:id", component: () => import("./views/reports/Report.vue") },
     { path: "*", component: () => import("./views/404.vue") }
   ]
 });

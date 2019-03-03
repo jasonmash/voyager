@@ -37,39 +37,41 @@
     </ul>
 
     <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-      <span>Saved reports</span>
-      <a class="d-flex align-items-center text-muted" href="#">
+      <span>Reports</span>
+      <router-link class="d-flex align-items-center text-muted" to="/configurations">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sidebar-icon sidebar-icon-plus-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
-      </a>
+      </router-link>
     </h6>
     <ul class="nav flex-column mb-2">
       <li class="nav-item">
-        <a class="nav-link" href="#">
+        <router-link class="nav-link" :to="'/reports/1'">
           <i class="sidebar-icon far fa-fw fa-file-alt"></i>
-          Current month
-        </a>
+          Report
+        </router-link>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">
+      <li class="nav-item" v-for="report in reports" :key="report.id + '-report'">
+        <router-link class="nav-link" :to="'/reports/'+report.id">
           <i class="sidebar-icon far fa-fw fa-file-alt"></i>
-          Last quarter
-        </a>
+          {{report.name}}
+        </router-link>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">
-          <i class="sidebar-icon far fa-fw fa-file-alt"></i>
-          Social engagement
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">
-          <i class="sidebar-icon far fa-fw fa-file-alt"></i>
-          Year-end sale
-        </a>
+      <li v-if="reports.length === 0" class="nav-item pt-1">
+        <span class="text-muted pl-3">No reports found</span>
       </li>
     </ul>
   </nav>
 </template>
+
+<script lang="ts">
+import { Component, Vue } from "vue-property-decorator";
+
+@Component
+export default class Sidebar extends Vue {
+  get reports() {
+    return this.$store.getters.reports;
+  }
+}
+</script>
 
 <style>
 .sidebar {
@@ -141,7 +143,7 @@
   width: 220px;
   top: 0;
   margin-bottom: 8px;
-  background: #074a92;
+  background: #0c3067;
   color: white;
   position: sticky;
 }

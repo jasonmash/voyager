@@ -33,9 +33,18 @@
 
           <div class="mt-2">Value: {{ attr.minValue }} - {{ attr.maxValue }}</div>
         </div>
-        <h5>Order By</h5>
-
+        <b-btn variant="primary" size="sm" v-b-modal.newreport>Create report</b-btn>
       </b-container>
     </div>
+
+    <b-modal id="newreport" title="Create Report">
+      <b-form>
+        <b-form-group label="Report name:" label-for="name">
+          <b-form-input id="name" type="text" required />
+        </b-form-group>
+
+        <b-button type="submit" variant="primary">Submit</b-button>
+      </b-form>
+    </b-modal>
   </div>
 </template>
