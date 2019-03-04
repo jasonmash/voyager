@@ -84,22 +84,24 @@ export default class Scatter3DChart extends Vue {
       this.chartData.xAxis3D.min = data.attributes[0].scaleMin;
       this.chartData.xAxis3D.max = data.attributes[0].scaleMax;
       this.chartData.xAxis3D.name = data.attributes[0].friendlyName;
+      this.chartData.series[0].encode.x = data.attributes[0].friendlyName;
+    }
 
+    if (this.chartData.yAxis3D.name !== data.attributes[1].friendlyName) {
       this.chartData.yAxis3D.min = data.attributes[1].scaleMin;
       this.chartData.yAxis3D.max = data.attributes[1].scaleMax;
       this.chartData.yAxis3D.name = data.attributes[1].friendlyName;
+      this.chartData.series[0].encode.y = data.attributes[1].friendlyName;
+    }
 
+    if (this.chartData.zAxis3D.name !== data.attributes[2].friendlyName) {
       this.chartData.zAxis3D.min = data.attributes[2].scaleMin;
       this.chartData.zAxis3D.max = data.attributes[2].scaleMax;
       this.chartData.zAxis3D.name = data.attributes[2].friendlyName;
-
-      this.chartData.series[0].encode.x = data.attributes[0].friendlyName;
-      this.chartData.series[0].encode.y = data.attributes[1].friendlyName;
       this.chartData.series[0].encode.z = data.attributes[2].friendlyName;
-
-      this.chartData.dataset.dimensions = [data.attributes[0].key, data.attributes[1].key, data.attributes[2].key];
     }
 
+    this.chartData.dataset.dimensions = [data.attributes[0].key, data.attributes[1].key, data.attributes[2].key];
     this.chartData.series[0].data = data.values;
 
     this.chartData.dataset.source = data.values;
