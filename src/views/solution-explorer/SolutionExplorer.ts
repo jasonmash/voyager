@@ -10,13 +10,17 @@ import { ChartType } from "@/models/chart-data";
 
 import BarChart from "@/components/charts/bar.vue";
 import LineChart from "@/components/charts/line.vue";
+import RadarChart from "@/components/charts/radar.vue";
 import Scatter2DChart from "@/components/charts/scatter-2d.vue";
 import Scatter3DChart from "@/components/charts/scatter-3d.vue";
+import StructureChart from "@/components/charts/structure.vue";
 
 @Component({
   components: {
     BarChart,
     LineChart,
+    RadarChart,
+    StructureChart,
     "scatter2d-chart": Scatter2DChart,
     "scatter3d-chart": Scatter3DChart,
     "range-slider": RangeSlider,
@@ -27,6 +31,7 @@ export default class SolutionExplorerComponent extends Vue {
   public drag: boolean = false;
   public attributes: any = [];
   public chartType: ChartType = ChartType.Line;
+  public selectedConfiguration: Configuration | null = null;
 
   public created() {
     const data: Attribute[] = this.$store.getters.attributes;
