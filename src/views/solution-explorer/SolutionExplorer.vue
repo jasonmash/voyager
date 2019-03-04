@@ -22,6 +22,7 @@
       </b-col>
       <b-col sm="3" class="border-right" style="height: 88vh; overflow-y: auto">
         <h5>Matching Configurations</h5>
+        <p class="mb-2">Showing {{list.length}} of {{totalCount}}</p>
         <b-list-group flush>
           <b-list-group-item :ref="`i-${index}`" v-for="(item, index) in list" :key="index" v-bind:to="'/configurations/' + item.id" :replace="!!$route.params.id" class="px-3 py-2">
             <p class="mb-0">

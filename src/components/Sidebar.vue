@@ -29,7 +29,7 @@
         </router-link>
       </li>
       <li class="nav-item">
-        <router-link class="nav-link" to="/overview">
+        <router-link class="nav-link" to="/data">
           <i class="sidebar-icon fa fa-fw fa-database"></i>
           Data Management
         </router-link>

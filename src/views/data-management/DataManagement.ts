@@ -5,7 +5,7 @@ import DataManagement from "@/utils/data-management";
 import Importer from "@/utils/importer";
 
 @Component
-export default class OverviewComponent extends Vue {
+export default class DataManagementComponent extends Vue {
   public files: File[] | null = null;
   public configurations: Configuration[] = [];
 
