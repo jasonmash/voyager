@@ -1,9 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
 
-import Page from "./views/layouts/Explorer.vue";
-import Layout from "./layouts/Layout.vue";
-
 Vue.use(Router);
 
 // Initialise route list (determines what each URL does)
@@ -18,6 +15,7 @@ export default new Router({
     { path: "/configurations", component: () => import("./views/configurations/Configurations.vue") },
     { path: "/configurations/:id", component: () => import("./views/configurations/Configurations.vue") },
     { path: "/reports/:id", component: () => import("./views/reports/Report.vue") },
+    { path: "/solutions", component: () => import("./views/solution-explorer/SolutionExplorer.vue") },
     { path: "*", component: () => import("./views/404.vue") }
   ]
 });

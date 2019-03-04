@@ -25,7 +25,7 @@ export default class LineChart extends Vue {
     const data: LineChartData = this.data;
 
     const chartData = {
-      animation: true,
+      animation: false,
       textStyle: {
         fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif"
       },

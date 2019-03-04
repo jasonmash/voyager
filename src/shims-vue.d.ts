@@ -5,3 +5,4 @@ declare module "*.vue" {
 
 declare module "vue-echarts";
 declare module "deepmerge";
+declare module "vuedraggable";

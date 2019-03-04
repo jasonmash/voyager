@@ -7,7 +7,7 @@
 <style scoped>
   .scatter2d-chart {
     width:auto;
-    height: 300px;
+    height: 400px;
   }
 </style>
 
@@ -25,29 +25,33 @@ export default class Scatter2DChart extends Vue {
     const data: Scatter2DChartData = this.data;
 
     const chartData = {
-      animation: true,
+      animation: false,
       textStyle: {
         fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif"
-      },
-      tooltip: {
-          trigger: "axis",
-          position: (pt: any) => [pt[0], "10%"]
       },
       xAxis: {
         type: "value",
         min: data.attributes[0].scaleMin,
-        max: data.attributes[0].scaleMax
+        max: data.attributes[0].scaleMax,
+        name: data.attributes[0].friendlyName,
+        nameLocation: "middle"
       },
       yAxis: {
         type: "value",
         min: data.attributes[1].scaleMin,
-        max: data.attributes[1].scaleMax
+        max: data.attributes[1].scaleMax,
+        name: data.attributes[1].friendlyName,
+        nameLocation: "middle"
       },
+      tooltip: {},
       series: [{
         symbolSize: 5,
         data: data.values,
         type: "scatter",
-        showAllSymbol: true
+        showAllSymbol: true,
+        tooltip: {
+          formatter: (params: any) => params.value[2]
+        }
       }]
     };
     return chartData;

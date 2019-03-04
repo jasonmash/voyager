@@ -25,7 +25,7 @@ export default class BarChart extends Vue {
     const data: BarChartData = this.data;
 
     const chartData = {
-      animation: true,
+      animation: false,
       textStyle: {
         fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif"
       },
