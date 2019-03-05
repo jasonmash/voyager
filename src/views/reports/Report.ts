@@ -2,16 +2,16 @@
 import { Component, Vue } from "vue-property-decorator";
 
 import { Report, Section } from "@/models/report";
-import { ChartType, BarChartData, LineChartData, Scatter2DChartData, Scatter3DChartData } from "@/models/chart-data";
+import { ChartType, CategoryChartData, ChartData } from "@/models/chart-data";
 import { Configuration } from "@/models/configuration";
 import { Attribute } from "@/models/attribute";
 import BarChart from "@/components/charts/bar.vue";
 import LineChart from "@/components/charts/line.vue";
-import Scatter2DChart from "@/components/charts/scatter-2d.vue";
+import ScatterChart from "@/components/charts/scatter.vue";
 import Scatter3DChart from "@/components/charts/scatter-3d.vue";
 
 @Component({
-  components: { BarChart, LineChart, "scatter2d-chart": Scatter2DChart, "scatter3d-chart": Scatter3DChart }
+  components: { BarChart, LineChart, ScatterChart, "scatter3d-chart": Scatter3DChart }
 })
 export default class ReportComponent extends Vue {
   public newSection: Section | undefined;
@@ -61,7 +61,7 @@ export default class ReportComponent extends Vue {
 
     switch (this.newSection.type) {
       case ChartType.Bar: {
-        const data: BarChartData = {
+        const data: CategoryChartData = {
           categories: this.configurations.map((c: Configuration) => c.id),
           values: this.configurations.map((c: Configuration) => c.attributes[attributeKey]),
           attributes: [attribute]
@@ -71,7 +71,7 @@ export default class ReportComponent extends Vue {
       }
 
       case ChartType.Line: {
-        const data: LineChartData = {
+        const data: CategoryChartData = {
           categories: this.configurations.map((c: Configuration) => c.id),
           values: this.configurations.map((c: Configuration) => c.attributes[attributeKey]),
           attributes: [attribute]
@@ -81,10 +81,9 @@ export default class ReportComponent extends Vue {
       }
 
       case ChartType.Scatter2D: {
-        const data: Scatter2DChartData = {
-          configurations: this.configurations.map((c: Configuration) => c.id),
+        const data: ChartData = {
           values: this.configurations.map(
-            (c: Configuration) => [c.attributes[attribute.key], c.attributes[attribute2.key]]),
+            (c: Configuration) => [c.attributes[attribute.key], c.attributes[attribute2.key], c.id]),
           attributes: [attribute, attribute2]
         };
         this.newSection.data = data;
@@ -92,7 +91,7 @@ export default class ReportComponent extends Vue {
       }
 
       case ChartType.Scatter3D: {
-        const data: Scatter3DChartData = {
+        const data: ChartData = {
           values: this.configurations.map((c: Configuration) => [
               c.attributes[attribute.key],
               c.attributes[attribute2.key],

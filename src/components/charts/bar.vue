@@ -14,15 +14,15 @@
 <script lang="ts">
 import { Prop, Component, Vue } from "vue-property-decorator";
 import { Report, Section } from "@/models/report";
-import { ChartType, BarChartData } from "@/models/chart-data";
+import { ChartType, CategoryChartData } from "@/models/chart-data";
 
 @Component
 export default class BarChart extends Vue {
-  @Prop(Object) public readonly data!: BarChartData;
+  @Prop(Object) public readonly data!: CategoryChartData;
 
   get chartData() {
     if (!this.data) { return; }
-    const data: BarChartData = this.data;
+    const data: CategoryChartData = this.data;
 
     const chartData = {
       animation: false,

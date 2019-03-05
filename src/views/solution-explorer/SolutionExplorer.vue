@@ -4,7 +4,7 @@
   <b-container fluid class="py-3">
     <h1 class="h3 mb-3">Solution Explorer</h1>
     <b-row>
-      <b-col sm="3" class="border-right">
+      <b-col sm="3" class="border-right" style="height: 88vh; overflow-y: auto">
         <h5>Parameters</h5>
         <p>Order by priority</p>
 
@@ -57,13 +57,13 @@
         <div v-else>
           <b-btn size="sm" variant="outline-primary" class="float-right">Add to report</b-btn>
           <h5>Visualisations</h5>
-          <b-card class="mt-4" no-body v-if="chartData">
-            <bar-chart v-if="chartType == 3" :data="chartData" />
-            <line-chart v-if="chartType == 3" :data="chartData" />
-            <scatter2d-chart v-if="chartType == 0" :data="chartData" />
-            <scatter3d-chart v-if="chartType == 1" :data="chartData" />
-            <radar-chart v-if="list.length < 10" :data="list" />
-          </b-card>
+          <div class="mt-4" v-if="chartData">
+            <bar-chart v-if="chartDimensions == 1" :data="chartData" />
+            <line-chart v-if="chartDimensions == 1" :data="chartData" />
+            <scatter-chart v-if="chartDimensions >= 2 && chartDimensions < 5" :data="chartData" />
+            <scatter3d-chart v-if="chartDimensions >= 3" :data="chartData" />
+          </div>
+          <radar-chart class="mt-4" v-if="list.length < 10" :data="list" />
         </div>
       </b-col>
     </b-row>

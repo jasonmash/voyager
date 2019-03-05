@@ -7,7 +7,7 @@
     <b-card v-for="(section, i) in report.sections" no-body :key="'section-' + i" :title="section.title" class="mb-3">
       <bar-chart :data="section.data" v-if="section.type == 2 && !!section.data" />
       <line-chart :data="section.data" v-if="section.type == 3 && !!section.data" />
-      <scatter2d-chart :data="section.data" v-if="section.type == 0 && !!section.data" />
+      <scatter-chart :data="section.data" v-if="section.type == 0 && !!section.data" />
       <scatter3d-chart :data="section.data" v-if="section.type == 1 && !!section.data" />
     </b-card>
 

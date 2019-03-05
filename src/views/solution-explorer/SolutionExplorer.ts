@@ -6,12 +6,11 @@ import draggable from "vuedraggable";
 import { Attribute } from "@/models/attribute";
 import { Configuration } from "@/models/configuration";
 import RangeSlider from "@/components/RangeSlider.vue";
-import { ChartType } from "@/models/chart-data";
 
 import BarChart from "@/components/charts/bar.vue";
 import LineChart from "@/components/charts/line.vue";
 import RadarChart from "@/components/charts/radar.vue";
-import Scatter2DChart from "@/components/charts/scatter-2d.vue";
+import ScatterChart from "@/components/charts/scatter.vue";
 import Scatter3DChart from "@/components/charts/scatter-3d.vue";
 import StructureChart from "@/components/charts/structure.vue";
 
@@ -21,7 +20,7 @@ import StructureChart from "@/components/charts/structure.vue";
     LineChart,
     RadarChart,
     StructureChart,
-    "scatter2d-chart": Scatter2DChart,
+    ScatterChart,
     "scatter3d-chart": Scatter3DChart,
     "range-slider": RangeSlider,
     draggable
@@ -30,7 +29,7 @@ import StructureChart from "@/components/charts/structure.vue";
 export default class SolutionExplorerComponent extends Vue {
   public drag: boolean = false;
   public attributes: any = [];
-  public chartType: ChartType = ChartType.Line;
+  public chartDimensions: number = 0;
   public selectedConfiguration: Configuration | null = null;
 
   public created() {
@@ -84,27 +83,11 @@ export default class SolutionExplorerComponent extends Vue {
 
   get chartData() {
     const attributes = _.filter(this.attributes, "filtered").map((a) => a.attribute);
-    switch (attributes.length) {
-      case 1: {
-        this.chartType = ChartType.Line;
-        break;
-      }
-      case 2: {
-        this.chartType = ChartType.Scatter2D;
-        break;
-      }
-      case 3: {
-        this.chartType = ChartType.Scatter3D;
-        break;
-      }
-      default: {
-        return;
-      }
-    }
+    this.chartDimensions = attributes.length;
 
     let data;
-    switch (this.chartType) {
-      case ChartType.Line: {
+    switch (this.chartDimensions) {
+      case 1: {
         data = {
           categories: this.list.map((c: Configuration) => c.id),
           values: this.list.map((c: Configuration) => c.attributes[attributes[0].key]),
@@ -113,9 +96,8 @@ export default class SolutionExplorerComponent extends Vue {
         break;
       }
 
-      case ChartType.Scatter2D: {
+      case 2: {
         data = {
-          configurations: this.list.map((c: Configuration) => c.id),
           values: this.list.map(
             (c: Configuration) => [c.attributes[attributes[0].key], c.attributes[attributes[1].key], c.id]),
           attributes: [attributes[0], attributes[1]]
@@ -123,7 +105,7 @@ export default class SolutionExplorerComponent extends Vue {
         break;
       }
 
-      case ChartType.Scatter3D: {
+      case 3: {
         data = {
           values: this.list.map((c: Configuration) => [
               c.attributes[attributes[0].key],
@@ -132,6 +114,35 @@ export default class SolutionExplorerComponent extends Vue {
               c.id
           ]),
           attributes: [attributes[0], attributes[1], attributes[2]]
+        };
+        break;
+      }
+
+      case 4: {
+        data = {
+          values: this.list.map((c: Configuration) => [
+              c.attributes[attributes[0].key],
+              c.attributes[attributes[1].key],
+              c.attributes[attributes[2].key],
+              c.attributes[attributes[3].key],
+              c.id
+          ]),
+          attributes: [attributes[0], attributes[1], attributes[2], attributes[3]]
+        };
+        break;
+      }
+
+      case 5: {
+        data = {
+          values: this.list.map((c: Configuration) => [
+              c.attributes[attributes[0].key],
+              c.attributes[attributes[1].key],
+              c.attributes[attributes[2].key],
+              c.attributes[attributes[3].key],
+              c.attributes[attributes[4].key],
+              c.id
+          ]),
+          attributes: [attributes[0], attributes[1], attributes[2], attributes[3], attributes[4]]
         };
         break;
       }

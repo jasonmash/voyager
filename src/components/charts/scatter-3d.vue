@@ -15,11 +15,12 @@
 <script lang="ts">
 import { Prop, Component, Vue, Watch } from "vue-property-decorator";
 import { Report, Section } from "@/models/report";
-import { ChartType, Scatter3DChartData } from "@/models/chart-data";
+import { Attribute } from "@/models/Attribute";
+import { ChartType, ChartData } from "@/models/chart-data";
 
 @Component
 export default class Scatter3DChart extends Vue {
-  @Prop(Object) public readonly data!: Scatter3DChartData;
+  @Prop(Object) public readonly data!: ChartData;
 
   public chartData: any = {
       animation: false,
@@ -46,12 +47,12 @@ export default class Scatter3DChart extends Vue {
       tooltip: {},
       series: [{
         data: [],
-        symbolSize: 2.5,
+        symbol: "circle",
         encode: {
-            tooltip: [0, 1, 2]
+          tooltip: []
         },
         tooltip: {
-          formatter: (params: any) => params.value[3]
+          formatter: (params: any) => params.value[params.value.length - 1]
         },
         type: "scatter3D"
       }],
@@ -78,7 +79,7 @@ export default class Scatter3DChart extends Vue {
   @Watch("data")
   public updateChartData() {
     if (!this.data) { return; }
-    const data: Scatter3DChartData = this.data;
+    const data: ChartData = this.data;
 
     if (this.chartData.xAxis3D.name !== data.attributes[0].friendlyName) {
       this.chartData.xAxis3D.min = data.attributes[0].scaleMin;
@@ -101,7 +102,48 @@ export default class Scatter3DChart extends Vue {
       this.chartData.series[0].encode.z = data.attributes[2].friendlyName;
     }
 
-    this.chartData.dataset.dimensions = [data.attributes[0].key, data.attributes[1].key, data.attributes[2].key];
+    if (data.attributes.length > 3) {
+      const normalisationFactor = (data.attributes[3].maxValue - data.attributes[3].minValue);
+      this.chartData.series[0].symbolSize = (value: any) => {
+        return 3 + 15 * ((value[3] - data.attributes[3].minValue) / normalisationFactor);
+      };
+    } else {
+      this.chartData.series[0].symbolSize = 4;
+    }
+    this.chartData.series[0].symbol = "circle";
+
+    if (data.attributes.length > 4) {
+      const colourMap = {
+        left: "right",
+        bottom: "20%",
+        dimension: 4,
+        min: data.attributes[4].scaleMin,
+        max: data.attributes[4].scaleMax,
+        itemHeight: 120,
+        calculable: true,
+        precision: data.attributes[4].step,
+        text: [data.attributes[4].friendlyName],
+        textGap: 30,
+        textStyle: { color: "#000" },
+        inRange: {
+          color: data.attributes[4].isHigherBetter ?
+            ["#dc3545", "#ffc107", "#28a745"] : ["#28a745", "#ffc107", "#dc3545"]
+        },
+        outOfRange: { color: ["rgba(0,0,0,.2)"] },
+        controller: {
+          inRange: {
+            color: data.attributes[3].isHigherBetter ?
+              ["#dc3545", "#ffc107", "#28a745"] : ["#28a745", "#ffc107", "#dc3545"]
+          },
+          outOfRange: { color: ["#ccc"] }
+        }
+      };
+      this.chartData.visualMap = [colourMap];
+    } else {
+      this.chartData.visualMap = undefined;
+    }
+
+    this.chartData.dataset.dimensions = data.attributes.map((a: Attribute) => a.key);
     this.chartData.series[0].data = data.values;
 
     this.chartData.dataset.source = data.values;
