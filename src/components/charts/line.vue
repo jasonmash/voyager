@@ -7,7 +7,7 @@
 <style scoped>
   .line-chart {
     width:auto;
-    height: 300px;
+    height: 400px;
   }
 </style>
 

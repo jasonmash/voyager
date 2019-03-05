@@ -82,5 +82,6 @@ export default class Importer {
     // Load new data
     $store.commit("addConfigurations", inputData.configurations.data);
     $store.commit("addAttributes", inputData.attributes.data);
+    $store.commit("addReports", inputData.reports.data);
   }
 }

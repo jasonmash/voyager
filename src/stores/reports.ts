@@ -31,6 +31,15 @@ const mutations = {
   },
 
   /**
+   * Add multiple reports
+   * @param {*} state Reference to state to update
+   * @param {Report} payload Reports to add
+   */
+  addReports: (state: State, payload: Report[]) => {
+    state.data = payload;
+  },
+
+  /**
    * Delete a report
    * @param {*} state Reference to state to update
    * @param {Report} payload Report to delete

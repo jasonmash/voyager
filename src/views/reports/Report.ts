@@ -1,5 +1,6 @@
 
 import { Component, Vue } from "vue-property-decorator";
+import _ from "lodash";
 
 import { Report, Section } from "@/models/report";
 import { ChartType, CategoryChartData, ChartData } from "@/models/chart-data";
@@ -14,15 +15,20 @@ import Scatter3DChart from "@/components/charts/scatter-3d.vue";
   components: { BarChart, LineChart, ScatterChart, "scatter3d-chart": Scatter3DChart }
 })
 export default class ReportComponent extends Vue {
-  public newSection: Section | undefined;
-  public showNewSectionBox: boolean = false;
-
-  public report: Report = {
-    id: 1,
-    name: "Report 1",
-    configurationIds: ["sol_1", "sol_2", "sol_3", "sol_4", "sol_5", "sol_6"],
-    sections: []
+  public newSection: Section = {
+    title: "",
+    type: ChartType.Bar,
+    data: {
+      attributes: [],
+      values: []
+    }
   };
+
+  public selectedChartType: ChartType = ChartType.Bar;
+
+  get report(): Report {
+    return this.$store.getters.reports.find((r: Report) => r.id.toString() === this.$route.params.id);
+  }
 
   get attributes() {
     return this.$store.getters.attributes;
@@ -35,36 +41,50 @@ export default class ReportComponent extends Vue {
   }
 
   public addSection() {
-    this.showNewSectionBox = true;
     this.newSection = {
       title: "",
       type: ChartType.Bar,
-      data: null
+      data: {
+        attributes: [],
+        values: []
+      }
     };
   }
 
   public saveNewSection() {
     if (!this.newSection) { return; }
+    this.createSection();
     this.report.sections.push(this.newSection);
-    this.showNewSectionBox = false;
+
+    this.$nextTick(() => {
+      // Wrapped in $nextTick to ensure DOM is rendered before closing
+      const modal: any = this.$refs.addSectionModal;
+      modal.hide();
+    });
   }
 
-  public updateSectionData(attributeKey: string) {
-    if (!this.newSection) { return; }
+  public updateAttr(attributeKey: string) {
+    if (!this.newSection || !this.newSection.data) { return; }
 
     const attribute = this.attributes.find((a: Attribute) => a.key === attributeKey);
     if (!attribute) { return; }
-    const attribute2 = this.attributes.find((a: Attribute) => a.key === "responseTime");
-    if (!attribute2) { return; }
-    const attribute3 = this.attributes.find((a: Attribute) => a.key === "reliability");
-    if (!attribute3) { return; }
+
+    this.newSection.data.attributes.push(attribute);
+  }
+
+
+  public createSection() {
+    if (!this.newSection || !this.newSection.data) { return; }
+    this.newSection.type = this.selectedChartType;
+
+    const attributes = _.clone(this.newSection.data.attributes);
 
     switch (this.newSection.type) {
       case ChartType.Bar: {
         const data: CategoryChartData = {
           categories: this.configurations.map((c: Configuration) => c.id),
-          values: this.configurations.map((c: Configuration) => c.attributes[attributeKey]),
-          attributes: [attribute]
+          values: this.configurations.map((c: Configuration) => c.attributes[attributes[0].key]),
+          attributes: [attributes[0]]
         };
         this.newSection.data = data;
         break;
@@ -73,8 +93,8 @@ export default class ReportComponent extends Vue {
       case ChartType.Line: {
         const data: CategoryChartData = {
           categories: this.configurations.map((c: Configuration) => c.id),
-          values: this.configurations.map((c: Configuration) => c.attributes[attributeKey]),
-          attributes: [attribute]
+          values: this.configurations.map((c: Configuration) => c.attributes[attributes[0].key]),
+          attributes: [attributes[0]]
         };
         this.newSection.data = data;
         break;
@@ -83,8 +103,8 @@ export default class ReportComponent extends Vue {
       case ChartType.Scatter2D: {
         const data: ChartData = {
           values: this.configurations.map(
-            (c: Configuration) => [c.attributes[attribute.key], c.attributes[attribute2.key], c.id]),
-          attributes: [attribute, attribute2]
+            (c: Configuration) => [c.attributes[attributes[0].key], c.attributes[attributes[1].key], c.id]),
+          attributes: [attributes[0], attributes[1]]
         };
         this.newSection.data = data;
         break;
@@ -93,12 +113,12 @@ export default class ReportComponent extends Vue {
       case ChartType.Scatter3D: {
         const data: ChartData = {
           values: this.configurations.map((c: Configuration) => [
-              c.attributes[attribute.key],
-              c.attributes[attribute2.key],
-              c.attributes[attribute3.key],
+              c.attributes[attributes[0].key],
+              c.attributes[attributes[1].key],
+              c.attributes[attributes[2].key],
               c.id
           ]),
-          attributes: [attribute, attribute2, attribute3]
+          attributes: [attributes[0], attributes[1], attributes[2]]
         };
         this.newSection.data = data;
         break;

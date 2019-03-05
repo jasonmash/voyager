@@ -12,6 +12,7 @@ export default class DataManagement {
   public static resetAllData(store: Store<any>) {
     store.commit("resetConfigurations");
     store.commit("resetAttributes");
+    store.commit("resetReports");
   }
 
   /**

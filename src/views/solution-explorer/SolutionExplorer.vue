@@ -10,14 +10,20 @@
 
         <draggable class="border-top" v-model="attributes" handle=".handle" @start="drag = true" @end="drag = false" :animation='200'>
           <transition-group type="transition" :name="!drag ? 'flip-list' : null">
-            <div v-for="attr in attributes" :key="attr.attribute.key" class="border-bottom bg-white pt-3">
+            <div v-for="(attr, i) in attributes" :key="attr.attribute.key" class="border-bottom bg-white pt-3">
               <i v-if="attr.filtered" class="fa fa-bars handle float-right"></i>
-              <b-form-checkbox class="h6 mr-3" v-model="attr.filtered" :value="true" :unchecked-value="false">{{attr.attribute.friendlyName}}</b-form-checkbox>
-              <p v-if="attr.filtered && attr.attribute.isHigherBetter">Sort: descending</p>
-              <p v-if="attr.filtered && !attr.attribute.isHigherBetter">Sort: ascending</p>
-              <range-slider v-if="attr.filtered" :min="attr.attribute.scaleMin" :max="attr.attribute.scaleMax" :step="attr.attribute.step" @change="onRangeChange(attr, $event)" :maxValue="attr.maxValue" :minValue="attr.minValue"/>
-
-              <div class="mb-3" v-if="attr.filtered">Value: {{ attr.minValue }} - {{ attr.maxValue }}</div>
+              <b-form-checkbox class="h6 mr-3" v-model="attr.filtered" :value="true" :unchecked-value="false">
+                {{attr.attribute.friendlyName}}
+              </b-form-checkbox>
+              <div v-if="attr.filtered">
+                <p class="mb-1"><b>Priority:</b> {{i + 1}}</p> 
+                <p class="mb-1" v-if="attr.attribute.isHigherBetter"><b>Optimisation Aim</b>: Higher is better</p>
+                <p class="mb-1" v-if="!attr.attribute.isHigherBetter"><b>Optimisation Aim</b>: Lower is better</p>
+                <p class="mb-2"><b>Range:</b> Between {{ attr.minValue }} and {{ attr.maxValue }}</p>
+                <div class="d-flex justify-content-center">
+                  <range-slider :min="attr.attribute.scaleMin" :max="attr.attribute.scaleMax" :step="attr.attribute.step" @change="onRangeChange(attr, $event)" :maxValue="attr.maxValue" :minValue="attr.minValue"/>
+                </div>
+              </div>
             </div>
           </transition-group>
         </draggable>
@@ -55,10 +61,9 @@
         </div>
 
         <div v-else>
-          <b-btn size="sm" variant="outline-primary" class="float-right">Add to report</b-btn>
+          <b-btn size="sm" variant="outline-primary" class="float-right" v-b-modal.newreport>Add to report</b-btn>
           <h5>Visualisations</h5>
           <div class="mt-4" v-if="chartData">
-            <bar-chart v-if="chartDimensions == 1" :data="chartData" />
             <line-chart v-if="chartDimensions == 1" :data="chartData" />
             <scatter-chart v-if="chartDimensions >= 2 && chartDimensions < 5" :data="chartData" />
             <scatter3d-chart v-if="chartDimensions >= 3" :data="chartData" />
@@ -67,6 +72,14 @@
         </div>
       </b-col>
     </b-row>
+
+    <b-modal id="newreport" title="Create Report" @ok="createReportOk" ref="newreport">
+      <b-form @submit.stop.prevent="createReportSubmit">
+        <b-form-group label="Report name:" label-for="name">
+          <b-form-input id="name" type="text" required v-model="newReportName" />
+        </b-form-group>
+      </b-form>
+    </b-modal>
   </b-container>
 </template>
 

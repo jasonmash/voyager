@@ -5,9 +5,11 @@ import draggable from "vuedraggable";
 
 import { Attribute } from "@/models/attribute";
 import { Configuration } from "@/models/configuration";
+import { Report, Section } from "@/models/report";
+import { ChartType } from "@/models/chart-data";
+
 import RangeSlider from "@/components/RangeSlider.vue";
 
-import BarChart from "@/components/charts/bar.vue";
 import LineChart from "@/components/charts/line.vue";
 import RadarChart from "@/components/charts/radar.vue";
 import ScatterChart from "@/components/charts/scatter.vue";
@@ -16,7 +18,6 @@ import StructureChart from "@/components/charts/structure.vue";
 
 @Component({
   components: {
-    BarChart,
     LineChart,
     RadarChart,
     StructureChart,
@@ -31,6 +32,7 @@ export default class SolutionExplorerComponent extends Vue {
   public attributes: any = [];
   public chartDimensions: number = 0;
   public selectedConfiguration: Configuration | null = null;
+  public newReportName: string = "";
 
   public created() {
     const data: Attribute[] = this.$store.getters.attributes;
@@ -148,5 +150,79 @@ export default class SolutionExplorerComponent extends Vue {
       }
     }
     return data;
+  }
+
+  public createReportOk(evt: Event) {
+    // Prevent modal from closing
+    evt.preventDefault();
+
+    if (!this.newReportName) {
+      alert("Please enter a report name");
+    } else {
+      this.createReportSubmit();
+    }
+  }
+
+  public createReportSubmit() {
+    const chartData: any = this.chartData;
+    const sections: Section[] = [];
+
+    if (this.chartDimensions === 1) {
+      sections.push({
+        title: "Bar Chart",
+        type: ChartType.Bar,
+        data: chartData
+      });
+      sections.push({
+        title: "Line Chart",
+        type: ChartType.Line,
+        data: chartData
+      });
+    }
+
+    if (this.chartDimensions === 2) {
+      sections.push({
+        title: "2D Scatter Chart",
+        type: ChartType.Scatter2D,
+        data: chartData
+      });
+    }
+
+    if (this.chartDimensions === 3 || this.chartDimensions === 4) {
+      sections.push({
+        title: "2D Scatter Chart",
+        type: ChartType.Scatter2D,
+        data: chartData
+      });
+      sections.push({
+        title: "3D Scatter Chart",
+        type: ChartType.Scatter3D,
+        data: chartData
+      });
+    }
+
+    if (this.chartDimensions === 5) {
+      sections.push({
+        title: "3D Scatter Chart",
+        type: ChartType.Scatter3D,
+        data: chartData
+      });
+    }
+
+    const report: Report = {
+      id: this.$store.getters.reports.length,
+      name: this.newReportName,
+      configurationIds: this.list.map((c: Configuration) => c.id),
+      sections
+    };
+
+    this.$store.commit("addReport", report);
+
+    this.$nextTick(() => {
+      // Wrapped in $nextTick to ensure DOM is rendered before closing
+      const modal: any = this.$refs.newreport;
+      modal.hide();
+      this.$router.push("/reports/" + report.id);
+    });
   }
 }

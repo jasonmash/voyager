@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="range-slider">
     <div class="multirange-box"></div>
     <input type="range" class="multirange original" @input="onChange" v-model="value1" :min="min" :max="max" :step="step">
     <input type="range" class="multirange ghost"    @input="onChange" v-model="value2" :min="min" :max="max" :step="step" :style="percentStyle">
@@ -55,6 +55,9 @@ export default class RangeSlider extends Vue {
 </script>
 
 <style>
+.range-slider {
+  width: 250px;
+}
 .multirange-box {
   position: absolute;
   z-index: 1;
