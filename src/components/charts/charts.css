@@ -5,26 +5,26 @@
 }
 
 .bar-chart {
-  width:auto;
-  height: 400px;
+  width: auto;
+  height: 450px;
 }
 
 .line-chart {
-  width:auto;
-  height: 400px;
+  width: auto;
+  height: 450px;
 }
 
 .scatter3d-chart {
-  width:auto;
-  height: 400px;
+  width: auto;
+  height: 450px;
 }
 
 .scatter-chart {
-  width:auto;
-  height: 400px;
+  width: auto;
+  height: 450px;
 }
 
 .radar-chart {
-  width:auto;
-  height: 400px;
+  width: auto;
+  height: 450px;
 }

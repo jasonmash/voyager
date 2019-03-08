@@ -34,10 +34,7 @@ export default class Scatter3DChart extends Vue {
         viewControl: {
           projection: "perspective"
         },
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0
+        right: 50
       },
       xAxis3D: {
         scale: true,
@@ -141,7 +138,7 @@ export default class Scatter3DChart extends Vue {
     if (data.attributes.length > 4) {
       const colourMap = {
         left: "right",
-        bottom: "20%",
+        top: "10%",
         dimension: 4,
         min: data.attributes[4].scaleMin,
         max: data.attributes[4].scaleMax,

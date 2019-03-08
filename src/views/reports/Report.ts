@@ -65,6 +65,7 @@ export default class ReportComponent extends Vue {
   public saveNewSection() {
     if (!this.newSection || !this.report) { return; }
 
+    this.newSection.type = this.newSectionData.type;
     this.newSection.data = this.loadSectionData();
     this.$store.commit("addReportSection", { id: this.report.id, section: this.newSection});
 
@@ -80,7 +81,7 @@ export default class ReportComponent extends Vue {
 
     switch (this.newSection.type) {
       case ChartType.Bar: {
-        const configs: Configuration[] = _.orderBy(this.configurations, [this.newSectionData.x]);
+        const configs: Configuration[] = _.orderBy(this.configurations, ["attributes." + this.newSectionData.x]);
         const data: CategoryChartData = {
           categories: configs.map((c: Configuration) => c.id),
           values: configs.map((c: Configuration) => c.attributes[this.newSectionData.x]),
@@ -90,7 +91,7 @@ export default class ReportComponent extends Vue {
       }
 
       case ChartType.Line: {
-        const configs: Configuration[] = _.orderBy(this.configurations, [this.newSectionData.x]);
+        const configs: Configuration[] = _.orderBy(this.configurations, ["attributes." + this.newSectionData.x]);
         const data: CategoryChartData = {
           categories: configs.map((c: Configuration) => c.id),
           values: configs.map((c: Configuration) => c.attributes[this.newSectionData.x]),
@@ -141,5 +142,16 @@ export default class ReportComponent extends Vue {
     }
 
     return null;
+  }
+
+  public deleteReport() {
+    if (!this.report) { return; }
+
+    const result = confirm("Are you sure you wish to delete this report?");
+
+    if (result) {
+      this.$store.commit("deleteReport", this.report);
+      this.$router.replace("/");
+    }
   }
 }

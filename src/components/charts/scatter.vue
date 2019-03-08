@@ -44,7 +44,7 @@ export default class ScatterChart extends Vue {
     if (colourAttribute) {
       colourMap = {
         left: "right",
-        bottom: "20%",
+        top: "10%",
         dimension: 3,
         min: colourAttribute.scaleMin,
         max: colourAttribute.scaleMax,
@@ -78,7 +78,7 @@ export default class ScatterChart extends Vue {
       grid: {
         top: 30,
         left: 70,
-        right: 30,
+        right: 50,
         bottom: 60
       },
       xAxis: {
