@@ -1,7 +1,12 @@
 <template>
-  <div>
+  <b-card no-body>
+    <div slot="header" class="chart-header">
+      <b-button size="sm" class="float-right" variant="outline-secondary">Export</b-button>
+      <span v-if="title">{{title}}</span>
+      <span v-else>Structure Chart</span>
+    </div>
     <e-chart :options="chartData" :init-options="{renderer: 'canvas'}" autoresize class="structure-chart" />
-  </div>
+  </b-card>
 </template>
 
 <style scoped>
@@ -16,9 +21,12 @@ import { Prop, Component, Vue } from "vue-property-decorator";
 import { Report, Section } from "@/models/report";
 import { ConfigurationStructure } from "@/models/configuration";
 
+import "./charts.css";
+
 @Component
 export default class StructureChart extends Vue {
   @Prop(Object) public readonly data!: ConfigurationStructure;
+  @Prop(String) public readonly title!: string | undefined;
 
   get chartData() {
 

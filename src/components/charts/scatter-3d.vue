@@ -1,16 +1,14 @@
 <template>
-  <div>
+  <b-card no-body>
+    <div slot="header" class="chart-header">
+      <b-button size="sm" class="float-right" variant="outline-secondary ml-2">Export</b-button>
+      <b-button size="sm" class="float-right" variant="outline-secondary" @click="switchPerspective">Change projection</b-button>
+      <span v-if="title">{{title}}</span>
+      <span v-else>3D Scatter Chart</span>
+    </div>
     <e-chart :options="chartData" :init-options="{renderer: 'canvas'}" autoresize class="scatter3d-chart" ref="chart" />
-    <b-button @click="switchPerspective">Change projection</b-button>
-  </div>
+  </b-card>
 </template>
-
-<style scoped>
-  .scatter3d-chart {
-    width:auto;
-    height: 400px;
-  }
-</style>
 
 <script lang="ts">
 import { Prop, Component, Vue, Watch } from "vue-property-decorator";
@@ -18,9 +16,14 @@ import { Report, Section } from "@/models/report";
 import { Attribute } from "@/models/Attribute";
 import { ChartType, ChartData } from "@/models/chart-data";
 
+import "./charts.css";
+
 @Component
 export default class Scatter3DChart extends Vue {
   @Prop(Object) public readonly data!: ChartData;
+  @Prop(String) public readonly title!: string | undefined;
+
+  public isUpdating = false;
 
   public chartData: any = {
       animation: false,
@@ -30,19 +33,32 @@ export default class Scatter3DChart extends Vue {
       grid3D: {
         viewControl: {
           projection: "perspective"
-        }
+        },
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0
       },
       xAxis3D: {
         scale: true,
-        nameLocation: "middle"
+        nameLocation: "middle",
+        nameTextStyle: {
+          fontSize: 12
+        }
       },
       yAxis3D: {
         scale: true,
-        nameLocation: "middle"
+        nameLocation: "middle",
+        nameTextStyle: {
+          fontSize: 12
+        }
       },
       zAxis3D: {
         scale: true,
-        nameLocation: "middle"
+        nameLocation: "middle",
+        nameTextStyle: {
+          fontSize: 12
+        }
       },
       tooltip: {},
       series: [{
@@ -63,7 +79,7 @@ export default class Scatter3DChart extends Vue {
     this.updateChartData();
   }
 
-  public unmounted() {
+  public beforeDestroy() {
     const chart: any = this.$refs.chart;
     chart.dispose();
   }
@@ -77,6 +93,16 @@ export default class Scatter3DChart extends Vue {
   }
 
   @Watch("data")
+  public onDataUpdate() {
+    if (this.isUpdating) { return; }
+    this.isUpdating = true;
+
+    setTimeout(() => {
+      this.updateChartData();
+      this.isUpdating = false;
+    }, 100);
+  }
+
   public updateChartData() {
     if (!this.data) { return; }
     const data: ChartData = this.data;

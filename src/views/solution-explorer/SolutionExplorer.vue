@@ -4,7 +4,7 @@
   <b-container fluid class="py-3">
     <h1 class="h3 mb-3">Solution Explorer</h1>
     <b-row>
-      <b-col sm="3" class="border-right" style="height: 88vh; overflow-y: auto">
+      <b-col sm="3" class="border-right" style="height: 90vh; overflow-y: auto">
         <h5>Parameters</h5>
         <p>Order by priority</p>
 
@@ -28,19 +28,21 @@
           </transition-group>
         </draggable>
       </b-col>
-      <b-col sm="3" class="border-right" style="height: 88vh; overflow-y: auto">
+      <b-col sm="3" class="border-right" style="height: 90vh; overflow-y: auto">
         <h5>Matching Configurations</h5>
         <p class="mb-2">Showing {{list.length}} of {{totalCount}}</p>
         <b-list-group flush>
           <b-list-group-item :ref="`i-${index}`" v-for="(item, index) in list" :key="index" :class="{'px-3 py-2': true, 'bg-light': selectedConfiguration == item}" @click="selectedConfiguration = item">
             <p class="mb-0">
               {{item.id}}<br>
-              <small><code>{{item.attributes}}</code></small>
+              <small>
+                <span v-for="a in attributes.filter((a) => a.filtered)" :key="a.attribute.key"><b>{{a.attribute.friendlyName}}</b>: {{item.attributes[a.attribute.key]}}<br></span>
+              </small>
             </p>
           </b-list-group-item>
         </b-list-group>
       </b-col>
-      <b-col style="height: 88vh; overflow-y: auto; overflow-x: hidden">
+      <b-col style="height: 90vh; overflow-y: auto; overflow-x: hidden">
         <div v-if="selectedConfiguration" class="mb-4">
           <b-btn size="sm" variant="outline-secondary" class="float-right" @click="selectedConfiguration = null"><i class="fa fa-times fa-fw"></i></b-btn>
           <h5>Selected Configuration</h5>
@@ -64,9 +66,9 @@
           <b-btn size="sm" variant="outline-primary" class="float-right" v-b-modal.newreport>Add to report</b-btn>
           <h5>Visualisations</h5>
           <div class="mt-4" v-if="chartData">
-            <line-chart v-if="chartDimensions == 1" :data="chartData" />
-            <scatter-chart v-if="chartDimensions >= 2 && chartDimensions < 5" :data="chartData" />
-            <scatter3d-chart v-if="chartDimensions >= 3" :data="chartData" />
+            <line-chart v-if="chartDimensions == 1" :data="chartData" class="mb-3"/>
+            <scatter-chart v-if="chartDimensions >= 2 && chartDimensions < 5" :data="chartData" class="mb-3"/>
+            <scatter3d-chart v-if="chartDimensions >= 3" :data="chartData" class="mb-3"/>
           </div>
           <radar-chart class="mt-4" v-if="list.length < 10" :data="list" />
         </div>

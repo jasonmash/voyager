@@ -1,24 +1,27 @@
 <template>
-  <div>
-    <e-chart :options="chartData" :init-options="{renderer: 'svg'}" autoresize class="line-chart" />
-  </div>
+  <b-card no-body>
+    <div slot="header" class="chart-header">
+      <b-button size="sm" class="float-right" variant="outline-secondary" @click="exportChart">Export</b-button>
+      <span v-if="title">{{title}}</span>
+      <span v-else>Line Chart</span>
+    </div>
+    <e-chart :options="chartData" :init-options="{renderer: 'svg'}" autoresize class="line-chart" ref="chart"/>
+  </b-card>
 </template>
-
-<style scoped>
-  .line-chart {
-    width:auto;
-    height: 400px;
-  }
-</style>
 
 <script lang="ts">
 import { Prop, Component, Vue } from "vue-property-decorator";
 import { Report, Section } from "@/models/report";
 import { ChartType, CategoryChartData } from "@/models/chart-data";
 
+import { ExportSvg } from "./shared";
+
+import "./charts.css";
+
 @Component
 export default class LineChart extends Vue {
   @Prop(Object) public readonly data!: CategoryChartData;
+  @Prop(String) public readonly title!: string | undefined;
 
   get chartData() {
     if (!this.data) { return; }
@@ -29,13 +32,22 @@ export default class LineChart extends Vue {
       textStyle: {
         fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif"
       },
+      grid: {
+        top: 30,
+        left: 50,
+        right: 30,
+        bottom: 60
+      },
       tooltip: {
-          trigger: "axis",
-          position: (pt: any) => [pt[0], "10%"]
+        trigger: "axis",
+        position: (pt: any) => [pt[0], "10%"]
       },
       xAxis: {
         type: "category",
-        data: data.categories
+        data: data.categories,
+        name: data.attributes[0].friendlyName,
+        nameLocation: "middle",
+        nameGap: 35
       },
       yAxis: {
         type: "value",
@@ -49,6 +61,10 @@ export default class LineChart extends Vue {
       }]
     };
     return chartData;
+  }
+
+  public exportChart() {
+    ExportSvg(this.$refs.chart, "Chart.svg");
   }
 }
 </script>

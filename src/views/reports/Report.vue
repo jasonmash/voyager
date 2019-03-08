@@ -7,64 +7,69 @@
     </b-button>
     <h1>{{report.name}}</h1>
     
-      <b-card no-body header="Possible Configurations" class="mb-3" style="max-height: 500px; overflow-y: auto">
+    <b-card-group columns>
+      <b-card no-body header="Possible Configurations" class="mb-3" style="height: 500px; overflow-y: auto">
         <code>{{report.configurationIds}}</code>
       </b-card>
-    <b-card-group columns>
-      <b-card v-for="(section, i) in report.sections" no-body :key="'section-' + i" :header="section.title" class="mb-3">
-        <scatter-chart :data="section.data" v-if="section.type == 0 && !!section.data" />
-        <scatter3d-chart :data="section.data" v-if="section.type == 1 && !!section.data" />
-        <bar-chart :data="section.data" v-if="section.type == 2 && !!section.data" />
-        <line-chart :data="section.data" v-if="section.type == 3 && !!section.data" />
-      </b-card>
+      <div v-for="(section, i) in report.sections" no-body :key="'section-' + i" :header="section.title" class="mb-3" style="height: 500px">
+        <scatter-chart :data="section.data" :title="section.title" v-if="section.type == 0 && !!section.data" />
+        <scatter3d-chart :data="section.data" :title="section.title" v-if="section.type == 1 && !!section.data" />
+        <bar-chart :data="section.data" :title="section.title" v-if="section.type == 2 && !!section.data" />
+        <line-chart :data="section.data" :title="section.title" v-if="section.type == 3 && !!section.data" />
+      </div>
     </b-card-group>
 
-    <b-modal title="New section" id="addSectionModal" ref="addSectionModal">
-      <form>
-        <label>Title</label>
-        <b-form-input v-model="newSection.title" type="text" placeholder="Enter a title" />
+    <b-modal title="New section" id="addSectionModal" ref="addSectionModal" @ok="saveNewSection">
+      <b-form @submit.stop.prevent="saveNewSection">
+        <b-form-group label="Title">
+          <b-form-input v-model="newSection.title" type="text" placeholder="Enter a title" />
+        </b-form-group>
 
-        <label>Type</label>
-        <b-select v-model="selectedChartType">
-          <option :value="2">Bar chart</option>
-          <option :value="3">Line chart</option>
-          <option :value="0">2D scatter chart</option>
-          <option :value="1">3D scatter chart</option>
-        </b-select>
+        <b-form-group label="Type">
+          <b-select v-model="newSectionData.type">
+            <option :value="2">Bar chart</option>
+            <option :value="3">Line chart</option>
+            <option :value="0">2D scatter chart</option>
+            <option :value="1">3D scatter chart</option>
+          </b-select>
+        </b-form-group>
 
-        <label>Axis: x</label>
-        <b-select @change="updateAttr">
-          <option v-for="attr in attributes" :key="attr.key" :value="attr.key">{{attr.friendlyName}}</option>
-        </b-select>
+        <b-form-group label="Axis: X">
+          <b-select v-model="newSectionData.x">
+            <option v-for="attr in attributes" :key="attr.key" :value="attr.key">{{attr.friendlyName}}</option>
+          </b-select>
+        </b-form-group>
 
-        <div v-if="selectedChartType == 0 || selectedChartType == 1">
-            <label>Axis: y</label>
-            <b-select @change="updateAttr">
+        <div v-if="newSectionData.type == 0 || newSectionData.type == 1">
+          <b-form-group label="Axis: Y">
+            <b-select v-model="newSectionData.y">
               <option v-for="attr in attributes" :key="attr.key" :value="attr.key">{{attr.friendlyName}}</option>
             </b-select>
+          </b-form-group>
         </div>
 
-        <div v-if="selectedChartType == 1">
-          <label>Axis: z</label>
-          <b-select @change="updateAttr">
-            <option v-for="attr in attributes" :key="attr.key" :value="attr.key">{{attr.friendlyName}}</option>
-          </b-select>
+        <div v-if="newSectionData.type == 1">
+          <b-form-group label="Axis: Z">
+            <b-select v-model="newSectionData.z">
+              <option v-for="attr in attributes" :key="attr.key" :value="attr.key">{{attr.friendlyName}}</option>
+            </b-select>
+          </b-form-group>
         </div>
 
-        <div v-if="selectedChartType == 0 || selectedChartType == 1">
-          <label>Bubble size</label>
-          <b-select @change="updateAttr">
-            <option v-for="attr in attributes" :key="attr.key" :value="attr.key">{{attr.friendlyName}}</option>
-          </b-select>
+        <div v-if="newSectionData.type == 0 || newSectionData.type == 1">
+          <b-form-group label="Bubble Size">
+            <b-select v-model="newSectionData.size">
+              <option v-for="attr in attributes" :key="attr.key" :value="attr.key">{{attr.friendlyName}}</option>
+            </b-select>
+          </b-form-group>
 
-          <label>Bubble colour</label>
-          <b-select @change="updateAttr">
-            <option v-for="attr in attributes" :key="attr.key" :value="attr.key">{{attr.friendlyName}}</option>
-          </b-select>
+          <b-form-group label="Bubble Colour">
+            <b-select v-model="newSectionData.colour">
+              <option v-for="attr in attributes" :key="attr.key" :value="attr.key">{{attr.friendlyName}}</option>
+            </b-select>
+          </b-form-group>
         </div>
-
-        <b-btn variant="success" @click="saveNewSection">Add</b-btn>
-      </form>
+      </b-form>
     </b-modal>
   </b-container>
 </template>

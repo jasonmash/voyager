@@ -22,7 +22,7 @@ export default class App extends Vue {}
 
 <style>
 #app {
-  min-width: 1000px;
+  min-width: 1250px;
 }
 
 body {
@@ -39,7 +39,7 @@ body {
   bottom: 0;
   left: 220px;
   width: calc(100% - 220px);
-  min-width: calc(1000px - 220px);
+  min-width: calc(1250px - 220px);
   overflow-y: auto;
   position: absolute;
 }

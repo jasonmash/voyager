@@ -8,5 +8,5 @@ export interface ChartData {
 }
 
 export interface CategoryChartData extends ChartData {
-  categories: number[];
+  categories: any[];
 }

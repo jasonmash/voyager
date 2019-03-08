@@ -1,15 +1,13 @@
 <template>
-  <div>
-    <e-chart :options="chartData" :init-options="{renderer: 'canvas'}" autoresize class="radar-chart" />
-  </div>
+  <b-card no-body>
+    <div slot="header" class="chart-header">
+      <b-button size="sm" class="float-right" variant="outline-secondary" @click="exportChart">Export</b-button>
+      <span v-if="title">{{title}}</span>
+      <span v-else>Radar Chart</span>
+    </div>
+    <e-chart :options="chartData" :init-options="{renderer: 'canvas'}" autoresize class="radar-chart" ref="chart"/>
+  </b-card>
 </template>
-
-<style scoped>
-  .radar-chart {
-    width:auto;
-    height: 400px;
-  }
-</style>
 
 <script lang="ts">
 import { Prop, Component, Vue } from "vue-property-decorator";
@@ -17,9 +15,14 @@ import { Report, Section } from "@/models/report";
 import { Attribute } from "@/models/attribute";
 import { Configuration } from "@/models/configuration";
 
+import { ExportSvg } from "./shared";
+
+import "./charts.css";
+
 @Component
 export default class RadarChart extends Vue {
   @Prop(Array) public readonly data!: Configuration[];
+  @Prop(String) public readonly title!: string | undefined;
 
   get attributes() {
     return this.$store.getters.attributes;
@@ -61,6 +64,10 @@ export default class RadarChart extends Vue {
       },
       series
     };
+  }
+
+  public exportChart() {
+    ExportSvg(this.$refs.chart, "Chart.svg");
   }
 }
 </script>

@@ -15,6 +15,7 @@ import Scatter3DChart from "@/components/charts/scatter-3d.vue";
   components: { BarChart, LineChart, ScatterChart, "scatter3d-chart": Scatter3DChart }
 })
 export default class ReportComponent extends Vue {
+  public newSectionData: any = {};
   public newSection: Section = {
     title: "",
     type: ChartType.Bar,
@@ -24,9 +25,7 @@ export default class ReportComponent extends Vue {
     }
   };
 
-  public selectedChartType: ChartType = ChartType.Bar;
-
-  get report(): Report {
+  get report() {
     return this.$store.getters.reports.find((r: Report) => r.id.toString() === this.$route.params.id);
   }
 
@@ -34,13 +33,25 @@ export default class ReportComponent extends Vue {
     return this.$store.getters.attributes;
   }
 
+  get attributeMap() {
+    const result: any = {};
+    this.$store.getters.attributes.forEach((a: Attribute) => {
+      result[a.key] = a;
+    });
+    return result;
+  }
+
   get configurations() {
+    if (!this.report) { return []; }
+
+    const report = this.report;
     return this.$store.getters.configurations.filter((c: Configuration) => {
-      return this.report.configurationIds.includes(c.id);
+      return report.configurationIds.includes(c.id);
     });
   }
 
   public addSection() {
+    this.newSectionData = {};
     this.newSection = {
       title: "",
       type: ChartType.Bar,
@@ -52,9 +63,10 @@ export default class ReportComponent extends Vue {
   }
 
   public saveNewSection() {
-    if (!this.newSection) { return; }
-    this.createSection();
-    this.report.sections.push(this.newSection);
+    if (!this.newSection || !this.report) { return; }
+
+    this.newSection.data = this.loadSectionData();
+    this.$store.commit("addReportSection", { id: this.report.id, section: this.newSection});
 
     this.$nextTick(() => {
       // Wrapped in $nextTick to ensure DOM is rendered before closing
@@ -63,70 +75,71 @@ export default class ReportComponent extends Vue {
     });
   }
 
-  public updateAttr(attributeKey: string) {
-    if (!this.newSection || !this.newSection.data) { return; }
-
-    const attribute = this.attributes.find((a: Attribute) => a.key === attributeKey);
-    if (!attribute) { return; }
-
-    this.newSection.data.attributes.push(attribute);
-  }
-
-
-  public createSection() {
-    if (!this.newSection || !this.newSection.data) { return; }
-    this.newSection.type = this.selectedChartType;
-
-    const attributes = _.clone(this.newSection.data.attributes);
+  public loadSectionData(): ChartData | null {
+    if (!this.newSection || !this.newSection.data) { return null; }
 
     switch (this.newSection.type) {
       case ChartType.Bar: {
+        const configs: Configuration[] = _.orderBy(this.configurations, [this.newSectionData.x]);
         const data: CategoryChartData = {
-          categories: this.configurations.map((c: Configuration) => c.id),
-          values: this.configurations.map((c: Configuration) => c.attributes[attributes[0].key]),
-          attributes: [attributes[0]]
+          categories: configs.map((c: Configuration) => c.id),
+          values: configs.map((c: Configuration) => c.attributes[this.newSectionData.x]),
+          attributes: [this.attributeMap[this.newSectionData.x]]
         };
-        this.newSection.data = data;
-        break;
+        return data;
       }
 
       case ChartType.Line: {
+        const configs: Configuration[] = _.orderBy(this.configurations, [this.newSectionData.x]);
         const data: CategoryChartData = {
-          categories: this.configurations.map((c: Configuration) => c.id),
-          values: this.configurations.map((c: Configuration) => c.attributes[attributes[0].key]),
-          attributes: [attributes[0]]
+          categories: configs.map((c: Configuration) => c.id),
+          values: configs.map((c: Configuration) => c.attributes[this.newSectionData.x]),
+          attributes: [this.attributeMap[this.newSectionData.x]]
         };
-        this.newSection.data = data;
-        break;
+        return data;
       }
 
       case ChartType.Scatter2D: {
         const data: ChartData = {
           values: this.configurations.map(
-            (c: Configuration) => [c.attributes[attributes[0].key], c.attributes[attributes[1].key], c.id]),
-          attributes: [attributes[0], attributes[1]]
+            (c: Configuration) => [
+              c.attributes[this.newSectionData.x],
+              c.attributes[this.newSectionData.y],
+              c.attributes[this.newSectionData.size],
+              c.attributes[this.newSectionData.colour],
+              c.id]),
+          attributes: [
+            this.attributeMap[this.newSectionData.x],
+            this.attributeMap[this.newSectionData.y],
+            this.attributeMap[this.newSectionData.size],
+            this.attributeMap[this.newSectionData.colour]
+          ]
         };
-        this.newSection.data = data;
-        break;
+        return data;
       }
 
       case ChartType.Scatter3D: {
         const data: ChartData = {
           values: this.configurations.map((c: Configuration) => [
-              c.attributes[attributes[0].key],
-              c.attributes[attributes[1].key],
-              c.attributes[attributes[2].key],
+              c.attributes[this.newSectionData.x],
+              c.attributes[this.newSectionData.y],
+              c.attributes[this.newSectionData.z],
+              c.attributes[this.newSectionData.size],
+              c.attributes[this.newSectionData.colour],
               c.id
           ]),
-          attributes: [attributes[0], attributes[1], attributes[2]]
+          attributes: [
+            this.attributeMap[this.newSectionData.x],
+            this.attributeMap[this.newSectionData.y],
+            this.attributeMap[this.newSectionData.z],
+            this.attributeMap[this.newSectionData.size],
+            this.attributeMap[this.newSectionData.colour]
+          ]
         };
-        this.newSection.data = data;
-        break;
-      }
-
-      default: {
-        this.newSection.data = null;
+        return data;
       }
     }
+
+    return null;
   }
 }

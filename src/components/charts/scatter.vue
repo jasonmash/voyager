@@ -1,15 +1,13 @@
 <template>
-  <div>
-    <e-chart :options="chartData" :init-options="{renderer: 'svg'}" autoresize class="scatter-chart" />
-  </div>
+  <b-card no-body>
+    <div slot="header" class="chart-header">
+      <b-button size="sm" class="float-right" variant="outline-secondary" @click="exportChart">Export</b-button>
+      <span v-if="title">{{title}}</span>
+      <span v-else>Scatter Chart</span>
+    </div>
+    <e-chart :options="chartData" :init-options="{renderer: 'svg'}" autoresize class="scatter-chart" ref="chart" />
+  </b-card>
 </template>
-
-<style scoped>
-  .scatter-chart {
-    width:auto;
-    height: 400px;
-  }
-</style>
 
 <script lang="ts">
 import { Prop, Component, Vue } from "vue-property-decorator";
@@ -17,9 +15,14 @@ import { Report, Section } from "@/models/report";
 import { Attribute } from "@/models/Attribute";
 import { ChartType, ChartData } from "@/models/chart-data";
 
+import { ExportSvg } from "./shared";
+
+import "./charts.css";
+
 @Component
 export default class ScatterChart extends Vue {
   @Prop(Object) public readonly data!: ChartData;
+  @Prop(String) public readonly title!: string | undefined;
 
   get chartData() {
     if (!this.data) { return; }
@@ -69,21 +72,30 @@ export default class ScatterChart extends Vue {
     const chartData = {
       animation: false,
       textStyle: {
-        fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif"
+        fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+        fontSize: 12
+      },
+      grid: {
+        top: 30,
+        left: 70,
+        right: 30,
+        bottom: 60
       },
       xAxis: {
         type: "value",
         min: data.attributes[0].scaleMin,
         max: data.attributes[0].scaleMax,
         name: data.attributes[0].friendlyName,
-        nameLocation: "middle"
+        nameLocation: "middle",
+        nameGap: 35
       },
       yAxis: {
         type: "value",
         min: data.attributes[1].scaleMin,
         max: data.attributes[1].scaleMax,
         name: data.attributes[1].friendlyName,
-        nameLocation: "middle"
+        nameLocation: "middle",
+        nameGap: 40
       },
       visualMap: colourMap ? [ colourMap ] : undefined,
       tooltip: {},
@@ -101,6 +113,10 @@ export default class ScatterChart extends Vue {
       }]
     };
     return chartData;
+  }
+
+  public exportChart() {
+    ExportSvg(this.$refs.chart, "Chart.svg");
   }
 }
 </script>

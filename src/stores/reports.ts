@@ -2,7 +2,7 @@ import _ from "lodash";
 import Vue from "vue";
 import { ActionTree, GetterTree, MutationTree } from "vuex";
 
-import { Report } from "@/models/report";
+import { Report, Section } from "@/models/report";
 
 export class State {
   public data: Report[] = [];
@@ -28,6 +28,16 @@ const mutations = {
    */
   addReport: (state: State, payload: Report) => {
     state.data.push(payload);
+  },
+
+  /**
+   * Add a single report section
+   * @param {*} state Reference to state to update
+   * @param {*} payload Report ID and section to add
+   */
+  addReportSection: (state: State, {id, section}) => {
+    const index = _.findIndex(state.data, (d) => d.id === id);
+    state.data[index].sections.push(section);
   },
 
   /**
