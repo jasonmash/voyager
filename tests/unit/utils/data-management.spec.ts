@@ -11,8 +11,12 @@ describe("Utils: DataManagement", () => {
     store.commit("processAttributeValue", { key: "a", value: 1 });
     store.commit("processAttributeValue", { key: "b", value: 2 });
 
+    store.commit("addReport", { id: 0 });
+    store.commit("addReport", { id: 1 });
+
     expect(store.state.attributes.data.length).to.equal(2);
     expect(store.state.configurations.data.length).to.equal(2);
+    expect(store.state.reports.data.length).to.equal(2);
 
     // apply action
     DataManagement.resetAllData(store);
@@ -20,5 +24,6 @@ describe("Utils: DataManagement", () => {
     // assert result
     expect(store.state.attributes.data.length).to.equal(0);
     expect(store.state.configurations.data.length).to.equal(0);
+    expect(store.state.reports.data.length).to.equal(0);
   });
 });
