@@ -39,6 +39,8 @@ export default class SolutionExplorerComponent extends Vue {
     this.attributes =  data.map((attr: Attribute) => {
       return { attribute: attr, minValue: attr.scaleMin, maxValue: attr.scaleMax, filtered: false };
     });
+
+    this.findOptimal();
   }
 
   get list() {
@@ -47,7 +49,7 @@ export default class SolutionExplorerComponent extends Vue {
     const attributes = _.clone(this.attributes);
     _.reverse(attributes);
 
-    // Filter list based on searchQuery, look in email and name fields
+    // Filter list based on searchQuery
     let result: Configuration[] = data.filter((item) => {
       let validAttributes = true;
       attributes.forEach((a: any) => {
@@ -224,5 +226,59 @@ export default class SolutionExplorerComponent extends Vue {
       modal.hide();
       this.$router.push("/reports/" + report.id);
     });
+  }
+
+  public findOptimal() {
+    const configs = this.configurations.map((c: Configuration) => {
+      return { id: c.id, a: c.attributes.a, b: c.attributes.b, c: c.attributes.c, d: c.attributes.d };
+    });
+
+    // console.log(this.optimalAtPoint({a: 85, b: 47}, configs));
+  }
+
+  public optimalAt(attrs: Array<{key: string, isHigherBetter: boolean}>, configs: any): any {
+    const optimal = configs.filter((a: any) => {
+      const hasBetterVal: boolean = !_.find(configs, (b: any) => {
+        let isBetter = true;
+        attrs.forEach((attr: any) => {
+          if (attr.isHigherBetter) {
+            isBetter = isBetter && b[attr.key] > a[attr.key];
+          } else {
+            isBetter = isBetter && b[attr.key] < a[attr.key];
+          }
+        });
+        return isBetter;
+      });
+      return hasBetterVal;
+    });
+    return optimal;
+  }
+
+  public optimalAtPoint(point: { a: number, b: number }, configurations: any): any {
+    if (configurations.length === 0) { return []; }
+
+    const allConfigs = configurations;
+
+    let configs = allConfigs.filter((c: any) => c.a === point.a && c.b === point.b);
+    const stepA = 1;
+    const stepB = 1;
+
+    let i = 0;
+    while (configs.length === 0) {
+      i++;
+      configs = allConfigs.filter((c: any) => c.a <= (point.a + (i * stepA)) && c.a >= (point.a - (i * stepA)));
+      configs = configs.filter((c: any) => c.b <= (point.b + (i * stepB)) && c.b >= (point.b - (i * stepB)));
+    }
+
+    const params = [{ key: "a", isHigherBetter: false }, { key: "b", isHigherBetter: false }];
+
+    let optimalConfigs = this.optimalAt(params, configs);
+    while (optimalConfigs.length === 0) {
+      i++;
+      configs = allConfigs.filter((c: any) => c.a <= (point.a + (i * stepA)) && c.a >= (point.a - (i * stepA)));
+      configs = configs.filter((c: any) => c.b <= (point.b + (i * stepB)) && c.b >= (point.b - (i * stepB)));
+      optimalConfigs = this.optimalAt(params, configs);
+    }
+    return optimalConfigs;
   }
 }

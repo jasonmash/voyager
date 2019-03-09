@@ -31,7 +31,7 @@ export default class ConfigurationsComponent extends Vue {
     const data: Configuration[] = this.$store.getters.configurations;
     const attributes = this.attributes;
 
-    // Filter list based on searchQuery, look in email and name fields
+    // Filter list based on searchQuery
     const result: Configuration[] = data.filter((item) => {
       const inName = item.id ? item.id.toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1 : false;
       let validAttributes = true;
