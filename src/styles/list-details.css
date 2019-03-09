@@ -36,8 +36,6 @@
 .list-col .list-group-item.router-link-exact-active {
   z-index: 3;
   background-color: #f7f8fb;
-  box-shadow: 0px 1px 4px rgba(0,0,0,0.4);
-  border-color: transparent;
   border-left: #007bff 3px solid;
   color: #007bff;
 }

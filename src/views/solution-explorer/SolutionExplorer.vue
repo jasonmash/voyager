@@ -28,8 +28,8 @@
           </transition-group>
         </draggable>
       </b-col>
-      <b-col sm="3" class="border-right" style="height: 90vh; overflow-y: auto">
-        <h5>Matching Configurations</h5>
+      <b-col sm="4" class="border-right" style="height: 90vh; overflow-y: auto">
+        <h5>Configurations</h5>
         <p class="mb-2">Showing {{list.length}} of {{totalCount}}</p>
         <b-list-group flush>
           <b-list-group-item :ref="`i-${index}`" v-for="(item, index) in list" :key="index" :class="{'px-3 py-2': true, 'bg-light': selectedConfiguration == item}" @click="selectedConfiguration = item">
@@ -46,31 +46,25 @@
         <div v-if="selectedConfiguration" class="mb-4">
           <b-btn size="sm" variant="outline-secondary" class="float-right" @click="selectedConfiguration = null"><i class="fa fa-times fa-fw"></i></b-btn>
           <h5>Selected Configuration</h5>
-          <b-card no-body :header="selectedConfiguration.id" class="mb-3">
-            <b-list-group flush>
-              <b-list-group-item v-for="attr in attributes" :key="`attr-${attr.attribute.key}`">
-                <span>{{attr.attribute.friendlyName}}:</span>
-                <span class="float-right number-text">{{selectedConfiguration.attributes[attr.attribute.key]}}</span>
-              </b-list-group-item>
-              <b-list-group-item>
-                <radar-chart :data="[selectedConfiguration]" />
-              </b-list-group-item>
-              <b-list-group-item v-if="selectedConfiguration.structure.components.length > 0" >
-                <structure-chart :data="selectedConfiguration.structure" />
-              </b-list-group-item>
-            </b-list-group>
-          </b-card>
+          <b-list-group flush>
+            <b-list-group-item v-for="attr in attributes" :key="`attr-${attr.attribute.key}`">
+              <span>{{attr.attribute.friendlyName}}:</span>
+              <span class="float-right number-text">{{selectedConfiguration.attributes[attr.attribute.key]}}</span>
+            </b-list-group-item>
+          </b-list-group>
+          <radar-chart :data="[selectedConfiguration]" />
+          <structure-chart v-if="selectedConfiguration.structure.components.length > 0" :data="selectedConfiguration.structure" />
         </div>
 
         <div v-else>
           <b-btn size="sm" variant="outline-primary" class="float-right" v-b-modal.newreport>Add to report</b-btn>
           <h5>Visualisations</h5>
+          <radar-chart class="mt-4" v-if="list.length < 10" :data="list" />
           <div class="mt-4" v-if="chartData">
             <line-chart v-if="chartDimensions == 1" :data="chartData" class="mb-3"/>
             <scatter-chart v-if="chartDimensions >= 2 && chartDimensions < 5" :data="chartData" class="mb-3"/>
             <scatter3d-chart v-if="chartDimensions >= 3" :data="chartData" class="mb-3"/>
           </div>
-          <radar-chart class="mt-4" v-if="list.length < 10" :data="list" />
         </div>
       </b-col>
     </b-row>
