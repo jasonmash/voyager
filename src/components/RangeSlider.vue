@@ -15,25 +15,33 @@ import { Component, Vue } from "vue-property-decorator";
 
 @Component({
   props: {
-    min: Number,
-    max: Number,
-    step: Number,
-    minValue: Number,
-    maxValue: Number
+    min: Number, // Minimum possible value of range
+    max: Number, // Maximum possible value of range
+    step: Number, // Smallest increment value for adjustments to range
+    minValue: Number, // Minimim selected value of range
+    maxValue: Number  // Maximum selected value of range
   }
 })
 export default class RangeSlider extends Vue {
+  // Value of range
   public value1: number = 0;
   public value2: number = 0;
 
+  // Percentage of range selected (used for ui)
   public percent1: number = 0;
   public percent2: number = 100;
 
+  /**
+   * When component loads, set range to given values
+   */
   public mounted() {
     this.value1 = this.$props.minValue;
     this.value2 = this.$props.maxValue;
   }
 
+  /**
+   * Get css styles to ensure correct portion of slider is highlighted
+   */
   get percentStyle() {
     this.percent1 = 100 * ((this.value1 - this.$props.min) / (this.$props.max - this.$props.min));
     this.percent2 = 100 * ((this.value2 - this.$props.min) / (this.$props.max - this.$props.min));
@@ -44,6 +52,9 @@ export default class RangeSlider extends Vue {
     return `--low:${percentLow + 0.5}%; --high:${percentHigh - 0.5}%;`;
   }
 
+  /**
+   * Handle range value change event
+   */
   public onChange() {
     const minValue = this.percent1 > this.percent2 ? this.value2 : this.value1;
     const maxValue = this.percent1 > this.percent2 ? this.value1 : this.value2;

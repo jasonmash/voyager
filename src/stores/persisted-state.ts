@@ -28,6 +28,9 @@ import merge from "deepmerge";
 import * as shvl from "shvl";
 import { Configuration } from "@/models/configuration";
 
+/**
+ * Saves Vuex store data to localStorage, for persistance across browser sessions
+ */
 export default function(options?: any, storage?: any, key?: any) {
   options = options || {};
   storage = options.storage || (window && window.localStorage);
