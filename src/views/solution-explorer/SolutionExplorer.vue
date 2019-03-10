@@ -4,53 +4,66 @@
   <b-container fluid class="py-3">
     <h1 class="h3 mb-3">Solution Explorer</h1>
     <b-row>
-      <b-col sm="3" class="border-right" style="height: 90vh; overflow-y: auto">
+      <b-col sm="3" class="border-right" style="height: 85vh; overflow-y: auto">
         <h5>Parameters</h5>
         <p>Order by priority</p>
 
-        <draggable class="border-top" v-model="attributes" handle=".handle" @start="drag = true" @end="drag = false" :animation='200'>
+        <draggable class="border-top" v-model="filters" handle=".handle" @start="drag = true" @end="drag = false" :animation='200'>
           <transition-group type="transition" :name="!drag ? 'flip-list' : null">
-            <div v-for="(attr, i) in attributes" :key="attr.attribute.key" class="border-bottom bg-white pt-3">
-              <i v-if="attr.filtered" class="fa fa-bars handle float-right"></i>
-              <b-form-checkbox class="h6 mr-3" v-model="attr.filtered" :value="true" :unchecked-value="false">
-                {{attr.attribute.friendlyName}}
+            <div v-for="(filter, i) in filters" :key="filter.attribute.key" class="border-bottom bg-white pt-3">
+              <i v-if="filter.isFiltered" class="fa fa-bars handle float-right"></i>
+              <b-form-checkbox class="h6 mr-3" v-model="filter.isFiltered" :value="true" :unchecked-value="false">
+                {{filter.attribute.friendlyName}}
               </b-form-checkbox>
-              <div v-if="attr.filtered">
+              <div v-if="filter.isFiltered">
                 <p class="mb-1"><b>Priority:</b> {{i + 1}}</p> 
-                <p class="mb-1" v-if="attr.attribute.isHigherBetter"><b>Optimisation Aim</b>: Higher is better</p>
-                <p class="mb-1" v-if="!attr.attribute.isHigherBetter"><b>Optimisation Aim</b>: Lower is better</p>
-                <p class="mb-2"><b>Range:</b> Between {{ attr.minValue }} and {{ attr.maxValue }}</p>
+                <p class="mb-1" v-if="filter.attribute.isHigherBetter"><b>Optimisation Aim</b>: Higher is better</p>
+                <p class="mb-1" v-if="!filter.attribute.isHigherBetter"><b>Optimisation Aim</b>: Lower is better</p>
+                <p class="mb-2"><b>Range:</b> Between {{ filter.minValue }} and {{ filter.maxValue }}</p>
                 <div class="d-flex justify-content-center">
-                  <range-slider :min="attr.attribute.scaleMin" :max="attr.attribute.scaleMax" :step="attr.attribute.step" @change="onRangeChange(attr, $event)" :maxValue="attr.maxValue" :minValue="attr.minValue"/>
+                  <range-slider :min="filter.attribute.scaleMin" :max="filter.attribute.scaleMax" :step="filter.attribute.step" @change="onRangeChange(filter, $event)" :maxValue="filter.maxValue" :minValue="filter.minValue"/>
                 </div>
               </div>
             </div>
           </transition-group>
         </draggable>
       </b-col>
-      <b-col sm="3" class="border-right" style="height: 90vh; overflow-y: auto">
-        <b-btn size="sm" variant="outline-secondary" class="float-right" @click="findOptimal"><i class="fa fa-star fa-fw"></i></b-btn>
+      <b-col sm="3" class="border-right" style="height: 85vh; overflow-y: auto">
         <h5>Configurations</h5>
-        <p class="mb-2">Showing {{list.length}} of {{totalCount}}</p>
+        <p class="mb-2">Showing {{filteredConfigurations.length}} of {{totalCount}}</p>
         <b-list-group flush>
-          <b-list-group-item :ref="`i-${index}`" v-for="(item, index) in list" :key="index" :class="{'px-3 py-2': true, 'bg-light': selectedConfiguration == item}" @click="selectedConfiguration = item">
-            <p class="mb-0">
-              {{item.id}}<br>
-              <small>
-                <span v-for="a in attributes.filter((a) => a.filtered)" :key="a.attribute.key"><b>{{a.attribute.friendlyName}}</b>: {{item.attributes[a.attribute.key]}}<br></span>
-              </small>
-            </p>
-          </b-list-group-item>
+          <div>
+            <b-list-group-item class="py-1 px-3 bg-light position-sticky">Optimal</b-list-group-item>
+            <b-list-group-item :ref="`i-${index}`" v-for="(item, index) in list.true" :key="'t-' + index" :class="{'px-3 py-2': true, 'bg-light': selectedConfiguration == item}" @click="selectedConfiguration = item">
+              <p class="mb-0">
+                {{item.id}}<br>
+                <small>
+                  <span v-for="a in filters.filter((a) => a.isFiltered)" :key="a.attribute.key"><b>{{a.attribute.friendlyName}}</b>: {{item.attributes[a.attribute.key]}}<br></span>
+                </small>
+              </p>
+            </b-list-group-item>
+          </div>
+          <div>
+            <b-list-group-item class="py-1 px-3 bg-light position-sticky">Alternatives</b-list-group-item>
+            <b-list-group-item :ref="`i-${index}`" v-for="(item, index) in list.false" :key="'f-' + index" :class="{'px-3 py-2': true, 'bg-light': selectedConfiguration == item}" @click="selectedConfiguration = item">
+              <p class="mb-0">
+                {{item.id}}<br>
+                <small>
+                  <span v-for="a in filters.filter((a) => a.isFiltered)" :key="a.attribute.key"><b>{{a.attribute.friendlyName}}</b>: {{item.attributes[a.attribute.key]}}<br></span>
+                </small>
+              </p>
+            </b-list-group-item>
+          </div>
         </b-list-group>
       </b-col>
-      <b-col style="height: 90vh; overflow-y: auto; overflow-x: hidden">
+      <b-col style="height: 85vh; overflow-y: auto; overflow-x: hidden">
         <div v-if="selectedConfiguration" class="mb-4">
           <b-btn size="sm" variant="outline-secondary" class="float-right" @click="selectedConfiguration = null"><i class="fa fa-times fa-fw"></i></b-btn>
           <h5>Selected Configuration</h5>
           <b-list-group flush>
-            <b-list-group-item v-for="attr in attributes" :key="`attr-${attr.attribute.key}`">
-              <span>{{attr.attribute.friendlyName}}:</span>
-              <span class="float-right number-text">{{selectedConfiguration.attributes[attr.attribute.key]}}</span>
+            <b-list-group-item v-for="filter in filters" :key="`attr-${filter.attribute.key}`">
+              <span>{{filter.attribute.friendlyName}}:</span>
+              <span class="float-right number-text">{{selectedConfiguration.attributes[filter.attribute.key]}}</span>
             </b-list-group-item>
           </b-list-group>
           <radar-chart :data="[selectedConfiguration]" />

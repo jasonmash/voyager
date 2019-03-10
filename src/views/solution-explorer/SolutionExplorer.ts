@@ -1,12 +1,13 @@
 import { Component, Vue } from "vue-property-decorator";
 
-import _ from "lodash";
+import _, { Dictionary } from "lodash";
 import draggable from "vuedraggable";
 
 import { Attribute } from "@/models/attribute";
 import { Configuration } from "@/models/configuration";
 import { Report, Section } from "@/models/report";
 import { ChartType } from "@/models/chart-data";
+import { Optimality } from "@/utils/optimality";
 
 import RangeSlider from "@/components/RangeSlider.vue";
 
@@ -15,6 +16,13 @@ import RadarChart from "@/components/charts/radar.vue";
 import ScatterChart from "@/components/charts/scatter.vue";
 import Scatter3DChart from "@/components/charts/scatter-3d.vue";
 import StructureChart from "@/components/charts/structure.vue";
+
+interface AttributeFilter {
+  attribute: Attribute;
+  minValue: number;
+  maxValue: number;
+  isFiltered: boolean;
+}
 
 @Component({
   components: {
@@ -29,45 +37,53 @@ import StructureChart from "@/components/charts/structure.vue";
 })
 export default class SolutionExplorerComponent extends Vue {
   public drag: boolean = false;
-  public attributes: any = [];
+  public filters: AttributeFilter[] = [];
   public chartDimensions: number = 0;
   public selectedConfiguration: Configuration | null = null;
   public newReportName: string = "";
+  public paretoFront: string[] = [];
+
+  public filteredConfigurations: Configuration[] = [];
 
   public created() {
     const data: Attribute[] = this.$store.getters.attributes;
-    this.attributes =  data.map((attr: Attribute) => {
-      return { attribute: attr, minValue: attr.scaleMin, maxValue: attr.scaleMax, filtered: false };
+    this.filters = data.map((a: Attribute) => {
+      return { attribute: a, minValue: a.scaleMin, maxValue: a.scaleMax, isFiltered: false };
     });
   }
 
   get list() {
     const data: Configuration[] = this.$store.getters.configurations;
-    this.attributes = _.orderBy(this.attributes, ["filtered"], ["desc"]);
-    const attributes = _.clone(this.attributes);
-    _.reverse(attributes);
+    this.filters = _.orderBy(this.filters, ["filtered"], ["desc"]);
+    const filters = _.clone(this.filters);
+    _.reverse(filters);
 
     // Filter list based on searchQuery
     let result: Configuration[] = data.filter((item) => {
       let validAttributes = true;
-      attributes.forEach((a: any) => {
-        if (a.filtered) {
-          const val = item.attributes[a.attribute.key];
-          if (val && (val > a.maxValue || val < a.minValue)) { validAttributes = false; }
+      filters.forEach((filter) => {
+        if (filter.isFiltered) {
+          const val = item.attributes[filter.attribute.key];
+          if (val && (val > filter.maxValue || val < filter.minValue)) { validAttributes = false; }
         }
       });
       return validAttributes;
     });
 
-    attributes.forEach((a: any) => {
-      if (a.filtered) {
+    filters.forEach((filter) => {
+      if (filter.isFiltered) {
         result = _.orderBy(result,
-          [((c: Configuration) => c.attributes[a.attribute.key])],
-          [(a.attribute.isHigherBetter ? "desc" : "asc")]);
+          [((c: Configuration) => c.attributes[filter.attribute.key])],
+          [(filter.attribute.isHigherBetter ? "desc" : "asc")]);
       }
     });
 
-    return result;
+    this.findOptimal(result);
+
+    this.filteredConfigurations = result;
+
+    const res = _.groupBy(result, (value: Configuration) => this.paretoFront.indexOf(value.id) !== -1);
+    return res;
   }
 
   get totalCount() {
@@ -84,67 +100,67 @@ export default class SolutionExplorerComponent extends Vue {
   }
 
   get chartData() {
-    const attributes = _.filter(this.attributes, "filtered").map((a) => a.attribute);
-    this.chartDimensions = attributes.length;
+    const filters = _.filter(this.filters, "isFiltered").map((a) => a.attribute);
+    this.chartDimensions = filters.length;
 
     let data;
     switch (this.chartDimensions) {
       case 1: {
         data = {
-          categories: this.list.map((c: Configuration) => c.id),
-          values: this.list.map((c: Configuration) => c.attributes[attributes[0].key]),
-          attributes: [attributes[0]]
+          categories: this.filteredConfigurations.map((c: Configuration) => c.id),
+          values: this.filteredConfigurations.map((c: Configuration) => c.attributes[filters[0].key]),
+          attributes: [filters[0]]
         };
         break;
       }
 
       case 2: {
         data = {
-          values: this.list.map(
-            (c: Configuration) => [c.attributes[attributes[0].key], c.attributes[attributes[1].key], c.id]),
-          attributes: [attributes[0], attributes[1]]
+          values: this.filteredConfigurations.map(
+            (c: Configuration) => [c.attributes[filters[0].key], c.attributes[filters[1].key], c.id]),
+          attributes: [filters[0], filters[1]]
         };
         break;
       }
 
       case 3: {
         data = {
-          values: this.list.map((c: Configuration) => [
-              c.attributes[attributes[0].key],
-              c.attributes[attributes[1].key],
-              c.attributes[attributes[2].key],
+          values: this.filteredConfigurations.map((c: Configuration) => [
+              c.attributes[filters[0].key],
+              c.attributes[filters[1].key],
+              c.attributes[filters[2].key],
               c.id
           ]),
-          attributes: [attributes[0], attributes[1], attributes[2]]
+          attributes: [filters[0], filters[1], filters[2]]
         };
         break;
       }
 
       case 4: {
         data = {
-          values: this.list.map((c: Configuration) => [
-              c.attributes[attributes[0].key],
-              c.attributes[attributes[1].key],
-              c.attributes[attributes[2].key],
-              c.attributes[attributes[3].key],
+          values: this.filteredConfigurations.map((c: Configuration) => [
+              c.attributes[filters[0].key],
+              c.attributes[filters[1].key],
+              c.attributes[filters[2].key],
+              c.attributes[filters[3].key],
               c.id
           ]),
-          attributes: [attributes[0], attributes[1], attributes[2], attributes[3]]
+          attributes: [filters[0], filters[1], filters[2], filters[3]]
         };
         break;
       }
 
       case 5: {
         data = {
-          values: this.list.map((c: Configuration) => [
-              c.attributes[attributes[0].key],
-              c.attributes[attributes[1].key],
-              c.attributes[attributes[2].key],
-              c.attributes[attributes[3].key],
-              c.attributes[attributes[4].key],
+          values: this.filteredConfigurations.map((c: Configuration) => [
+              c.attributes[filters[0].key],
+              c.attributes[filters[1].key],
+              c.attributes[filters[2].key],
+              c.attributes[filters[3].key],
+              c.attributes[filters[4].key],
               c.id
           ]),
-          attributes: [attributes[0], attributes[1], attributes[2], attributes[3], attributes[4]]
+          attributes: [filters[0], filters[1], filters[2], filters[3], filters[4]]
         };
         break;
       }
@@ -212,7 +228,7 @@ export default class SolutionExplorerComponent extends Vue {
     const report: Report = {
       id: this.$store.getters.reports.length,
       name: this.newReportName,
-      configurationIds: this.list.map((c: Configuration) => c.id),
+      configurationIds: this.filteredConfigurations.map((c: Configuration) => c.id),
       sections
     };
 
@@ -226,73 +242,11 @@ export default class SolutionExplorerComponent extends Vue {
     });
   }
 
-  public findOptimal() {
-    const result = this.optimalAt([{ key: "a", isHigherBetter: false },
-      { key: "b", isHigherBetter: false }], this.list);
-
-    // console.log(result.map((r) => r.id));
-    // console.log(this.optimalAtPoint([{ key: "a", value: 85, step: 1}, {key: "b", value: 74, step: 1}], this.list));
-  }
-
-  public optimalAt(attrs: Array<{key: string, isHigherBetter: boolean}>, configs: Configuration[]): Configuration[] {
-    const optimal = configs.filter((a) => {
-      const hasBetterVal: boolean = !_.find(configs, (b) => {
-        let isBetter = true;
-        attrs.forEach((attr: any) => {
-          if (attr.isHigherBetter) {
-            isBetter = isBetter && b.attributes[attr.key] > a.attributes[attr.key];
-          } else {
-            isBetter = isBetter && b.attributes[attr.key] < a.attributes[attr.key];
-          }
-        });
-        return isBetter;
-      });
-      return hasBetterVal;
-    });
-    return optimal;
-  }
-
-  public optimalAtPoint(point: Array<{ key: string, value: number, step: number }>,
-                        configurations: Configuration[]): Configuration[] {
-
-    if (configurations.length === 0) { return []; }
-
-    let configs = configurations.filter((c) => {
-      let isPoint = true;
-      point.forEach((p) => {
-        isPoint = isPoint && c.attributes[p.key] === p.value;
-      });
-      return isPoint;
-    });
-
-    let i = 0;
-    while (configs.length === 0) {
-      i++;
-      configs = configurations.filter((c) => {
-        let isPoint = true;
-        point.forEach((p) => {
-          isPoint = isPoint && (c.attributes[p.key] <= (p.value + (i * p.step))
-            && c.attributes[p.key] >= (p.value - (i * p.step)));
-        });
-        return isPoint;
-      });
-    }
-
-    const params = [{ key: "a", isHigherBetter: false }, { key: "b", isHigherBetter: false }];
-
-    let optimalConfigs = this.optimalAt(params, configs);
-    while (optimalConfigs.length === 0) {
-      i++;
-      configs = configurations.filter((c) => {
-        let isPoint = true;
-        point.forEach((p) => {
-          isPoint = isPoint && (c.attributes[p.key] <= (p.value + (i * p.step))
-            && c.attributes[p.key] >= (p.value - (i * p.step)));
-        });
-        return isPoint;
-      });
-      optimalConfigs = this.optimalAt(params, configs);
-    }
-    return optimalConfigs;
+  public findOptimal(items: Configuration[]) {
+    const a = this.filters[0].attribute;
+    const b = this.filters[1].attribute;
+    const c = this.filters[2].attribute;
+    const result = Optimality.getParetoFront([a, b, c], items);
+    this.paretoFront = result.map((r) => r.id);
   }
 }
