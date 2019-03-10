@@ -16,6 +16,7 @@ import RadarChart from "@/components/charts/radar.vue";
 import ScatterChart from "@/components/charts/scatter.vue";
 import Scatter3DChart from "@/components/charts/scatter-3d.vue";
 import StructureChart from "@/components/charts/structure.vue";
+import SurfaceChart from "@/components/charts/surface.vue";
 
 interface AttributeFilter {
   attribute: Attribute;
@@ -30,6 +31,7 @@ interface AttributeFilter {
     RadarChart,
     StructureChart,
     ScatterChart,
+    SurfaceChart,
     "scatter3d-chart": Scatter3DChart,
     "range-slider": RangeSlider,
     draggable
@@ -97,6 +99,26 @@ export default class SolutionExplorerComponent extends Vue {
   public onRangeChange(attr: any, event: any) {
     attr.minValue = parseFloat(event.min);
     attr.maxValue = parseFloat(event.max);
+  }
+
+  get surfaceData() {
+    const filters = _.filter(this.filters, "isFiltered").map((config) => config.attribute);
+    this.chartDimensions = filters.length;
+
+    const a = this.filters[0].attribute;
+    const b = this.filters[1].attribute;
+    const c = this.filters[2].attribute;
+    const result = Optimality.getParetoFront([a, b, c], this.filteredConfigurations);
+    return {
+      values: this.filteredConfigurations.map((config: Configuration) => [
+        config.attributes[filters[0].key],
+        config.attributes[filters[1].key],
+        config.attributes[filters[2].key],
+        config.id
+      ]),
+      attributes: [filters[0], filters[1], filters[2]],
+      configs: result
+    };
   }
 
   get chartData() {
