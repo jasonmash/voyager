@@ -1,7 +1,9 @@
 <template>
   <b-card no-body>
     <div slot="header" class="chart-header">
-      <b-button size="sm" class="float-right" variant="outline-secondary" @click="exportChart">Export</b-button>
+      <b-dropdown right class="float-right" size="sm" variant="outline-secondary">
+        <b-dropdown-item @click="exportChart">Export (.svg)</b-dropdown-item>
+      </b-dropdown>
       <span v-if="title">{{title}}</span>
       <span v-else>Scatter Chart</span>
     </div>

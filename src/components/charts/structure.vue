@@ -1,11 +1,13 @@
 <template>
   <b-card no-body>
     <div slot="header" class="chart-header">
-      <b-button size="sm" class="float-right" variant="outline-secondary">Export</b-button>
+      <b-dropdown right class="float-right" size="sm" variant="outline-secondary">
+        <b-dropdown-item @click="exportChart">Export (.png)</b-dropdown-item>
+      </b-dropdown>
       <span v-if="title">{{title}}</span>
       <span v-else>Structure Chart</span>
     </div>
-    <e-chart :options="chartData" :init-options="{renderer: 'canvas'}" autoresize class="structure-chart" />
+    <e-chart :options="chartData" ref="chart" :init-options="{renderer: 'canvas'}" autoresize class="structure-chart" />
   </b-card>
 </template>
 
@@ -20,6 +22,8 @@
 import { Prop, Component, Vue } from "vue-property-decorator";
 import { Report, Section } from "@/models/report";
 import { ConfigurationStructure } from "@/models/configuration";
+
+import { ExportCanvas } from "./shared";
 
 import "./charts.css";
 
@@ -87,6 +91,10 @@ export default class StructureChart extends Vue {
         }
       ]
     };
+  }
+
+  public exportChart() {
+    ExportCanvas(this.$refs.chart, "Structure.png");
   }
 }
 </script>

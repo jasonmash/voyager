@@ -1,12 +1,17 @@
 <template>
   <b-card no-body>
     <div slot="header" class="chart-header">
-      <b-button size="sm" class="float-right" variant="outline-secondary ml-2">Export</b-button>
-      <b-button size="sm" class="float-right" variant="outline-secondary" @click="switchPerspective">Change projection</b-button>
+      <b-dropdown right class="float-right" size="sm" variant="outline-secondary">
+        <b-dropdown-header>Projection</b-dropdown-header>
+        <b-dropdown-item :active="chartData.grid3D.viewControl.projection === 'perspective'" @click="switchPerspective('perspective')">Perspective</b-dropdown-item>
+        <b-dropdown-item :active="chartData.grid3D.viewControl.projection === 'orthographic'" @click="switchPerspective('orthographic')">Orthographic</b-dropdown-item>
+        <b-dropdown-divider />
+        <b-dropdown-item @click="exportChart">Export (.png)</b-dropdown-item>
+      </b-dropdown>
       <span v-if="title">{{title}}</span>
       <span v-else>3D Scatter Chart</span>
     </div>
-    <e-chart :options="chartData" :init-options="{renderer: 'canvas'}" autoresize class="scatter3d-chart" ref="chart" />
+    <e-chart :options="chartData" :init-options="{renderer: 'canvas', pixelRatio: 2}" autoresize class="scatter3d-chart" ref="chart" />
   </b-card>
 </template>
 
@@ -15,6 +20,8 @@ import { Prop, Component, Vue, Watch } from "vue-property-decorator";
 import { Report, Section } from "@/models/report";
 import { Attribute } from "@/models/Attribute";
 import { ChartType, ChartData } from "@/models/chart-data";
+
+import { ExportCanvas } from "./shared";
 
 import "./charts.css";
 
@@ -81,12 +88,8 @@ export default class Scatter3DChart extends Vue {
     chart.dispose();
   }
 
-  public switchPerspective() {
-    if (this.chartData.grid3D.viewControl.projection === "perspective") {
-      this.chartData.grid3D.viewControl.projection = "orthographic";
-    } else {
-      this.chartData.grid3D.viewControl.projection = "perspective";
-    }
+  public switchPerspective(perspective: string) {
+    this.chartData.grid3D.viewControl.projection = perspective;
   }
 
   @Watch("data")
@@ -170,6 +173,10 @@ export default class Scatter3DChart extends Vue {
     this.chartData.series[0].data = data.values;
 
     this.chartData.dataset.source = data.values;
+  }
+
+  public exportChart() {
+    ExportCanvas(this.$refs.chart, "Chart.png");
   }
 }
 </script>
