@@ -39,8 +39,6 @@ export default class SolutionExplorerComponent extends Vue {
     this.attributes =  data.map((attr: Attribute) => {
       return { attribute: attr, minValue: attr.scaleMin, maxValue: attr.scaleMax, filtered: false };
     });
-
-    this.findOptimal();
   }
 
   get list() {
@@ -229,22 +227,22 @@ export default class SolutionExplorerComponent extends Vue {
   }
 
   public findOptimal() {
-    const configs = this.configurations.map((c: Configuration) => {
-      return { id: c.id, a: c.attributes.a, b: c.attributes.b, c: c.attributes.c, d: c.attributes.d };
-    });
+    const result = this.optimalAt([{ key: "a", isHigherBetter: false },
+      { key: "b", isHigherBetter: false }], this.list);
 
-    // console.log(this.optimalAtPoint({a: 85, b: 47}, configs));
+    // console.log(result.map((r) => r.id));
+    // console.log(this.optimalAtPoint([{ key: "a", value: 85, step: 1}, {key: "b", value: 74, step: 1}], this.list));
   }
 
-  public optimalAt(attrs: Array<{key: string, isHigherBetter: boolean}>, configs: any): any {
-    const optimal = configs.filter((a: any) => {
-      const hasBetterVal: boolean = !_.find(configs, (b: any) => {
+  public optimalAt(attrs: Array<{key: string, isHigherBetter: boolean}>, configs: Configuration[]): Configuration[] {
+    const optimal = configs.filter((a) => {
+      const hasBetterVal: boolean = !_.find(configs, (b) => {
         let isBetter = true;
         attrs.forEach((attr: any) => {
           if (attr.isHigherBetter) {
-            isBetter = isBetter && b[attr.key] > a[attr.key];
+            isBetter = isBetter && b.attributes[attr.key] > a.attributes[attr.key];
           } else {
-            isBetter = isBetter && b[attr.key] < a[attr.key];
+            isBetter = isBetter && b.attributes[attr.key] < a.attributes[attr.key];
           }
         });
         return isBetter;
@@ -254,20 +252,30 @@ export default class SolutionExplorerComponent extends Vue {
     return optimal;
   }
 
-  public optimalAtPoint(point: { a: number, b: number }, configurations: any): any {
+  public optimalAtPoint(point: Array<{ key: string, value: number, step: number }>,
+                        configurations: Configuration[]): Configuration[] {
+
     if (configurations.length === 0) { return []; }
 
-    const allConfigs = configurations;
-
-    let configs = allConfigs.filter((c: any) => c.a === point.a && c.b === point.b);
-    const stepA = 1;
-    const stepB = 1;
+    let configs = configurations.filter((c) => {
+      let isPoint = true;
+      point.forEach((p) => {
+        isPoint = isPoint && c.attributes[p.key] === p.value;
+      });
+      return isPoint;
+    });
 
     let i = 0;
     while (configs.length === 0) {
       i++;
-      configs = allConfigs.filter((c: any) => c.a <= (point.a + (i * stepA)) && c.a >= (point.a - (i * stepA)));
-      configs = configs.filter((c: any) => c.b <= (point.b + (i * stepB)) && c.b >= (point.b - (i * stepB)));
+      configs = configurations.filter((c) => {
+        let isPoint = true;
+        point.forEach((p) => {
+          isPoint = isPoint && (c.attributes[p.key] <= (p.value + (i * p.step))
+            && c.attributes[p.key] >= (p.value - (i * p.step)));
+        });
+        return isPoint;
+      });
     }
 
     const params = [{ key: "a", isHigherBetter: false }, { key: "b", isHigherBetter: false }];
@@ -275,8 +283,14 @@ export default class SolutionExplorerComponent extends Vue {
     let optimalConfigs = this.optimalAt(params, configs);
     while (optimalConfigs.length === 0) {
       i++;
-      configs = allConfigs.filter((c: any) => c.a <= (point.a + (i * stepA)) && c.a >= (point.a - (i * stepA)));
-      configs = configs.filter((c: any) => c.b <= (point.b + (i * stepB)) && c.b >= (point.b - (i * stepB)));
+      configs = configurations.filter((c) => {
+        let isPoint = true;
+        point.forEach((p) => {
+          isPoint = isPoint && (c.attributes[p.key] <= (p.value + (i * p.step))
+            && c.attributes[p.key] >= (p.value - (i * p.step)));
+        });
+        return isPoint;
+      });
       optimalConfigs = this.optimalAt(params, configs);
     }
     return optimalConfigs;

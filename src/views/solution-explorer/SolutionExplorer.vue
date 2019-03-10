@@ -29,6 +29,7 @@
         </draggable>
       </b-col>
       <b-col sm="4" class="border-right" style="height: 90vh; overflow-y: auto">
+        <b-btn size="sm" variant="outline-secondary" class="float-right" @click="findOptimal"><i class="fa fa-star fa-fw"></i></b-btn>
         <h5>Configurations</h5>
         <p class="mb-2">Showing {{list.length}} of {{totalCount}}</p>
         <b-list-group flush>
