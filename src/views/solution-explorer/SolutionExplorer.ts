@@ -265,10 +265,8 @@ export default class SolutionExplorerComponent extends Vue {
   }
 
   public findOptimal(items: Configuration[]) {
-    const a = this.filters[0].attribute;
-    const b = this.filters[1].attribute;
-    const c = this.filters[2].attribute;
-    const result = Optimality.getParetoFront([a, b, c], items);
+    const attributes = this.filters.filter((f) => f.isFiltered).map((f) => f.attribute);
+    const result = Optimality.getParetoFront(attributes, items);
     this.paretoFront = result.map((r) => r.id);
   }
 }

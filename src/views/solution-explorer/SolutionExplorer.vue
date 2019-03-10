@@ -31,9 +31,9 @@
       <b-col sm="3" class="border-right" style="height: 85vh; overflow-y: auto">
         <h5>Configurations</h5>
         <p class="mb-2">Showing {{filteredConfigurations.length}} of {{totalCount}}</p>
-        <b-list-group flush>
+        <b-list-group flush style="position:relative;overflow-y:auto;max-height:77vh">
           <div>
-            <b-list-group-item class="py-1 px-3 bg-light position-sticky">Optimal</b-list-group-item>
+            <b-list-group-item class="py-1 px-3 bg-light position-sticky" style="top:0; z-index:2">Optimal configurations</b-list-group-item>
             <b-list-group-item :ref="`i-${index}`" v-for="(item, index) in list.true" :key="'t-' + index" :class="{'px-3 py-2': true, 'bg-light': selectedConfiguration == item}" @click="selectedConfiguration = item">
               <p class="mb-0">
                 {{item.id}}<br>
@@ -44,7 +44,7 @@
             </b-list-group-item>
           </div>
           <div>
-            <b-list-group-item class="py-1 px-3 bg-light position-sticky">Alternatives</b-list-group-item>
+            <b-list-group-item class="py-1 px-3 bg-light position-sticky" style="top:0; z-index:2">Other configurations</b-list-group-item>
             <b-list-group-item :ref="`i-${index}`" v-for="(item, index) in list.false" :key="'f-' + index" :class="{'px-3 py-2': true, 'bg-light': selectedConfiguration == item}" @click="selectedConfiguration = item">
               <p class="mb-0">
                 {{item.id}}<br>
