@@ -1,6 +1,6 @@
 .detail-col {
   width: calc(100% - 350px);
-  top: 0;
+  top: 56px;
   bottom: 0;
   right: 0;
   position: absolute;
@@ -9,7 +9,7 @@
 
 .list-col {
   width: 350px;
-  top: 0;
+  top: 56px;
   bottom: 0;
   position: absolute;
   overflow: auto;

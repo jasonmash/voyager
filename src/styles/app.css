@@ -11,12 +11,3 @@ body {
   font-feature-settings: 'cv01' 1, 'cv02' 1, 'cv03' 1, 'cv04' 1, 'cv09' 1, 'tnum' 1;
 }
 
-#main {
-  top: 0;
-  bottom: 0;
-  left: 220px;
-  width: calc(100% - 220px);
-  min-width: calc(1250px - 220px);
-  overflow-y: auto;
-  position: absolute;
-}

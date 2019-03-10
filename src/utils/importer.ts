@@ -2,6 +2,40 @@ import { Store } from "vuex";
 import { Configuration } from "@/models/configuration";
 
 export default class Importer {
+
+  public static processInputFile(reader: FileReader, file: File, $message: any, $store: any) {
+    if (typeof reader.result !== "string" || reader.result.length === 0) {
+      $message({
+        content: `Invalid file uploaded: '${file.name}'`,
+        type: "danger"
+      });
+      return;
+    }
+
+    try {
+      const inputData = JSON.parse(reader.result);
+      const result = Importer.importFile(inputData, $store);
+      if (result) {
+        $message({
+          content: `Successfully imported data from '${file.name}'`,
+          type: "success"
+        });
+      } else {
+        $message({
+          content: `Data within '${file.name}' is incorrectly formatted`,
+          type: "danger",
+          duration: 8000
+        });
+      }
+    } catch (err) {
+      $message({
+        content: `Unable to process '${file.name}': ${err}`,
+        type: "danger",
+        duration: 8000
+      });
+    }
+  }
+
   /**
    * JSON file importer
    * @static

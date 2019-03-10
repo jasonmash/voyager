@@ -9,7 +9,6 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     { path: "/", component: () => import("./views/About.vue") },
-    { path: "/data", component: () => import("./views/data-management/DataManagement.vue") },
     { path: "/attributes", component: () => import("./views/attributes/Attributes.vue") },
     { path: "/attributes/:id", component: () => import("./views/attributes/Attributes.vue") },
     { path: "/configurations", component: () => import("./views/configurations/Configurations.vue") },

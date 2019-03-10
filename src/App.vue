@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <sidebar />
+    <navbar />
 
     <main id="main" role="main">
       <router-view />
@@ -13,11 +13,11 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import Sidebar from "@/components/Sidebar.vue";
+import Navbar from "@/components/Navbar.vue";
 import MessageBox from "@/components/messages/MessageBox.vue";
 
 import "@/styles/app.css";
 
-@Component({ components: { Sidebar, MessageBox }})
+@Component({ components: { Navbar, MessageBox }})
 export default class App extends Vue {}
 </script>

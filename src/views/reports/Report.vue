@@ -2,7 +2,7 @@
 
 <template>
   <b-container fluid class="py-3" v-if="report">
-    <b-dropdown class="float-right ml-2" variant="outline-secondary">
+    <b-dropdown class="float-right ml-2" right variant="outline-secondary">
       <b-dropdown-item @click="deleteReport">Delete report</b-dropdown-item>
     </b-dropdown>
     <b-button @click="addSection" class="float-right" variant="primary" v-b-modal.addSectionModal>
