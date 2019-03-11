@@ -1,6 +1,6 @@
 import { Component, Vue } from "vue-property-decorator";
 
-import _, { Dictionary } from "lodash";
+import _ from "lodash";
 import draggable from "vuedraggable";
 
 import { Attribute } from "@/models/attribute";
@@ -56,7 +56,13 @@ export default class SolutionExplorerComponent extends Vue {
 
   get list() {
     const data: Configuration[] = this.$store.getters.configurations;
-    this.filters = _.orderBy(this.filters, ["filtered"], ["desc"]);
+    this.filters = this.filters.sort((a, b) => {
+      if (!a.isFiltered && !b.isFiltered) { return a.attribute.friendlyName.localeCompare(b.attribute.friendlyName); }
+      if (a.isFiltered && !b.isFiltered) { return -1; }
+      if (!a.isFiltered && b.isFiltered) { return 1; }
+      return 0;
+    });
+
     const filters = _.clone(this.filters);
     _.reverse(filters);
 
@@ -265,7 +271,7 @@ export default class SolutionExplorerComponent extends Vue {
   }
 
   public findOptimal(items: Configuration[]) {
-    const attributes = this.filters.filter((f) => f.isFiltered).map((f) => f.attribute);
+    const attributes = _.filter(this.filters, "isFiltered").map((config) => config.attribute);
     const result = Optimality.getParetoFront(attributes, items);
     this.paretoFront = result.map((r) => r.id);
   }

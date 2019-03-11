@@ -5,7 +5,7 @@
     <h1 class="h3 mb-3">Solution Explorer</h1>
     <b-row>
       <b-col sm="3" class="border-right" style="height: 85vh; overflow-y: auto">
-        <h5>Parameters</h5>
+        <h5>Attributes</h5>
         <p>Order by priority</p>
 
         <draggable class="border-top" v-model="filters" handle=".handle" @start="drag = true" @end="drag = false" :animation='200'>
@@ -29,11 +29,14 @@
         </draggable>
       </b-col>
       <b-col sm="3" class="border-right" style="height: 85vh; overflow-y: auto">
+        <b-btn size="sm" variant="outline-primary" class="float-right" v-b-modal.newreport>Create report</b-btn>
         <h5>Configurations</h5>
         <p class="mb-2">Showing {{filteredConfigurations.length}} of {{totalCount}}</p>
         <b-list-group flush style="position:relative;overflow-y:auto;max-height:77vh">
           <div>
-            <b-list-group-item class="py-1 px-3 bg-light position-sticky" style="top:0; z-index:2">Optimal configurations</b-list-group-item>
+            <b-list-group-item class="py-1 px-3 bg-light position-sticky" style="top:0; z-index:2">
+              Optimal configurations <span class="float-right text-muted">{{list.true ? list.true.length : 0}}</span>
+            </b-list-group-item>
             <b-list-group-item :ref="`i-${index}`" v-for="(item, index) in list.true" :key="'t-' + index" :class="{'px-3 py-2': true, 'bg-light': selectedConfiguration == item}" @click="selectedConfiguration = item">
               <p class="mb-0">
                 {{item.id}}<br>
@@ -43,8 +46,10 @@
               </p>
             </b-list-group-item>
           </div>
-          <div>
-            <b-list-group-item class="py-1 px-3 bg-light position-sticky" style="top:0; z-index:2">Other configurations</b-list-group-item>
+          <div class="border-bottom">
+            <b-list-group-item class="py-1 px-3 bg-light position-sticky" style="top:0; z-index:2">
+              Other configurations <span class="float-right text-muted">{{list.false ? list.false.length : 0}}</span>
+            </b-list-group-item>
             <b-list-group-item :ref="`i-${index}`" v-for="(item, index) in list.false" :key="'f-' + index" :class="{'px-3 py-2': true, 'bg-light': selectedConfiguration == item}" @click="selectedConfiguration = item">
               <p class="mb-0">
                 {{item.id}}<br>
@@ -71,7 +76,6 @@
         </div>
 
         <div v-else>
-          <b-btn size="sm" variant="outline-primary" class="float-right" v-b-modal.newreport>Add to report</b-btn>
           <h5>Visualisations</h5>
           <radar-chart class="mt-4" v-if="list.length < 10" :data="list" />
           <div class="mt-4" v-if="chartData">
