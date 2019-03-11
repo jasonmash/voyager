@@ -16,7 +16,7 @@ export class Optimality {
         if (b.id === a.id) { return false; }
         let isBetter = true;
         attrs.forEach((attr) => {
-          if (b.attributes[attr.key] !== a.attributes[attr.key]) {
+          if (attrs.length === 1 || b.attributes[attr.key] !== a.attributes[attr.key]) {
             if (attr.isHigherBetter) {
               isBetter = isBetter && b.attributes[attr.key] > a.attributes[attr.key];
             } else {

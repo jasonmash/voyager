@@ -16,10 +16,16 @@
                 {{filter.attribute.friendlyName}}
               </b-form-checkbox>
               <div v-if="filter.isFiltered">
-                <p class="mb-1"><b>Priority:</b> {{i + 1}}</p> 
-                <p class="mb-1" v-if="filter.attribute.isHigherBetter"><b>Optimisation Aim</b>: Higher is better</p>
-                <p class="mb-1" v-if="!filter.attribute.isHigherBetter"><b>Optimisation Aim</b>: Lower is better</p>
-                <p class="mb-2"><b>Range:</b> Between {{ filter.minValue }} and {{ filter.maxValue }}</p>
+                <p class="mb-2"><b>Priority:</b> {{i + 1}}</p> 
+                <div class="mb-2"><b>Optimisation Aim:</b>
+                  <div class="d-flex justify-content-center pt-1">
+                    <b-form-radio-group :checked="filter.attribute.isHigherBetter" @input="setAttributeOptimality(filter.attribute, $event)">
+                      <b-form-radio :value="true">Higher is better</b-form-radio>
+                      <b-form-radio :value="false" class="mr-0">Lower is better</b-form-radio>
+                    </b-form-radio-group>   
+                  </div>           
+                </div>
+                <p class="my-2"><b>Range:</b> Between {{ filter.minValue }} and {{ filter.maxValue }}</p>
                 <div class="d-flex justify-content-center">
                   <range-slider :min="filter.attribute.scaleMin" :max="filter.attribute.scaleMax" :step="filter.attribute.step" @change="onRangeChange(filter, $event)" :maxValue="filter.maxValue" :minValue="filter.minValue"/>
                 </div>
@@ -79,10 +85,10 @@
           <h5>Visualisations</h5>
           <radar-chart class="mt-4" v-if="list.length < 10" :data="list" />
           <div class="mt-4" v-if="chartData">
-            <surface-chart v-if="chartDimensions == 3" :data="surfaceData" class="mb-3"/>
             <line-chart v-if="chartDimensions == 1" :data="chartData" class="mb-3"/>
-            <scatter-chart v-if="chartDimensions >= 2 && chartDimensions < 5" :data="chartData" class="mb-3"/>
             <scatter3d-chart v-if="chartDimensions >= 3" :data="chartData" class="mb-3"/>
+            <scatter-chart v-if="chartDimensions >= 2 && chartDimensions < 5" :data="chartData" class="mb-3"/>
+            <surface-chart v-if="chartDimensions == 3" :data="surfaceData" class="mb-3"/>
           </div>
         </div>
       </b-col>

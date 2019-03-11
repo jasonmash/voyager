@@ -7,7 +7,6 @@
       <b-navbar-nav>
         <b-nav-item to="/">Overview</b-nav-item>
         <b-nav-item to="/configurations">Configurations</b-nav-item>
-        <b-nav-item to="/attributes">Attributes</b-nav-item>
         <b-nav-item to="/solutions">Explorer</b-nav-item>
         <b-nav-item-dropdown>
           <template slot="button-content">Reports</template>

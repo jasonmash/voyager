@@ -48,25 +48,20 @@ export default class SolutionExplorerComponent extends Vue {
   public filteredConfigurations: Configuration[] = [];
 
   public created() {
-    const data: Attribute[] = this.$store.getters.attributes;
-    this.filters = data.map((a: Attribute) => {
+    this.filters = this.$store.getters.attributes.map((a: Attribute) => {
       return { attribute: a, minValue: a.scaleMin, maxValue: a.scaleMax, isFiltered: false };
     });
+    this.sortFilters();
   }
 
   get list() {
     const data: Configuration[] = this.$store.getters.configurations;
-    this.filters = this.filters.sort((a, b) => {
-      if (!a.isFiltered && !b.isFiltered) { return a.attribute.friendlyName.localeCompare(b.attribute.friendlyName); }
-      if (a.isFiltered && !b.isFiltered) { return -1; }
-      if (!a.isFiltered && b.isFiltered) { return 1; }
-      return 0;
-    });
+    this.sortFilters();
 
     const filters = _.clone(this.filters);
     _.reverse(filters);
 
-    // Filter list based on searchQuery
+    // Filter list based on set parameters
     let result: Configuration[] = data.filter((item) => {
       let validAttributes = true;
       filters.forEach((filter) => {
@@ -100,6 +95,15 @@ export default class SolutionExplorerComponent extends Vue {
 
   get configurations() {
     return this.$store.getters.configurations;
+  }
+
+  public sortFilters() {
+    this.filters = this.filters.sort((a, b) => {
+      if (!a.isFiltered && !b.isFiltered) { return a.attribute.friendlyName.localeCompare(b.attribute.friendlyName); }
+      if (a.isFiltered && !b.isFiltered) { return -1; }
+      if (!a.isFiltered && b.isFiltered) { return 1; }
+      return 0;
+    });
   }
 
   public onRangeChange(attr: any, event: any) {
@@ -194,6 +198,10 @@ export default class SolutionExplorerComponent extends Vue {
       }
     }
     return data;
+  }
+
+  public setAttributeOptimality(attribute: Attribute, isHigherBetter: boolean) {
+    this.$store.commit("updateAttribute", { key: attribute.key, isHigherBetter });
   }
 
   public createReportOk(evt: Event) {
