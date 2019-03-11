@@ -104,6 +104,10 @@ input[type=range]::-webkit-slider-thumb {
   background: #fff;
   cursor: pointer;
   margin-top: 0;
+  transition: background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out,
+    -webkit-box-shadow 0.15s ease-in-out;
 }
 
 input[type=range]::-moz-range-thumb {
@@ -114,6 +118,9 @@ input[type=range]::-moz-range-thumb {
   border-radius: 50%;
   background: #fff;
   cursor: pointer;
+  transition: background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
 }
 
 input[type=range]::-ms-thumb {
@@ -124,24 +131,42 @@ input[type=range]::-ms-thumb {
   border-radius: 50%;
   background: #fff;
   cursor: pointer;
+  transition: background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
 }
 input[type=range]:hover::-webkit-slider-thumb {
   background: #eee;
 }
+input[type=range]:focus::-webkit-slider-thumb {
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
 input[type=range]:active::-webkit-slider-thumb {
-  background: #ddd;
+  background-color: #b3d7ff;
+  border-color: #b3d7ff;
+  box-shadow: none;
 }
 input[type=range]:hover::-moz-range-thumb {
   background: #eee;
 }
+input[type=range]:focus::-moz-range-thumb {
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
 input[type=range]:active::-moz-range-thumb {
-  background: #ddd;
+  background-color: #b3d7ff;
+  border-color: #b3d7ff;
+  box-shadow: none;
 }
 input[type=range]:hover::-ms-thumb {
   background: #eee;
 }
+input[type=range]:focus::-ms-thumb {
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
 input[type=range]:active::-ms-thumb {
-  background: #ddd;
+  background-color: #b3d7ff;
+  border-color: #b3d7ff;
+  box-shadow: none;
 }
 
 @supports (--css: variables) {
