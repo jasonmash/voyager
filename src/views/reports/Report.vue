@@ -59,14 +59,14 @@
           </b-form-group>
         </div>
 
-        <div v-if="newSectionData.type == 0 || newSectionData.type == 1">
+        <div v-if="(newSectionData.type == 0 && newSectionData.y) || (newSectionData.type == 1 && newSectionData.z)">
           <b-form-group label="Bubble Size">
             <b-select v-model="newSectionData.size">
               <option v-for="attr in attributes" :key="attr.key" :value="attr.key">{{attr.friendlyName}}</option>
             </b-select>
           </b-form-group>
 
-          <b-form-group label="Bubble Colour">
+          <b-form-group v-if="newSectionData.size" label="Bubble Colour">
             <b-select v-model="newSectionData.colour">
               <option v-for="attr in attributes" :key="attr.key" :value="attr.key">{{attr.friendlyName}}</option>
             </b-select>

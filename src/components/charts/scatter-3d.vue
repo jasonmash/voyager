@@ -128,7 +128,7 @@ export default class Scatter3DChart extends Vue {
       this.chartData.series[0].encode.z = data.attributes[2].friendlyName;
     }
 
-    if (data.attributes.length > 3) {
+    if (data.attributes.length > 3 && !!data.attributes[3]) {
       const normalisationFactor = (data.attributes[3].maxValue - data.attributes[3].minValue);
       this.chartData.series[0].symbolSize = (value: any) => {
         return 3 + 15 * ((value[3] - data.attributes[3].minValue) / normalisationFactor);
@@ -138,7 +138,7 @@ export default class Scatter3DChart extends Vue {
     }
     this.chartData.series[0].symbol = "circle";
 
-    if (data.attributes.length > 4) {
+    if (data.attributes.length > 4 && !!data.attributes[4]) {
       const colourMap = {
         left: "right",
         top: "10%",
@@ -169,7 +169,7 @@ export default class Scatter3DChart extends Vue {
       this.chartData.visualMap = undefined;
     }
 
-    this.chartData.dataset.dimensions = data.attributes.map((a: Attribute) => a.key);
+    this.chartData.dataset.dimensions = data.attributes.map((a: Attribute) => { if (!!a) { return a.key; } });
     this.chartData.series[0].data = data.values;
 
     this.chartData.dataset.source = data.values;

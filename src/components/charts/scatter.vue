@@ -34,11 +34,11 @@ export default class ScatterChart extends Vue {
     let colourAttribute: Attribute | undefined;
     let normalisationFactor = 0;
 
-    if (data.attributes.length > 2) {
+    if (data.attributes.length > 2 && !!data.attributes[2]) {
       sizeAttribute = data.attributes[2];
       normalisationFactor = (sizeAttribute.maxValue - sizeAttribute.minValue);
     }
-    if (data.attributes.length > 3) {
+    if (data.attributes.length > 3 && !!data.attributes[3]) {
       colourAttribute = data.attributes[3];
     }
 
