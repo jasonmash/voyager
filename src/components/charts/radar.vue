@@ -7,7 +7,7 @@
       <span v-if="title">{{title}}</span>
       <span v-else>Radar Chart</span>
     </div>
-    <e-chart :options="chartData" :init-options="{renderer: 'canvas'}" autoresize class="radar-chart" ref="chart"/>
+    <e-chart :options="chartData" :init-options="{renderer: 'canvas'}" autoresize class="radar-chart" ref="chart" :style="height ? 'height: ' + height + 'px' : ''"/>
   </b-card>
 </template>
 
@@ -25,6 +25,7 @@ import "./charts.css";
 export default class RadarChart extends Vue {
   @Prop(Array) public readonly data!: Configuration[];
   @Prop(String) public readonly title!: string | undefined;
+  @Prop(String) public readonly height!: string | undefined;
 
   get attributes() {
     return this.$store.getters.attributes;
@@ -48,7 +49,7 @@ export default class RadarChart extends Vue {
 
     return {
       tooltip: {},
-      animationDuration: 200,
+      animation: false,
       textStyle: {
         fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
         color: "black"

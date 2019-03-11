@@ -8,11 +8,9 @@ export default new Router({
   mode: "history",
   base: process.env.BASE_URL,
   routes: [
-    { path: "/", component: () => import("./views/About.vue") },
-    { path: "/configurations", component: () => import("./views/configurations/Configurations.vue") },
-    { path: "/configurations/:id", component: () => import("./views/configurations/Configurations.vue") },
+    { path: "/", component: () => import("./views/solution-explorer/SolutionExplorer.vue") },
+    { path: "/about", component: () => import("./views/About.vue") },
     { path: "/reports/:id", component: () => import("./views/reports/Report.vue") },
-    { path: "/solutions", component: () => import("./views/solution-explorer/SolutionExplorer.vue") },
     { path: "*", component: () => import("./views/404.vue") }
   ]
 });

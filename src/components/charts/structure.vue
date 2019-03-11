@@ -7,7 +7,7 @@
       <span v-if="title">{{title}}</span>
       <span v-else>Structure Chart</span>
     </div>
-    <e-chart :options="chartData" ref="chart" :init-options="{renderer: 'canvas'}" autoresize class="structure-chart" />
+    <e-chart :options="chartData" ref="chart" :init-options="{renderer: 'canvas'}" autoresize class="structure-chart" :style="height ? 'height: ' + height + 'px' : ''" />
   </b-card>
 </template>
 
@@ -31,6 +31,7 @@ import "./charts.css";
 export default class StructureChart extends Vue {
   @Prop(Object) public readonly data!: ConfigurationStructure;
   @Prop(String) public readonly title!: string | undefined;
+  @Prop(String) public readonly height!: string | undefined;
 
   get chartData() {
 
@@ -50,7 +51,7 @@ export default class StructureChart extends Vue {
           layout: "force",
           symbolSize: 50,
           symbol: "circle",
-          animation: true,
+          animation: false,
           animationDuration: 100,
           draggable: true,
           label: {

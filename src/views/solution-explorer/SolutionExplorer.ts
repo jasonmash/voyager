@@ -7,7 +7,10 @@ import { Attribute } from "@/models/attribute";
 import { Configuration } from "@/models/configuration";
 import { Report, Section } from "@/models/report";
 import { ChartType } from "@/models/chart-data";
+
 import { Optimality } from "@/utils/optimality";
+import DataManagement from "@/utils/data-management";
+import Importer from "@/utils/importer";
 
 import RangeSlider from "@/components/RangeSlider.vue";
 
@@ -44,10 +47,17 @@ export default class SolutionExplorerComponent extends Vue {
   public selectedConfiguration: Configuration | null = null;
   public newReportName: string = "";
   public paretoFront: string[] = [];
+  public searchQuery: string = "";
+
+  public files: File[] | null = null;
 
   public filteredConfigurations: Configuration[] = [];
 
   public created() {
+    this.loadFilters();
+  }
+
+  public loadFilters() {
     this.filters = this.$store.getters.attributes.map((a: Attribute) => {
       return { attribute: a, minValue: a.scaleMin, maxValue: a.scaleMax, isFiltered: false };
     });
@@ -82,6 +92,11 @@ export default class SolutionExplorerComponent extends Vue {
     });
 
     this.findOptimal(result);
+
+    // Filter by search query
+    result = result.filter((item) => {
+      return item.id ? item.id.toLowerCase().indexOf(this.searchQuery.toLowerCase()) > -1 : false;
+    });
 
     this.filteredConfigurations = result;
 
@@ -282,5 +297,46 @@ export default class SolutionExplorerComponent extends Vue {
     const attributes = _.filter(this.filters, "isFiltered").map((config) => config.attribute);
     const result = Optimality.getParetoFront(attributes, items);
     this.paretoFront = result.map((r) => r.id);
+  }
+
+  public exportData() {
+    DataManagement.exportAllData(this.$store);
+  }
+
+  public resetData() {
+    const result = confirm("Are you sure you wish to remove all stored data? \n\n" +
+      "This will remove all configurations, attributes, and reports.");
+    if (result) { DataManagement.resetAllData(this.$store); }
+    this.filters = [];
+    this.selectedConfiguration = null;
+  }
+
+  public importData() {
+    const input: any = this.$refs.fileinput;
+    input.$el.click();
+  }
+
+  public uploadFile(event: any) {
+    const input = event.target;
+    if (!input.files || input.files.length < 1) { return; }
+
+    this.$message({
+      content: `Importing data...`,
+      type: "info"
+    });
+
+    const loadFilters = this.loadFilters;
+    setTimeout(async () => {
+      for (const file of input.files) {
+        const reader = new FileReader();
+        reader.onload = () => Importer.processInputFile(reader, file, this.$message, this.$store);
+        reader.readAsText(file);
+      }
+
+      const fileInput: any = this.$refs.fileinput;
+      fileInput.reset();
+
+      setTimeout(() => loadFilters(), 100);
+    }, 200);
   }
 }

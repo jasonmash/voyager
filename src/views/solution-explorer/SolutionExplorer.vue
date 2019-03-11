@@ -2,6 +2,18 @@
 
 <template>
   <b-container fluid class="py-3">
+    <div class="float-right">
+      <b-btn right size="sm" class="mr-3" variant="outline-secondary" @click="importData">
+        <i class="fa fa-fw fa-upload mr-2"></i>Import
+      </b-btn>
+      <b-btn right size="sm" class="mr-3" variant="outline-secondary" @click="exportData">
+        <i class="fa fa-fw fa-download mr-2"></i>Export
+      </b-btn>
+      <b-btn right size="sm" variant="outline-secondary" @click="resetData">
+        <i class="fa fa-fw fa-trash-alt mr-2"></i>Reset
+      </b-btn>
+      <b-form-file plain id="fileinput" ref="fileinput" v-model="files" multiple accept=".json" @change="uploadFile"/>
+    </div>
     <h1 class="h3 mb-3">Solution Explorer</h1>
     <b-row>
       <b-col sm="3" class="border-right" style="height: 85vh; overflow-y: auto">
@@ -38,7 +50,8 @@
         <b-btn size="sm" variant="outline-primary" class="float-right" v-b-modal.newreport>Create report</b-btn>
         <h5>Configurations</h5>
         <p class="mb-2">Showing {{filteredConfigurations.length}} of {{totalCount}}</p>
-        <b-list-group flush style="position:relative;overflow-y:auto;max-height:77vh">
+        <b-form-input type="text" placeholder="Search..." size="sm" v-model="searchQuery" autofocus name="search"></b-form-input>
+        <b-list-group flush style="position:relative;overflow-y:auto;max-height:74vh;margin-top:10px">
           <div>
             <b-list-group-item class="py-1 px-3 bg-light position-sticky" style="top:0; z-index:2">
               Optimal configurations <span class="float-right text-muted">{{list.true ? list.true.length : 0}}</span>
@@ -68,22 +81,37 @@
         </b-list-group>
       </b-col>
       <b-col style="height: 85vh; overflow-y: auto; overflow-x: hidden">
-        <div v-if="selectedConfiguration" class="mb-4">
-          <b-btn size="sm" variant="outline-secondary" class="float-right" @click="selectedConfiguration = null"><i class="fa fa-times fa-fw"></i></b-btn>
-          <h5>Selected Configuration</h5>
-          <b-list-group flush>
-            <b-list-group-item v-for="filter in filters" :key="`attr-${filter.attribute.key}`">
-              <span>{{filter.attribute.friendlyName}}:</span>
-              <span class="float-right number-text">{{selectedConfiguration.attributes[filter.attribute.key]}}</span>
-            </b-list-group-item>
-          </b-list-group>
-          <radar-chart :data="[selectedConfiguration]" />
-          <structure-chart v-if="selectedConfiguration.structure.components.length > 0" :data="selectedConfiguration.structure" />
+        <div v-if="selectedConfiguration" class="mb-4 bg-light p-3 border rounded" style="box-shadow: 0px 2px 3px rgba(0,0,0,0.2)">
+          <b-btn size="sm" variant="outline-danger" class="float-right" @click="selectedConfiguration = null"><i class="fa fa-times fa-fw"></i></b-btn>
+          <h6 class="text-muted">Selected Configuration</h6>
+          <h5 class="mb-4">{{selectedConfiguration.id}}</h5>
+          <b-row>
+            <b-col sm="6">
+              <b-card no-body class="mb-3">
+                <b-list-group flush>
+                  <b-list-group-item v-for="filter in filters" :key="`attr-${filter.attribute.key}`">
+                    <span>{{filter.attribute.friendlyName}}:</span>
+                    <span class="float-right number-text">{{selectedConfiguration.attributes[filter.attribute.key]}}</span>
+                  </b-list-group-item>
+                </b-list-group>
+              </b-card>
+              <radar-chart :data="[selectedConfiguration]" height="330" v-if="selectedConfiguration.structure.components.length > 0" />
+            </b-col>
+            <b-col sm="6">
+                <structure-chart v-if="selectedConfiguration.structure.components.length > 0" :data="selectedConfiguration.structure" :height="(350 + (46 * filters.length)).toPrecision(3)"/>
+                <radar-chart :data="[selectedConfiguration]" v-else />
+            </b-col>
+          </b-row>
+        </div>
+
+        <div v-else-if="filters.length === 0" class="text-center">
+          <h6 class="my-3">To start, import some configurations and attributes.</h6>
         </div>
 
         <div v-else>
           <h5>Visualisations</h5>
-          <radar-chart class="mt-4" v-if="list.length < 10" :data="list" />
+          <p v-if="chartDimensions == 0" >Change the selected attribute filters to visualise the solution space.</p>
+          <radar-chart class="mt-4" v-if="filteredConfigurations.length < 10" :data="filteredConfigurations" />
           <div class="mt-4" v-if="chartData">
             <line-chart v-if="chartDimensions == 1" :data="chartData" class="mb-3"/>
             <scatter3d-chart v-if="chartDimensions >= 3" :data="chartData" class="mb-3"/>
@@ -123,4 +151,13 @@
   cursor: ns-resize;
 }
 
+#fileinput {
+  /* Position file input box off-screen, and trigger via code */
+  position: absolute;
+  top: -100px;
+  left: -100px;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+}
 </style>
