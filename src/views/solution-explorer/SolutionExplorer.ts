@@ -16,9 +16,9 @@ import LineChart from "@/components/charts/line.vue";
 import RadarChart from "@/components/charts/radar.vue";
 import ScatterChart from "@/components/charts/scatter.vue";
 import Scatter3DChart from "@/components/charts/scatter-3d.vue";
-import StructureChart from "@/components/charts/structure.vue";
 import SurfaceChart from "@/components/charts/surface.vue";
 
+import ConfigurationBox from "./components/Configuration";
 import Toolbar from "./components/Toolbar";
 
 interface AttributeFilter {
@@ -30,10 +30,10 @@ interface AttributeFilter {
 
 @Component({
   components: {
+    "configuration": ConfigurationBox,
     Toolbar,
     LineChart,
     RadarChart,
-    StructureChart,
     ScatterChart,
     SurfaceChart,
     "scatter3d-chart": Scatter3DChart,

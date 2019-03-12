@@ -70,36 +70,15 @@
         </b-list-group>
       </b-col>
       <b-col style="height: 85vh; overflow-y: auto; overflow-x: hidden">
-        <div v-if="selectedConfiguration" class="mb-4 bg-light p-3 border rounded" style="box-shadow: 0px 2px 3px rgba(0,0,0,0.2)">
-          <b-btn size="sm" variant="outline-danger" class="float-right" @click="selectedConfiguration = null"><i class="fa fa-times fa-fw"></i></b-btn>
-          <h6 class="text-muted">Selected Configuration</h6>
-          <h5 class="mb-4">{{selectedConfiguration.id}}</h5>
-          <b-row>
-            <b-col sm="6">
-              <b-card no-body class="mb-3">
-                <b-list-group flush>
-                  <b-list-group-item v-for="filter in filters" :key="`attr-${filter.attribute.key}`">
-                    <span>{{filter.attribute.friendlyName}}:</span>
-                    <span class="float-right number-text">{{selectedConfiguration.attributes[filter.attribute.key]}}</span>
-                  </b-list-group-item>
-                </b-list-group>
-              </b-card>
-              <radar-chart :data="[selectedConfiguration]" height="330" v-if="selectedConfiguration.structure.components.length > 0" />
-            </b-col>
-            <b-col sm="6">
-                <structure-chart v-if="selectedConfiguration.structure.components.length > 0" :data="selectedConfiguration.structure" :height="(350 + (46 * filters.length)).toPrecision(3)"/>
-                <radar-chart :data="[selectedConfiguration]" v-else />
-            </b-col>
-          </b-row>
-        </div>
+        <configuration v-if="selectedConfiguration" :configuration="selectedConfiguration" @clearSelection="selectedConfiguration = null"/>
 
         <div v-else-if="filters.length === 0" class="text-center">
-          <h6 class="my-3">To start, import some configurations and attributes.</h6>
+          <h6 class="my-3">To start, import some configurations with attributes.</h6>
         </div>
 
         <div v-else>
           <h5>Visualisations</h5>
-          <p v-if="chartDimensions == 0" >Change the selected attribute filters to visualise the solution space.</p>
+          <p v-if="chartDimensions == 0" >Change the selected attribute filters to visualise the solution space, or select a configuration.</p>
           <radar-chart class="mt-4" v-if="filteredConfigurations.length < 10" :data="filteredConfigurations" />
           <div class="mt-4" v-if="chartData">
             <line-chart v-if="chartDimensions == 1" :data="chartData" class="mb-3"/>
