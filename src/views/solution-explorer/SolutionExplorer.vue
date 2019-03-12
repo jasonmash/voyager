@@ -5,7 +5,7 @@
     <toolbar @refreshData="loadFilters" />
     <h1 class="h3 mb-3">Solution Explorer</h1>
     <b-row>
-      <b-col sm="3" class="border-right" style="height: 85vh; overflow-y: auto">
+      <b-col xs="3" sm="3" class="border-right" style="height: 85vh; overflow-y: auto">
         <h5>Attributes</h5>
         <p>Order by priority</p>
 
@@ -15,39 +15,12 @@
           </transition-group>
         </draggable>
       </b-col>
-      <b-col sm="3" class="border-right" style="height: 85vh; overflow-y: auto">
+      <b-col xs="3" sm="3" class="border-right" style="height: 85vh; overflow-y: auto">
         <b-btn size="sm" variant="outline-primary" class="float-right" v-b-modal.newreport>Create report</b-btn>
         <h5>Configurations</h5>
         <p class="mb-2">Showing {{filteredConfigurations.length}} of {{totalCount}}</p>
         <b-form-input type="text" placeholder="Search..." size="sm" v-model="searchQuery" autofocus name="search"></b-form-input>
-        <b-list-group flush style="position:relative;overflow-y:auto;max-height:74vh;margin-top:10px">
-          <div>
-            <b-list-group-item class="py-1 px-3 bg-light position-sticky" style="top:0; z-index:2">
-              Optimal configurations <span class="float-right text-muted">{{list.true ? list.true.length : 0}}</span>
-            </b-list-group-item>
-            <b-list-group-item :ref="`i-${index}`" v-for="(item, index) in list.true" :key="'t-' + index" :class="{'px-3 py-2': true, 'bg-light': selectedConfiguration == item}" @click="selectedConfiguration = item">
-              <p class="mb-0">
-                {{item.id}}<br>
-                <small>
-                  <span v-for="a in filters.filter((a) => a.isFiltered)" :key="a.attribute.key"><b>{{a.attribute.friendlyName}}</b>: {{item.attributes[a.attribute.key]}}<br></span>
-                </small>
-              </p>
-            </b-list-group-item>
-          </div>
-          <div class="border-bottom">
-            <b-list-group-item class="py-1 px-3 bg-light position-sticky" style="top:0; z-index:2">
-              Other configurations <span class="float-right text-muted">{{list.false ? list.false.length : 0}}</span>
-            </b-list-group-item>
-            <b-list-group-item :ref="`i-${index}`" v-for="(item, index) in list.false" :key="'f-' + index" :class="{'px-3 py-2': true, 'bg-light': selectedConfiguration == item}" @click="selectedConfiguration = item">
-              <p class="mb-0">
-                {{item.id}}<br>
-                <small>
-                  <span v-for="a in filters.filter((a) => a.isFiltered)" :key="a.attribute.key"><b>{{a.attribute.friendlyName}}</b>: {{item.attributes[a.attribute.key]}}<br></span>
-                </small>
-              </p>
-            </b-list-group-item>
-          </div>
-        </b-list-group>
+        <configuration-list :list="list" :filters="filters" :selectedConfiguration="selectedConfiguration" @select="selectedConfiguration=$event"/>
       </b-col>
       <b-col style="height: 85vh; overflow-y: auto; overflow-x: hidden">
         <configuration v-if="selectedConfiguration" :configuration="selectedConfiguration" @clearSelection="selectedConfiguration = null"/>

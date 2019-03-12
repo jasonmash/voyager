@@ -1,6 +1,6 @@
 <template>
   <div v-if="filter" class="border-bottom bg-white pt-3">
-    <i v-if="filter.isFiltered" class="fa fa-bars handle float-right"></i>
+    <i v-if="filter.isFiltered" class="fa fa-arrows-alt-v handle float-right"></i>
     <b-form-checkbox class="h6 mr-3" v-model="filter.isFiltered" :value="true" :unchecked-value="false">
       {{filter.attribute.friendlyName}}
     </b-form-checkbox>
