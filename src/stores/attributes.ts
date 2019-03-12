@@ -78,6 +78,7 @@ const mutations = {
   addAttributes: (state: State, payload: Attribute[]) => {
     payload.forEach((c: Attribute) => {
       const index = _.findIndex(state.data, (d) => d.key === c.key);
+      if (c.isHigherBetter === undefined) { c.isHigherBetter = true; }
       if (index > -1) {
         Vue.set(state.data, index, _.merge(state.data[index], c));
       } else {

@@ -10,34 +10,26 @@ import { ChartType } from "@/models/chart-data";
 
 import { Optimality } from "@/utils/optimality";
 
-import RangeSlider from "@/components/RangeSlider.vue";
-
 import LineChart from "@/components/charts/line.vue";
 import RadarChart from "@/components/charts/radar.vue";
 import ScatterChart from "@/components/charts/scatter.vue";
 import Scatter3DChart from "@/components/charts/scatter-3d.vue";
 import SurfaceChart from "@/components/charts/surface.vue";
 
+import AttributeBox, { AttributeFilter } from "./components/Attribute";
 import ConfigurationBox from "./components/Configuration";
 import Toolbar from "./components/Toolbar";
-
-interface AttributeFilter {
-  attribute: Attribute;
-  minValue: number;
-  maxValue: number;
-  isFiltered: boolean;
-}
 
 @Component({
   components: {
     "configuration": ConfigurationBox,
+    "attribute": AttributeBox,
     Toolbar,
     LineChart,
     RadarChart,
     ScatterChart,
     SurfaceChart,
     "scatter3d-chart": Scatter3DChart,
-    "range-slider": RangeSlider,
     draggable
   }
 })
@@ -121,11 +113,6 @@ export default class SolutionExplorerComponent extends Vue {
       if (!a.isFiltered && b.isFiltered) { return 1; }
       return 0;
     });
-  }
-
-  public onRangeChange(attr: any, event: any) {
-    attr.minValue = parseFloat(event.min);
-    attr.maxValue = parseFloat(event.max);
   }
 
   get surfaceData() {
@@ -215,10 +202,6 @@ export default class SolutionExplorerComponent extends Vue {
       }
     }
     return data;
-  }
-
-  public setAttributeOptimality(attribute: Attribute, isHigherBetter: boolean) {
-    this.$store.commit("updateAttribute", { key: attribute.key, isHigherBetter });
   }
 
   public createReportOk(evt: Event) {
