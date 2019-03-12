@@ -1,47 +1,46 @@
 <script lang="ts" src="./SolutionExplorer.ts" />
 
 <template>
-  <b-container fluid class="py-3">
+  <b-container fluid id="solution-explorer" class="pt-3">
     <toolbar @refreshData="loadFilters" />
     <h1 class="h3 mb-3">Solution Explorer</h1>
-    <b-row>
-      <b-col xs="3" sm="3" class="border-right" style="height: 85vh; overflow-y: auto">
-        <h5>Attributes</h5>
-        <p>Order by priority</p>
 
-        <draggable class="border-top" v-model="filters" handle=".handle" @start="drag = true" @end="drag = false" :animation='200'>
-          <transition-group type="transition" :name="!drag ? 'flip-list' : null">
-            <attribute v-for="(filter, i) in filters" :key="filter.attribute.key" :filter="filter" :index="i"/> 
-          </transition-group>
-        </draggable>
-      </b-col>
-      <b-col xs="3" sm="3" class="border-right" style="height: 85vh; overflow-y: auto">
-        <b-btn size="sm" variant="outline-primary" class="float-right" v-b-modal.newreport>Create report</b-btn>
-        <h5>Configurations</h5>
-        <p class="mb-2">Showing {{filteredConfigurations.length}} of {{totalCount}}</p>
-        <b-form-input type="text" placeholder="Search..." size="sm" v-model="searchQuery" autofocus name="search"></b-form-input>
-        <configuration-list :list="list" :filters="filters" :selectedConfiguration="selectedConfiguration" @select="selectedConfiguration=$event"/>
-      </b-col>
-      <b-col style="height: 85vh; overflow-y: auto; overflow-x: hidden">
-        <configuration v-if="selectedConfiguration" :configuration="selectedConfiguration" @clearSelection="selectedConfiguration = null"/>
+    <div class="border-right solution-explorer-col s-col-1">
+      <h5>Attributes</h5>
+      <p>Order by priority</p>
 
-        <div v-else-if="filters.length === 0" class="text-center">
-          <h6 class="my-3">To start, import some configurations with attributes.</h6>
+      <draggable class="border-top" v-model="filters" handle=".handle" @start="drag = true" @end="drag = false" :animation='200'>
+        <transition-group type="transition" :name="!drag ? 'flip-list' : null">
+          <attribute v-for="(filter, i) in filters" :key="filter.attribute.key" :filter="filter" :index="i"/> 
+        </transition-group>
+      </draggable>
+    </div>
+    <div class="border-right solution-explorer-col s-col-2">
+      <b-btn size="sm" variant="outline-primary" class="float-right" v-b-modal.newreport>Create report</b-btn>
+      <h5>Configurations</h5>
+      <p class="mb-2">Showing {{filteredConfigurations.length}} of {{totalCount}}</p>
+      <b-form-input type="text" placeholder="Search..." size="sm" v-model="searchQuery" autofocus name="search"></b-form-input>
+      <configuration-list :list="list" :filters="filters" :selectedConfiguration="selectedConfiguration" @select="selectedConfiguration=$event"/>
+    </div>
+    <div class="solution-explorer-col s-col-3">
+      <configuration v-if="selectedConfiguration" :configuration="selectedConfiguration" @clearSelection="selectedConfiguration = null"/>
+
+      <div v-else-if="filters.length === 0" class="text-center">
+        <h6 class="my-3">To start, import some configurations with attributes.</h6>
+      </div>
+
+      <div v-else>
+        <h5>Visualisations</h5>
+        <p v-if="chartDimensions == 0" >Change the selected attribute filters to visualise the solution space, or select a configuration.</p>
+        <radar-chart class="mt-4" v-if="filteredConfigurations.length < 10" :data="filteredConfigurations" />
+        <div class="mt-4" v-if="chartData">
+          <line-chart v-if="chartDimensions == 1" :data="chartData" class="mb-3"/>
+          <scatter3d-chart v-if="chartDimensions >= 3" :data="chartData" class="mb-3"/>
+          <scatter-chart v-if="chartDimensions >= 2 && chartDimensions < 5" :data="chartData" class="mb-3"/>
+          <surface-chart v-if="chartDimensions == 3" :data="surfaceData" class="mb-3"/>
         </div>
-
-        <div v-else>
-          <h5>Visualisations</h5>
-          <p v-if="chartDimensions == 0" >Change the selected attribute filters to visualise the solution space, or select a configuration.</p>
-          <radar-chart class="mt-4" v-if="filteredConfigurations.length < 10" :data="filteredConfigurations" />
-          <div class="mt-4" v-if="chartData">
-            <line-chart v-if="chartDimensions == 1" :data="chartData" class="mb-3"/>
-            <scatter3d-chart v-if="chartDimensions >= 3" :data="chartData" class="mb-3"/>
-            <scatter-chart v-if="chartDimensions >= 2 && chartDimensions < 5" :data="chartData" class="mb-3"/>
-            <surface-chart v-if="chartDimensions == 3" :data="surfaceData" class="mb-3"/>
-          </div>
-        </div>
-      </b-col>
-    </b-row>
+      </div>
+    </div>
 
     <b-modal id="newreport" title="Create Report" @ok="createReportOk" ref="newreport">
       <b-form @submit.stop.prevent="createReportSubmit">
@@ -54,6 +53,35 @@
 </template>
 
 <style>
+#solution-explorer {
+  position: absolute;
+  top: 56px;
+  bottom: 0;
+  left: 0;
+  min-width: 1250px;
+}
+
+.solution-explorer-col {
+  position: absolute;
+  top: 70px;
+  bottom: 0;
+  width: 350px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0 15px;
+}
+.solution-explorer-col.s-col-1 {
+  left: 0;
+}
+.solution-explorer-col.s-col-2 {
+  left: 350px;
+}
+.solution-explorer-col.s-col-3 {
+  left: 700px;
+  right: 0;
+  width: auto;
+}
+
 .custom-control-label::before,
 .custom-control-label::after {
   top: 0.075rem;

@@ -31,10 +31,12 @@
 
 <style scoped>
   .config-list {
-    position: relative;
+    position: absolute;
     overflow-y: auto;
-    max-height: 74vh;
-    margin-top: 10px;
+    bottom: 0;
+    top: 96px;
+    width: 350px;
+    margin: 10px -15px 0;
   }
 
   .config-list .list-group-item {
