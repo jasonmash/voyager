@@ -30,14 +30,14 @@
       </div>
 
       <div v-else>
-        <h5>Visualisations</h5>
+        <h5 class="mb-0">Visualisations</h5>
         <p v-if="chartDimensions == 0" >Change the selected attribute filters to visualise the solution space, or select a configuration.</p>
-        <radar-chart class="mt-4" v-if="filteredConfigurations.length < 10" :data="filteredConfigurations" />
-        <div class="mt-4" v-if="chartData">
+        <radar-chart class="mt-3" v-if="filteredConfigurations.length < 10" :data="filteredConfigurations" />
+        <div class="mt-3" v-if="chartData">
+          <surface-chart v-if="chartDimensions == 3" :data="surfaceData" class="mb-3"/>
           <line-chart v-if="chartDimensions == 1" :data="chartData" class="mb-3"/>
           <scatter3d-chart v-if="chartDimensions >= 3" :data="chartData" class="mb-3"/>
           <scatter-chart v-if="chartDimensions >= 2 && chartDimensions < 5" :data="chartData" class="mb-3"/>
-          <surface-chart v-if="chartDimensions == 3" :data="surfaceData" class="mb-3"/>
         </div>
       </div>
     </div>

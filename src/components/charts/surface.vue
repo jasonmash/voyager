@@ -2,6 +2,7 @@
   <b-card no-body>
     <div slot="header" class="chart-header">
       <b-dropdown right class="float-right" size="sm" variant="outline-secondary">
+        <b-dropdown-item :active="useWorstCase" @click="useWorstCase = !useWorstCase">Use worst case</b-dropdown-item>
         <b-dropdown-header>Projection</b-dropdown-header>
         <b-dropdown-item :active="chartData.grid3D.viewControl.projection === 'perspective'" @click="switchPerspective('perspective')">Perspective</b-dropdown-item>
         <b-dropdown-item :active="chartData.grid3D.viewControl.projection === 'orthographic'" @click="switchPerspective('orthographic')">Orthographic</b-dropdown-item>
@@ -33,6 +34,7 @@ export default class SurfaceChart extends Vue {
   @Prop(String) public readonly title!: string | undefined;
 
   public isUpdating = false;
+  public useWorstCase = false;
 
   public chartData: any = {
     animation: false,
@@ -168,7 +170,7 @@ export default class SurfaceChart extends Vue {
         }, {
           attribute: data.attributes[1],
           value: y
-        }], data.configs);
+        }], data.configs, this.useWorstCase);
         if (!config[0]) { return; }
         return config[0].attributes[data.attributes[2].key];
       }

@@ -31,7 +31,8 @@ export class Optimality {
     return optimal;
   }
 
-  public static getOptimalConfigForPoint(point: Point[], configurations: Configuration[]): Configuration[] {
+  public static getOptimalConfigForPoint(point: Point[], configurations: Configuration[],
+                                         useWorstCase: boolean): Configuration[] {
     if (configurations.length === 0) { return []; }
 
     let configs = configurations.filter((c) => {
@@ -48,8 +49,14 @@ export class Optimality {
       configs = configurations.filter((c) => {
         let isPoint = true;
         point.forEach((p) => {
-          isPoint = isPoint && (c.attributes[p.attribute.key] <= (p.value + (i * p.attribute.step))
-                            && c.attributes[p.attribute.key] >= (p.value - (i * p.attribute.step)));
+          if (!useWorstCase) {
+            isPoint = isPoint && (c.attributes[p.attribute.key] <= (p.value + (i * p.attribute.step))
+                              && c.attributes[p.attribute.key] >= (p.value - (i * p.attribute.step)));
+          } else if (!p.attribute.isHigherBetter) {
+            isPoint = isPoint && (c.attributes[p.attribute.key] >= (p.value - (i * p.attribute.step)));
+          } else if (p.attribute.isHigherBetter) {
+            isPoint = isPoint && (c.attributes[p.attribute.key] <= (p.value + (i * p.attribute.step)));
+          }
         });
         return isPoint;
       });
@@ -63,8 +70,14 @@ export class Optimality {
       configs = configurations.filter((c) => {
         let isPoint = true;
         point.forEach((p) => {
-          isPoint = isPoint && (c.attributes[p.attribute.key] <= (p.value + (i * p.attribute.step))
-                            && c.attributes[p.attribute.key] >= (p.value - (i * p.attribute.step)));
+          if (!useWorstCase) {
+            isPoint = isPoint && (c.attributes[p.attribute.key] <= (p.value + (i * p.attribute.step))
+                              && c.attributes[p.attribute.key] >= (p.value - (i * p.attribute.step)));
+          } else if (!p.attribute.isHigherBetter) {
+            isPoint = isPoint && (c.attributes[p.attribute.key] >= (p.value - (i * p.attribute.step)));
+          } else if (p.attribute.isHigherBetter) {
+            isPoint = isPoint && (c.attributes[p.attribute.key] <= (p.value + (i * p.attribute.step)));
+          }
         });
         return isPoint;
       });

@@ -3,6 +3,10 @@
   height: 31px;
 }
 
+.card-header {
+  padding: 0.5rem 0.5rem 0.5rem 1rem;
+}
+
 .bar-chart {
   width: auto;
   height: 450px;
