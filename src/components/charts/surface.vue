@@ -78,7 +78,10 @@ export default class SurfaceChart extends Vue {
           "#d73027", "#a50026"]
       }
     },
-    tooltip: {},
+    tooltip: {
+      show: false,
+      trigger: "none"
+    },
     series: [{
       wireframe: {
         show: true
@@ -164,16 +167,15 @@ export default class SurfaceChart extends Vue {
         max: data.attributes[1].scaleMax
       },
       z: (x: number, y: number) => {
-        const config = Optimality.getOptimalConfigForPoint([{
+        return Optimality.getAttrValAtPoint([{
           attribute: data.attributes[0],
           value: x
         }, {
           attribute: data.attributes[1],
           value: y
-        }], data.configs, this.useWorstCase);
-        if (!config[0]) { return; }
-        return config[0].attributes[data.attributes[2].key];
-      }
+        }], data.configs, data.attributes[2]);
+      },
+      tooltip: { show: false }
     };
   }
 

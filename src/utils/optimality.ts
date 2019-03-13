@@ -31,58 +31,24 @@ export class Optimality {
     return optimal;
   }
 
-  public static getOptimalConfigForPoint(point: Point[], configurations: Configuration[],
-                                         useWorstCase: boolean): Configuration[] {
-    if (configurations.length === 0) { return []; }
+  public static getAttrValAtPoint(point: Point[], configurations: Configuration[],
+                                  attr: Attribute): number | undefined {
+    if (configurations.length === 0) { return undefined; }
 
     let configs = configurations.filter((c) => {
-      let isPoint = true;
+      let useConfig = true;
       point.forEach((p) => {
-        isPoint = isPoint && c.attributes[p.attribute.key] === p.value;
+        if (!p.attribute.isHigherBetter) {
+          useConfig = useConfig && (c.attributes[p.attribute.key] <= p.value);
+        } else if (p.attribute.isHigherBetter) {
+          useConfig = useConfig && (c.attributes[p.attribute.key] >= p.value);
+        }
       });
-      return isPoint;
+      return useConfig;
     });
 
-    let i = 0;
-    while (configs.length === 0) {
-      i++;
-      configs = configurations.filter((c) => {
-        let isPoint = true;
-        point.forEach((p) => {
-          if (!useWorstCase) {
-            isPoint = isPoint && (c.attributes[p.attribute.key] <= (p.value + (i * p.attribute.step))
-                              && c.attributes[p.attribute.key] >= (p.value - (i * p.attribute.step)));
-          } else if (!p.attribute.isHigherBetter) {
-            isPoint = isPoint && (c.attributes[p.attribute.key] >= (p.value - (i * p.attribute.step)));
-          } else if (p.attribute.isHigherBetter) {
-            isPoint = isPoint && (c.attributes[p.attribute.key] <= (p.value + (i * p.attribute.step)));
-          }
-        });
-        return isPoint;
-      });
-    }
+    configs = _.orderBy(configs, ["attributes." + attr.key], [attr.isHigherBetter ? "dsc" : "asc"]);
 
-    const attributes = point.map((p) => p.attribute);
-
-    let optimalConfigs = this.getParetoFront(attributes, configs);
-    while (optimalConfigs.length === 0) {
-      i++;
-      configs = configurations.filter((c) => {
-        let isPoint = true;
-        point.forEach((p) => {
-          if (!useWorstCase) {
-            isPoint = isPoint && (c.attributes[p.attribute.key] <= (p.value + (i * p.attribute.step))
-                              && c.attributes[p.attribute.key] >= (p.value - (i * p.attribute.step)));
-          } else if (!p.attribute.isHigherBetter) {
-            isPoint = isPoint && (c.attributes[p.attribute.key] >= (p.value - (i * p.attribute.step)));
-          } else if (p.attribute.isHigherBetter) {
-            isPoint = isPoint && (c.attributes[p.attribute.key] <= (p.value + (i * p.attribute.step)));
-          }
-        });
-        return isPoint;
-      });
-      optimalConfigs = this.getParetoFront(attributes, configs);
-    }
-    return optimalConfigs;
+    return configs[0] ? configs[0].attributes[attr.key] : undefined;
   }
 }

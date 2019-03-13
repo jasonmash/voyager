@@ -119,11 +119,6 @@ export default class SolutionExplorerComponent extends Vue {
   get surfaceData() {
     const filters = _.filter(this.filters, "isFiltered").map((config) => config.attribute);
     this.chartDimensions = filters.length;
-
-    const a = this.filters[0].attribute;
-    const b = this.filters[1].attribute;
-    const c = this.filters[2].attribute;
-    const result = Optimality.getParetoFront([a, b, c], this.filteredConfigurations);
     return {
       values: this.filteredConfigurations.map((config: Configuration) => [
         config.attributes[filters[0].key],
@@ -132,7 +127,7 @@ export default class SolutionExplorerComponent extends Vue {
         config.id
       ]),
       attributes: [filters[0], filters[1], filters[2]],
-      configs: result
+      configs: this.filteredConfigurations
     };
   }
 
