@@ -9,7 +9,7 @@
     <b-btn right size="sm" variant="outline-secondary" @click="resetData">
       <i class="fa fa-fw fa-trash-alt mr-2"></i>Reset
     </b-btn>
-    <b-form-file plain id="fileinput" ref="fileinput" v-model="files" multiple @change="uploadFile"/> <!-- accept=".json"-->
+    <b-form-file plain id="fileinput" ref="fileinput" v-model="files" multiple @change="uploadFile" accept=".json, .csv"/>
   </div>
 </template>
 

@@ -3,6 +3,7 @@ declare module "*.vue" {
   export default Vue;
 }
 
+declare module "papaparse";
 declare module "vue-echarts";
 declare module "deepmerge";
 declare module "vuedraggable";

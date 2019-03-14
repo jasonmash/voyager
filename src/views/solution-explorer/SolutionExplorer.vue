@@ -32,7 +32,7 @@
       <div v-else>
         <h5 class="mb-0">Visualisations</h5>
         <p v-if="chartDimensions == 0" >Change the selected attribute filters to visualise the solution space, or select a configuration.</p>
-        <radar-chart class="mt-3" v-if="filteredConfigurations.length < 10" :data="filteredConfigurations" />
+        <radar-chart class="mt-3" v-if="filteredConfigurations.length > 0 && filteredConfigurations.length < 10" :data="filteredConfigurations" />
         <div class="mt-3" v-if="chartData">
           <surface-chart v-if="chartDimensions == 3" :data="chartData" class="mb-3"/>
           <line-chart v-if="chartDimensions == 1" :data="chartData" class="mb-3"/>

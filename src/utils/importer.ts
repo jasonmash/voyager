@@ -1,4 +1,6 @@
 import { Store } from "vuex";
+import Papa from "papaparse";
+
 import { Configuration } from "@/models/configuration";
 import { Message } from "@/components/messages/Message";
 
@@ -12,8 +14,16 @@ export default class Importer {
       };
     }
 
+    if (file.name.endsWith(".json")) {
+      return this.parseJson(reader.result, file, $store);
+    } else if (file.name.endsWith(".csv")) {
+      return this.parseCsv(reader.result, file, $store);
+    }
+  }
+
+  public static parseJson(data: string, file: File, $store: any): Message {
     try {
-      const inputData = JSON.parse(reader.result);
+      const inputData = JSON.parse(data);
       const result = Importer.importFile(inputData, $store);
       if (result) {
         return {
@@ -27,6 +37,50 @@ export default class Importer {
           duration: 8000
         };
       }
+    } catch (err) {
+      return {
+        content: `Unable to process '${file.name}': ${err}`,
+        type: "danger",
+        duration: 8000
+      };
+    }
+  }
+
+  public static parseCsv(data: string, file: File, $store: any): Message {
+    try {
+      const results = Papa.parse(data, {
+        header: true,
+        dynamicTyping: true
+      });
+
+      if (results.errors.length > 0) {
+        return {
+          content: `Unable to process '${file.name}': ${results.errors}`,
+          type: "danger",
+          duration: 8000
+        };
+      }
+
+      const configurations: Configuration[] = [];
+      let nextIndex: number = $store.getters.configurations.length;
+      results.data.forEach((config: any) => {
+        let id = "config-" + nextIndex;
+        if (config.id) {
+          id = config.id;
+        } else {
+          nextIndex++;
+        }
+        const c = new Configuration({ id });
+        c.setAttributes([config], $store);
+        configurations.push(c);
+      });
+      $store.commit("addConfigurations", configurations);
+
+      return {
+        content: `Successfully imported data from '${file.name}'`,
+        type: "success"
+      };
+
     } catch (err) {
       return {
         content: `Unable to process '${file.name}': ${err}`,

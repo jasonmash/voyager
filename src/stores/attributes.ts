@@ -45,16 +45,22 @@ const mutations = {
       if (attrInfo.minValue > attribute.value) {
         attrInfo.minValue = attribute.value;
       }
+
       const magnitude = Math.floor(Math.log((attrInfo.maxValue + attrInfo.minValue) / 2) / Math.LN10 + 0.000000001);
       attrInfo.step = Math.pow(10, magnitude - 2);
 
-      const precision = Math.floor(Math.log(attrInfo.maxValue - attrInfo.minValue) / Math.LN10 + 0.000000001);
-      if (Math.abs(precision) > 2) {
-        attrInfo.scaleMax = parseFloat((attrInfo.maxValue + attrInfo.step).toPrecision(Math.abs(precision) + 1));
-        attrInfo.scaleMin = parseFloat((attrInfo.minValue - attrInfo.step).toPrecision(Math.abs(precision) + 1));
+      if (attrInfo.minValue < attrInfo.maxValue) {
+        const precision = Math.floor(Math.log(attrInfo.maxValue - attrInfo.minValue) / Math.LN10 + 0.000000001);
+        if (Math.abs(precision) > 2) {
+          attrInfo.scaleMax = parseFloat((attrInfo.maxValue + attrInfo.step).toPrecision(Math.abs(precision) + 1));
+          attrInfo.scaleMin = parseFloat((attrInfo.minValue - attrInfo.step).toPrecision(Math.abs(precision) + 1));
+        } else {
+          attrInfo.scaleMax = parseFloat((attrInfo.maxValue + attrInfo.step).toPrecision(2));
+          attrInfo.scaleMin = parseFloat((attrInfo.minValue - attrInfo.step).toPrecision(2));
+        }
       } else {
-        attrInfo.scaleMax = parseFloat((attrInfo.maxValue + attrInfo.step).toPrecision(2));
-        attrInfo.scaleMin = parseFloat((attrInfo.minValue - attrInfo.step).toPrecision(2));
+        attrInfo.scaleMax = attrInfo.maxValue + attrInfo.step;
+        attrInfo.scaleMin = attrInfo.minValue - attrInfo.step;
       }
       Vue.set(state.data, index, attrInfo);
     }

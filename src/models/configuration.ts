@@ -54,6 +54,7 @@ export class Configuration {
     // Loop through each attribute in incoming list
     attributeList.forEach((attribute: any) => {
       Object.keys(attribute).forEach((key: string) => {
+        if (key.toLowerCase() === "id") { return; }
         output[key] = parseFloat(attribute[key]);
 
         // Use processAttribute mutation to update associated Attribute info (e.g. maxValue seen so far)
