@@ -23,14 +23,14 @@ import Toolbar from "./components/Toolbar";
 @Component({
   components: {
     "configuration": ConfigurationBox,
-    ConfigurationList,
     "attribute": AttributeBox,
+    ConfigurationList,
     Toolbar,
+    "scatter3d-chart": Scatter3DChart,
     LineChart,
     RadarChart,
     ScatterChart,
     SurfaceChart,
-    "scatter3d-chart": Scatter3DChart,
     draggable
   }
 })
@@ -51,6 +51,14 @@ export default class SolutionExplorerComponent extends Vue {
     this.loadFilters();
   }
 
+  get totalCount() {
+    return this.$store.getters.configurations.length;
+  }
+
+  get configurations() {
+    return this.$store.getters.configurations;
+  }
+
   public loadFilters() {
     this.selectedConfiguration = null;
     this.filters = this.$store.getters.attributes.map((a: Attribute) => {
@@ -65,6 +73,8 @@ export default class SolutionExplorerComponent extends Vue {
 
     const filters = _.clone(this.filters);
     _.reverse(filters);
+
+    const attributes = _.filter(this.filters, "isFiltered").map((config) => config.attribute);
 
     // Filter list based on set parameters
     let result: Configuration[] = data.filter((item) => {
@@ -85,8 +95,7 @@ export default class SolutionExplorerComponent extends Vue {
           [(filter.attribute.isHigherBetter ? "desc" : "asc")]);
       }
     });
-
-    this.findOptimal(result);
+    this.paretoFront = Optimality.getParetoFront(attributes, result).map((r) => r.id);
 
     // Filter by search query
     result = result.filter((item) => {
@@ -99,14 +108,6 @@ export default class SolutionExplorerComponent extends Vue {
     return res;
   }
 
-  get totalCount() {
-    return this.$store.getters.configurations.length;
-  }
-
-  get configurations() {
-    return this.$store.getters.configurations;
-  }
-
   public sortFilters() {
     this.filters = this.filters.sort((a, b) => {
       if (!a.isFiltered && !b.isFiltered) { return a.attribute.friendlyName.localeCompare(b.attribute.friendlyName); }
@@ -116,84 +117,60 @@ export default class SolutionExplorerComponent extends Vue {
     });
   }
 
-  get surfaceData() {
-    const filters = _.filter(this.filters, "isFiltered").map((config) => config.attribute);
-    this.chartDimensions = filters.length;
-    return {
-      values: this.filteredConfigurations.map((config: Configuration) => [
-        config.attributes[filters[0].key],
-        config.attributes[filters[1].key],
-        config.attributes[filters[2].key],
-        config.id
-      ]),
-      attributes: [filters[0], filters[1], filters[2]],
-      configs: this.filteredConfigurations
-    };
-  }
-
   get chartData() {
-    const filters = _.filter(this.filters, "isFiltered").map((a) => a.attribute);
-    this.chartDimensions = filters.length;
+    const attributes = _.filter(this.filters, "isFiltered").map((a) => a.attribute);
+    this.chartDimensions = attributes.length;
 
-    let data;
+    const data: any = {
+      attributes
+    };
     switch (this.chartDimensions) {
       case 1: {
-        data = {
-          categories: this.filteredConfigurations.map((c: Configuration) => c.id),
-          values: this.filteredConfigurations.map((c: Configuration) => c.attributes[filters[0].key]),
-          attributes: [filters[0]]
-        };
+        data.categories = this.filteredConfigurations.map((c: Configuration) => c.id);
+        data.values = this.filteredConfigurations.map((c: Configuration) => c.attributes[attributes[0].key]);
         break;
       }
 
       case 2: {
-        data = {
-          values: this.filteredConfigurations.map(
-            (c: Configuration) => [c.attributes[filters[0].key], c.attributes[filters[1].key], c.id]),
-          attributes: [filters[0], filters[1]]
-        };
+        data.values = this.filteredConfigurations.map((c: Configuration) => [
+          c.attributes[attributes[0].key],
+          c.attributes[attributes[1].key],
+          c.id
+        ]);
         break;
       }
 
       case 3: {
-        data = {
-          values: this.filteredConfigurations.map((c: Configuration) => [
-              c.attributes[filters[0].key],
-              c.attributes[filters[1].key],
-              c.attributes[filters[2].key],
-              c.id
-          ]),
-          attributes: [filters[0], filters[1], filters[2]]
-        };
+        data.values = this.filteredConfigurations.map((c: Configuration) => [
+          c.attributes[attributes[0].key],
+          c.attributes[attributes[1].key],
+          c.attributes[attributes[2].key],
+          c.id
+        ]);
+        data.configs = this.filteredConfigurations;
         break;
       }
 
       case 4: {
-        data = {
-          values: this.filteredConfigurations.map((c: Configuration) => [
-              c.attributes[filters[0].key],
-              c.attributes[filters[1].key],
-              c.attributes[filters[2].key],
-              c.attributes[filters[3].key],
-              c.id
-          ]),
-          attributes: [filters[0], filters[1], filters[2], filters[3]]
-        };
+        data.values = this.filteredConfigurations.map((c: Configuration) => [
+          c.attributes[attributes[0].key],
+          c.attributes[attributes[1].key],
+          c.attributes[attributes[2].key],
+          c.attributes[attributes[3].key],
+          c.id
+        ]);
         break;
       }
 
       case 5: {
-        data = {
-          values: this.filteredConfigurations.map((c: Configuration) => [
-              c.attributes[filters[0].key],
-              c.attributes[filters[1].key],
-              c.attributes[filters[2].key],
-              c.attributes[filters[3].key],
-              c.attributes[filters[4].key],
-              c.id
-          ]),
-          attributes: [filters[0], filters[1], filters[2], filters[3], filters[4]]
-        };
+        data.values = this.filteredConfigurations.map((c: Configuration) => [
+          c.attributes[attributes[0].key],
+          c.attributes[attributes[1].key],
+          c.attributes[attributes[2].key],
+          c.attributes[attributes[3].key],
+          c.attributes[attributes[4].key],
+          c.id
+        ]);
         break;
       }
     }
@@ -227,11 +204,5 @@ export default class SolutionExplorerComponent extends Vue {
       modal.hide();
       this.$router.push("/reports/" + report.id);
     });
-  }
-
-  public findOptimal(items: Configuration[]) {
-    const attributes = _.filter(this.filters, "isFiltered").map((config) => config.attribute);
-    const result = Optimality.getParetoFront(attributes, items);
-    this.paretoFront = result.map((r) => r.id);
   }
 }
