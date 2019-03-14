@@ -1,6 +1,6 @@
 <template>
   <div class="float-right">
-    <b-btn right size="sm" class="mr-3" variant="outline-secondary" @click="importData">
+    <b-btn right size="sm" class="mr-3" variant="outline-secondary" @click="importData" v-b-tooltip.hover title="Import .json or .csv file(s)">
       <i class="fa fa-fw fa-upload mr-2"></i>Import
     </b-btn>
     <b-btn right size="sm" class="mr-3" variant="outline-secondary" @click="exportData">

@@ -27,6 +27,7 @@ const mutations = {
     const index = _.findIndex(state.data, (f: Attribute) => f.key === attribute.key);
 
     if (index === -1) {
+      // Insert new attribute
       state.data.push({
         key: attribute.key,
         maxValue: attribute.value,
@@ -38,6 +39,7 @@ const mutations = {
         step: 1
       });
     } else {
+      // Update existing attribute values
       const attrInfo = state.data[index];
       if (attrInfo.maxValue < attribute.value) {
         attrInfo.maxValue = attribute.value;
@@ -46,22 +48,34 @@ const mutations = {
         attrInfo.minValue = attribute.value;
       }
 
-      const magnitude = Math.floor(Math.log((attrInfo.maxValue + attrInfo.minValue) / 2) / Math.LN10 + 0.000000001);
-      attrInfo.step = Math.pow(10, magnitude - 2);
+      const getPrecision = (n: number) => Math.floor(Math.log(n) / Math.LN10 + 0.000000001);
 
-      if (attrInfo.minValue < attrInfo.maxValue) {
-        const precision = Math.floor(Math.log(attrInfo.maxValue - attrInfo.minValue) / Math.LN10 + 0.000000001);
-        if (Math.abs(precision) > 2) {
-          attrInfo.scaleMax = parseFloat((attrInfo.maxValue + attrInfo.step).toPrecision(Math.abs(precision) + 1));
-          attrInfo.scaleMin = parseFloat((attrInfo.minValue - attrInfo.step).toPrecision(Math.abs(precision) + 1));
-        } else {
-          attrInfo.scaleMax = parseFloat((attrInfo.maxValue + attrInfo.step).toPrecision(2));
-          attrInfo.scaleMin = parseFloat((attrInfo.minValue - attrInfo.step).toPrecision(2));
-        }
+      const minPrecision = getPrecision(attrInfo.minValue);
+      const maxPrecision = getPrecision(attrInfo.maxValue);
+      const precision = maxPrecision < minPrecision ? minPrecision : maxPrecision;
+
+      // Calculate smallest incremental step for range sliders
+      attrInfo.step = Math.pow(10, precision - 2);
+
+      if (precision < 0) {
+        // Calculate scales for attributes with small differences in values (step = 0.01 and below)
+        attrInfo.scaleMax = attrInfo.maxValue + (attrInfo.step - (attrInfo.maxValue % attrInfo.step));
+        attrInfo.scaleMin = attrInfo.minValue - (attrInfo.step + (attrInfo.minValue % attrInfo.step));
+      } else if (precision > 2) {
+        // Calculate scales for attributes with large differences in values (step = 10+)
+        attrInfo.scaleMax = parseFloat(Math.ceil(attrInfo.maxValue +
+          (attrInfo.step - (Math.ceil(attrInfo.maxValue) % attrInfo.step))).toPrecision(precision));
+        attrInfo.scaleMin = parseFloat(Math.floor(attrInfo.minValue -
+          (attrInfo.step - (Math.floor(attrInfo.minValue) % attrInfo.step))).toPrecision(precision));
       } else {
-        attrInfo.scaleMax = attrInfo.maxValue + attrInfo.step;
-        attrInfo.scaleMin = attrInfo.minValue - attrInfo.step;
+        // Calculate scales for attributes with integer differences in values (step = 1)
+        attrInfo.scaleMax = Math.ceil(attrInfo.maxValue +
+          (attrInfo.step - (Math.ceil(attrInfo.maxValue) % attrInfo.step)));
+        attrInfo.scaleMin = Math.floor(attrInfo.minValue -
+          (attrInfo.step - (Math.floor(attrInfo.minValue) % attrInfo.step)));
       }
+
+      // Update attribute in store
       Vue.set(state.data, index, attrInfo);
     }
   },
@@ -83,6 +97,7 @@ const mutations = {
    */
   addAttributes: (state: State, payload: Attribute[]) => {
     payload.forEach((c: Attribute) => {
+      // Check if attribute already exists, if so update it, if not add it
       const index = _.findIndex(state.data, (d) => d.key === c.key);
       if (c.isHigherBetter === undefined) { c.isHigherBetter = true; }
       if (index > -1) {
