@@ -30,15 +30,31 @@
       </div>
 
       <div v-else>
-        <h5 class="mb-0">Visualisations</h5>
-        <p v-if="chartDimensions == 0" class="pt-2">Change the selected attribute filters to visualise the solution space, or select a configuration.</p>
-        <radar-chart class="mt-3" v-if="filteredConfigurations.length > 0 && filteredConfigurations.length < 10" :data="filteredConfigurations" />
-        <div class="mt-3" v-if="chartData">
-          <line-chart v-if="chartDimensions == 1" :data="chartData" class="mb-3"/>
-          <scatter-chart v-if="chartDimensions >= 2 && chartDimensions < 5" :data="chartData" class="mb-3"/>
-          <scatter3d-chart :key="chartDimensions" v-if="chartDimensions >= 3 && chartDimensions <= 5" :data="chartData" class="mb-3"/>
-          <surface-chart v-if="chartDimensions == 3" :data="chartData" class="mb-3"/>
-        </div>
+        <h5 class="mb-3">Visualisations</h5>
+      
+        <b-tabs content-class="mt-3" no-fade lazy :key="chartDimensions">
+          <b-tab title="Info" key="1" v-if="chartDimensions == 0">
+            <p v-if="chartDimensions == 0" class="pt-2">Change the selected attribute filters to visualise the solution space, or select a configuration.</p>
+          </b-tab>
+          <b-tab title="Line" key="2" v-if="chartDimensions == 1">
+            <line-chart :data="chartData"/>
+          </b-tab>
+          <b-tab title="Bar" key="3" v-if="chartDimensions == 1">
+            <bar-chart :data="chartData"/>
+          </b-tab>
+          <b-tab title="2D Scatter" key="4" v-if="chartDimensions >= 2 && chartDimensions < 5">
+            <scatter-chart :data="chartData" />
+          </b-tab>
+          <b-tab title="3D Scatter" key="5" v-if="chartDimensions >= 3 && chartDimensions <= 5">
+            <scatter3d-chart :key="chartDimensions" :data="chartData"/>
+          </b-tab>
+          <b-tab title="Surface" key="6" v-if="chartDimensions == 3">
+            <surface-chart :data="chartData"/>
+          </b-tab>
+          <b-tab title="Radar" key="7" v-if="filteredConfigurations.length > 0 && filteredConfigurations.length < 10">
+            <radar-chart :data="filteredConfigurations" />
+          </b-tab>
+        </b-tabs>
       </div>
     </div>
 

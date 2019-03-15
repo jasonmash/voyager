@@ -9,6 +9,7 @@ import { Report } from "@/models/report";
 
 import { Optimality } from "@/utils/optimality";
 
+import BarChart from "@/components/charts/bar.vue";
 import LineChart from "@/components/charts/line.vue";
 import RadarChart from "@/components/charts/radar.vue";
 import ScatterChart from "@/components/charts/scatter.vue";
@@ -27,6 +28,7 @@ import Toolbar from "./components/Toolbar";
     ConfigurationList,
     Toolbar,
     "scatter3d-chart": Scatter3DChart,
+    BarChart,
     LineChart,
     RadarChart,
     ScatterChart,
@@ -103,6 +105,8 @@ export default class SolutionExplorerComponent extends Vue {
     });
 
     this.filteredConfigurations = result;
+
+    this.chartDimensions = _.filter(this.filters, "isFiltered").map((a) => a.attribute).length;
 
     const res = _.groupBy(result, (value: Configuration) => this.paretoFront.indexOf(value.id) !== -1);
     return res;
