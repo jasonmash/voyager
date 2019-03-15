@@ -14,7 +14,7 @@
 <script lang="ts">
 import { Prop, Component, Vue } from "vue-property-decorator";
 import { Report, Section } from "@/models/report";
-import { ChartType, CategoryChartData } from "@/models/chart-data";
+import { ChartType, ChartData } from "@/models/chart-data";
 
 import { ExportSvg } from "./shared";
 
@@ -22,12 +22,12 @@ import "./charts.css";
 
 @Component
 export default class BarChart extends Vue {
-  @Prop(Object) public readonly data!: CategoryChartData;
+  @Prop(Object) public readonly data!: ChartData;
   @Prop(String) public readonly title!: string | undefined;
 
   get chartData() {
     if (!this.data) { return; }
-    const data: CategoryChartData = this.data;
+    const data: ChartData = this.data;
 
     const chartData = {
       animation: false,

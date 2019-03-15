@@ -24,6 +24,7 @@ import { Component, Vue } from "vue-property-decorator";
 
 @Component
 export default class Navbar extends Vue {
+  // Get list of reports to show in dropdown menu
   get reports() {
     return this.$store.getters.reports;
   }

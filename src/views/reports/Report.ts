@@ -3,7 +3,7 @@ import { Component, Vue } from "vue-property-decorator";
 import _ from "lodash";
 
 import { Report, Section } from "@/models/report";
-import { ChartType, CategoryChartData, ChartData } from "@/models/chart-data";
+import { ChartType, ChartData } from "@/models/chart-data";
 import { Configuration } from "@/models/configuration";
 import { Attribute } from "@/models/attribute";
 import BarChart from "@/components/charts/bar.vue";
@@ -82,7 +82,7 @@ export default class ReportComponent extends Vue {
     switch (this.newSection.type) {
       case ChartType.Bar: {
         const configs: Configuration[] = _.orderBy(this.configurations, ["attributes." + this.newSectionData.x]);
-        const data: CategoryChartData = {
+        const data: ChartData = {
           categories: configs.map((c: Configuration) => c.id),
           values: configs.map((c: Configuration) => c.attributes[this.newSectionData.x]),
           attributes: [this.attributeMap[this.newSectionData.x]]
@@ -92,7 +92,7 @@ export default class ReportComponent extends Vue {
 
       case ChartType.Line: {
         const configs: Configuration[] = _.orderBy(this.configurations, ["attributes." + this.newSectionData.x]);
-        const data: CategoryChartData = {
+        const data: ChartData = {
           categories: configs.map((c: Configuration) => c.id),
           values: configs.map((c: Configuration) => c.attributes[this.newSectionData.x]),
           attributes: [this.attributeMap[this.newSectionData.x]]

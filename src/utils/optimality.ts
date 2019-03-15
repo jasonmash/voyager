@@ -3,15 +3,24 @@ import _ from "lodash";
 import { Attribute } from "@/models/attribute";
 import { Configuration } from "@/models/configuration";
 
+/**
+ * Represents a point to find optimal configuration at
+ */
 interface Point {
-  attribute: Attribute;
-  value: number;
+  attribute: Attribute; // Attribute for point
+  value: number; // Value of attribute at point
 }
 
 export class Optimality {
 
+  /**
+   * Get list of configurations forming the pareto front of a set of configurations
+   * @param attrs Attributes to optimise for
+   * @param configs Configurations to use
+   */
   public static getParetoFront(attrs: Attribute[], configs: Configuration[]): Configuration[] {
     const optimal = configs.filter((a) => {
+      // Config is optimal if a better configuration doesn't exist
       const betterValExists = _.find(configs, (b) => {
         if (b.id === a.id) { return false; }
         let isBetter = true;
@@ -31,13 +40,20 @@ export class Optimality {
     return optimal;
   }
 
-  public static getAttrValAtPoint(point: Point[], configurations: Configuration[],
-                                  attr: Attribute): number | undefined {
+  /**
+   * Find value of attribute for a given point
+   * @param points Array of points, including the value and the attribute the value is for
+   * @param configurations List of configurations to use
+   * @param attribute Return value attribute
+   */
+  public static getAttrValAtPoint(points: Point[], configurations: Configuration[],
+                                  attribute: Attribute): number | undefined {
     if (configurations.length === 0) { return undefined; }
 
     let configs = configurations.filter((c) => {
       let useConfig = true;
-      point.forEach((p) => {
+      // Loop through each point, include configuration if all constraints matched
+      points.forEach((p) => {
         if (!p.attribute.isHigherBetter) {
           useConfig = useConfig && (c.attributes[p.attribute.key] <= p.value);
         } else if (p.attribute.isHigherBetter) {
@@ -47,8 +63,10 @@ export class Optimality {
       return useConfig;
     });
 
-    configs = _.orderBy(configs, ["attributes." + attr.key], [attr.isHigherBetter ? "dsc" : "asc"]);
+    // Order possible configuration by desired attribute value (e.g. lower is better)
+    configs = _.orderBy(configs, ["attributes." + attribute.key], [attribute.isHigherBetter ? "dsc" : "asc"]);
 
-    return configs[0] ? configs[0].attributes[attr.key] : undefined;
+    // Return optimal value at specified attribute if one exists
+    return configs[0] ? configs[0].attributes[attribute.key] : undefined;
   }
 }
