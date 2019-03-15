@@ -18,6 +18,11 @@ export default class Importer {
       return this.parseJson(reader.result, file, $store);
     } else if (file.name.endsWith(".csv")) {
       return this.parseCsv(reader.result, file, $store);
+    } else {
+      return {
+        content: `Invalid file uploaded: '${file.name}'`,
+        type: "danger"
+      };
     }
   }
 

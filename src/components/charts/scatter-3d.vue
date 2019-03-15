@@ -68,6 +68,7 @@ export default class Scatter3DChart extends Vue {
       series: [{
         data: [],
         symbol: "circle",
+        maxSize: 30,
         encode: {
           tooltip: []
         },
@@ -128,11 +129,31 @@ export default class Scatter3DChart extends Vue {
       this.chartData.series[0].encode.z = data.attributes[2].friendlyName;
     }
 
+    const visualMaps = [];
+
     if (data.attributes.length > 3 && !!data.attributes[3]) {
-      const normalisationFactor = (data.attributes[3].maxValue - data.attributes[3].minValue);
-      this.chartData.series[0].symbolSize = (value: any) => {
-        return 3 + 15 * ((value[3] - data.attributes[3].minValue) / normalisationFactor);
+      const sizeMap = {
+        top: "5%",
+        right: "20",
+        dimension: 3,
+        min: data.attributes[3].scaleMin,
+        max: data.attributes[3].scaleMax,
+        realtime: false,
+        itemWidth: 30,
+        itemHeight: 120,
+        calculable: true,
+        precision: data.attributes[3].step,
+        text: [data.attributes[3].friendlyName],
+        textGap: 30,
+        textStyle: { color: "#000" },
+        inRange: { symbolSize: [5, 30] },
+        outOfRange: { symbolSize: [5, 30] },
+        controller: {
+          inRange: { color: ["#c23531"] },
+          outOfRange: { color: ["#444"] }
+        }
       };
+      visualMaps.push(sizeMap);
     } else {
       this.chartData.series[0].symbolSize = 4;
     }
@@ -140,11 +161,12 @@ export default class Scatter3DChart extends Vue {
 
     if (data.attributes.length > 4 && !!data.attributes[4]) {
       const colourMap = {
-        left: "right",
-        top: "10%",
+        top: "50%",
+        right: "20",
         dimension: 4,
         min: data.attributes[4].scaleMin,
         max: data.attributes[4].scaleMax,
+        realtime: true,
         itemHeight: 120,
         calculable: true,
         precision: data.attributes[4].step,
@@ -158,19 +180,20 @@ export default class Scatter3DChart extends Vue {
         outOfRange: { color: ["rgba(0,0,0,.2)"] },
         controller: {
           inRange: {
-            color: data.attributes[3].isHigherBetter ?
+            color: data.attributes[4].isHigherBetter ?
               ["#dc3545", "#ffc107", "#28a745"] : ["#28a745", "#ffc107", "#dc3545"]
           },
           outOfRange: { color: ["#ccc"] }
         }
       };
-      this.chartData.visualMap = [colourMap];
-    } else {
-      this.chartData.visualMap = undefined;
+      visualMaps.push(colourMap);
     }
+
 
     this.chartData.dataset.dimensions = data.attributes.map((a: Attribute) => { if (!!a) { return a.key; } });
     this.chartData.series[0].data = data.values;
+
+    this.chartData.visualMap = visualMaps.length > 0 ? visualMaps : undefined;
 
     this.chartData.dataset.source = data.values;
   }

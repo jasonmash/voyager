@@ -42,16 +42,41 @@ export default class ScatterChart extends Vue {
       colourAttribute = data.attributes[3];
     }
 
-    let colourMap;
+    const visualMaps = [];
+    if (sizeAttribute) {
+      visualMaps.push({
+        top: "5%",
+        right: "15",
+        dimension: 2,
+        min: sizeAttribute.scaleMin,
+        max: sizeAttribute.scaleMax,
+        realtime: false,
+        itemWidth: 30,
+        itemHeight: 120,
+        calculable: true,
+        precision: sizeAttribute.step,
+        text: [sizeAttribute.friendlyName],
+        textGap: 30,
+        textStyle: { color: "#000" },
+        inRange: { symbolSize: [3, 25] },
+        outOfRange: { symbolSize: [3, 25] },
+        controller: {
+          inRange: { color: ["#c23531"] },
+          outOfRange: { color: ["#444"] }
+        }
+      });
+    }
+
     if (colourAttribute) {
-      colourMap = {
-        left: "right",
-        top: "10%",
+      visualMaps.push({
+        right: "15",
+        top: "50%",
         dimension: 3,
         min: colourAttribute.scaleMin,
         max: colourAttribute.scaleMax,
         itemHeight: 120,
         calculable: true,
+        realtime: false,
         precision: colourAttribute.step,
         text: [colourAttribute.friendlyName],
         textGap: 30,
@@ -68,7 +93,7 @@ export default class ScatterChart extends Vue {
           },
           outOfRange: { color: ["#ccc"] }
         }
-      };
+      });
     }
 
     const chartData = {
@@ -80,7 +105,7 @@ export default class ScatterChart extends Vue {
       grid: {
         top: 30,
         left: 70,
-        right: 50,
+        right: visualMaps.length > 0 ? 100 : 50,
         bottom: 60
       },
       xAxis: {
@@ -99,16 +124,13 @@ export default class ScatterChart extends Vue {
         nameLocation: "middle",
         nameGap: 40
       },
-      visualMap: colourMap ? [ colourMap ] : undefined,
+      visualMap: visualMaps.length > 0 ? visualMaps : undefined,
       tooltip: {},
       series: [{
         data: data.values,
         type: "scatter",
+        symbolSize: 4,
         showAllSymbol: true,
-        symbolSize: (value: any) => {
-          if (!sizeAttribute) { return 5; }
-          return 3 + 15 * ((value[2] - sizeAttribute.minValue) / normalisationFactor);
-        },
         tooltip: {
           formatter: (params: any) => params.value[params.value.length - 1]
         }
