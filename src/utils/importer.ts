@@ -6,6 +6,12 @@ import { Message } from "@/components/messages/Message";
 
 export default class Importer {
 
+  /**
+   * Import a given file into the store
+   * @param reader FileReader reference of file to import
+   * @param file File object containing metadata
+   * @param $store Vuex store to import data to
+   */
   public static processInputFile(reader: FileReader, file: File, $store: any): Message {
     if (typeof reader.result !== "string" || reader.result.length === 0) {
       return {
@@ -14,6 +20,7 @@ export default class Importer {
       };
     }
 
+    // Check file format, process accordingly
     if (file.name.endsWith(".json")) {
       return this.parseJson(reader.result, file, $store);
     } else if (file.name.endsWith(".csv")) {
@@ -26,6 +33,12 @@ export default class Importer {
     }
   }
 
+  /**
+   * Parse JSON file string
+   * @param data JSON string to process
+   * @param file File metadata
+   * @param $store Vuex store to import data into
+   */
   public static parseJson(data: string, file: File, $store: any): Message {
     try {
       const inputData = JSON.parse(data);
@@ -51,13 +64,21 @@ export default class Importer {
     }
   }
 
+  /**
+   * Parse CSV file string
+   * @param data CSV data to process
+   * @param file File metadata
+   * @param $store Vuex store to import data into
+   */
   public static parseCsv(data: string, file: File, $store: any): Message {
     try {
+      // Use PapaParse to process csv file, with headers
       const results = Papa.parse(data, {
         header: true,
         dynamicTyping: true
       });
 
+      // Check for errors, process accordingly
       if (results.errors.length > 0) {
         return {
           content: `Unable to process '${file.name}': ${results.errors}`,
@@ -66,19 +87,27 @@ export default class Importer {
         };
       }
 
+      // Translate each row into a Configuration object
       const configurations: Configuration[] = [];
       let nextIndex: number = $store.getters.configurations.length;
       results.data.forEach((config: any) => {
+        // Find id/Id field for configuration
         let id = "config-" + nextIndex;
         if (config.id) {
           id = config.id;
+        } else if (config.Id) {
+          id = config.Id;
         } else {
           nextIndex++;
         }
+
+        // Create object
         const c = new Configuration({ id });
         c.setAttributes([config], $store);
         configurations.push(c);
       });
+
+      // Save to store
       $store.commit("addConfigurations", configurations);
 
       return {
