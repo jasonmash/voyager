@@ -44,7 +44,10 @@
           <b-tab title="Surface" key="6" v-if="chartDimensions == 3">
             <surface-chart :data="chartData"/>
           </b-tab>
-          <b-tab title="Radar" key="7" v-if="filteredConfigurations.length < 10">
+          <b-tab title="Map" key="7" v-if="chartDimensions == 3">
+            <map-chart :data="chartData"/>
+          </b-tab>
+          <b-tab title="Radar" key="8" v-if="filteredConfigurations.length < 10">
             <radar-chart :data="filteredConfigurations" />
           </b-tab>
         </b-tabs>

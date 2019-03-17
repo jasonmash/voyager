@@ -14,6 +14,7 @@ import RadarChart from "@/components/charts/radar.vue";
 import ScatterChart from "@/components/charts/scatter.vue";
 import Scatter3DChart from "@/components/charts/scatter-3d.vue";
 import SurfaceChart from "@/components/charts/surface.vue";
+import MapChart from "@/components/charts/map.vue";
 
 import AttributeBox, { AttributeFilter } from "./components/Attribute";
 import ConfigurationBox from "./components/Configuration";
@@ -24,14 +25,10 @@ import Toolbar from "./components/Toolbar";
   components: {
     "configuration": ConfigurationBox,
     "attribute": AttributeBox,
-    ConfigurationList,
-    Toolbar,
+    ConfigurationList, Toolbar, draggable,
     "scatter3d-chart": Scatter3DChart,
     "chart-1d": Chart1D,
-    RadarChart,
-    ScatterChart,
-    SurfaceChart,
-    draggable
+    RadarChart, ScatterChart, SurfaceChart, MapChart
   }
 })
 export default class SolutionExplorerComponent extends Vue {

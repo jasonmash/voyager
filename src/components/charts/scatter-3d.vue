@@ -31,52 +31,52 @@ export default class Scatter3DChart extends Vue {
 
   // Chart data in echarts object format
   public chartData: any = {
-      animation: false,
-      textStyle: {
-        fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif"
+    animation: false,
+    textStyle: {
+      fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif"
+    },
+    grid3D: {
+      viewControl: {
+        projection: "perspective"
       },
-      grid3D: {
-        viewControl: {
-          projection: "perspective"
-        },
-        right: 50
+      right: 50
+    },
+    xAxis3D: {
+      scale: true,
+      nameLocation: "middle",
+      nameTextStyle: {
+        fontSize: 12
+      }
+    },
+    yAxis3D: {
+      scale: true,
+      nameLocation: "middle",
+      nameTextStyle: {
+        fontSize: 12
+      }
+    },
+    zAxis3D: {
+      scale: true,
+      nameLocation: "middle",
+      nameTextStyle: {
+        fontSize: 12
+      }
+    },
+    tooltip: {},
+    series: [{
+      data: [],
+      symbol: "circle",
+      maxSize: 30,
+      encode: {
+        tooltip: []
       },
-      xAxis3D: {
-        scale: true,
-        nameLocation: "middle",
-        nameTextStyle: {
-          fontSize: 12
-        }
+      tooltip: {
+        formatter: (params: any) => params.value[params.value.length - 1]
       },
-      yAxis3D: {
-        scale: true,
-        nameLocation: "middle",
-        nameTextStyle: {
-          fontSize: 12
-        }
-      },
-      zAxis3D: {
-        scale: true,
-        nameLocation: "middle",
-        nameTextStyle: {
-          fontSize: 12
-        }
-      },
-      tooltip: {},
-      series: [{
-        data: [],
-        symbol: "circle",
-        maxSize: 30,
-        encode: {
-          tooltip: []
-        },
-        tooltip: {
-          formatter: (params: any) => params.value[params.value.length - 1]
-        },
-        type: "scatter3D"
-      }],
-      dataset: {}
-    };
+      type: "scatter3D"
+    }],
+    dataset: {}
+  };
 
   /**
    * Load chart data when mounted in UI

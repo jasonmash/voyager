@@ -47,7 +47,7 @@ export class Optimality {
    * @param attribute Return value attribute
    */
   public static getAttrValAtPoint(points: Point[], configurations: Configuration[],
-                                  attribute: Attribute): number | undefined {
+                                  attribute: Attribute): Configuration | undefined {
     if (configurations.length === 0) { return undefined; }
 
     let configs = configurations.filter((c) => {
@@ -67,6 +67,6 @@ export class Optimality {
     configs = _.orderBy(configs, ["attributes." + attribute.key], [attribute.isHigherBetter ? "dsc" : "asc"]);
 
     // Return optimal value at specified attribute if one exists
-    return configs[0] ? configs[0].attributes[attribute.key] : undefined;
+    return configs[0];
   }
 }

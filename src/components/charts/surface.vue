@@ -181,13 +181,14 @@ export default class SurfaceChart extends Vue {
       },
       z: (x: number, y: number) => {
         // Get z value for point
-        return Optimality.getAttrValAtPoint([{
+        const z = Optimality.getAttrValAtPoint([{
           attribute: data.attributes[0],
           value: x
         }, {
           attribute: data.attributes[1],
           value: y
         }], data.configs, data.attributes[2]);
+        return z ? z.attributes[data.attributes[2].key] : undefined;
       },
       tooltip: { show: false }
     };
