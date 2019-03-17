@@ -1,13 +1,12 @@
 <template>
   <div>
-    <b-dropdown right class="float-right" size="sm" variant="outline-secondary">
+    <b-dropdown right class="float-right chart-dd" size="sm" variant="outline-secondary">
       <b-dropdown-header>Projection</b-dropdown-header>
       <b-dropdown-item :active="chartData.grid3D.viewControl.projection === 'perspective'" @click="switchPerspective('perspective')">Perspective</b-dropdown-item>
       <b-dropdown-item :active="chartData.grid3D.viewControl.projection === 'orthographic'" @click="switchPerspective('orthographic')">Orthographic</b-dropdown-item>
       <b-dropdown-divider />
       <b-dropdown-item @click="exportChart">Export (.png)</b-dropdown-item>
     </b-dropdown>
-    <br>
     <e-chart :options="chartData" :init-options="{renderer: 'canvas', pixelRatio: 2}" autoresize class="chart" ref="chart" />
   </div>
 </template>

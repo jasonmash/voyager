@@ -1,9 +1,15 @@
 .chart {
   width: auto;
-  height: 450px;
-  margin-top: 10px;
+  height: 50vh;
+  margin-top: 0;
 }
 
 .tab-content > .active:focus {
   outline: none !important;
+}
+
+.chart-dd {
+  margin-top: -38px;
+  margin-right: 8px;
+  height: 30px;
 }

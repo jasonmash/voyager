@@ -32,7 +32,7 @@
       <div v-else>
         <h5 class="mb-3">Visualisations</h5>
       
-        <b-tabs content-class="mt-3" no-fade lazy :key="chartDimensions">
+        <b-tabs content-class="mt-0" no-fade lazy :key="chartDimensions">
           <b-tab title="Info" key="1" v-if="chartDimensions == 0">
             <p v-if="chartDimensions == 0" class="pt-2">Change the selected attribute filters to visualise the solution space, or select a configuration.</p>
           </b-tab>

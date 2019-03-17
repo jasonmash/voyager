@@ -1,9 +1,8 @@
 <template>
   <div>
-    <b-dropdown right class="float-right" size="sm" variant="outline-secondary">
+    <b-dropdown right class="float-right chart-dd" size="sm" variant="outline-secondary">
       <b-dropdown-item @click="exportChart">Export (.png)</b-dropdown-item>
     </b-dropdown>
-    <br>
     <e-chart :options="chartData" ref="chart" :init-options="{renderer: 'canvas'}" autoresize class="chart" :style="height ? 'height: ' + height + 'px' : ''" />
   </div>
 </template>

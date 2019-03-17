@@ -14,7 +14,7 @@
           </b-list-group>
         </b-card>
         <b-card header="Properties" v-if="configuration.structure.components.length > 0" no-body>
-          <radar-chart :data="[configuration]" height="312" />
+          <radar-chart :data="[configuration]" height="334" />
         </b-card>
       </b-col>
       <b-col sm="6" class="pl-0">
