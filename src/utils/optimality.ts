@@ -64,7 +64,8 @@ export class Optimality {
     });
 
     // Order possible configuration by desired attribute value (e.g. lower is better)
-    configs = _.orderBy(configs, ["attributes." + attribute.key], [attribute.isHigherBetter ? "dsc" : "asc"]);
+    const order: any = attribute.isHigherBetter ? "dsc" : "asc";
+    configs = _.orderBy(configs, ["attributes." + attribute.key], [order]);
 
     // Return optimal value at specified attribute if one exists
     return configs[0];
