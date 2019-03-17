@@ -1,0 +1,27 @@
+{
+    "id": "config-1",
+    "graph": [
+      {
+        "NodeA": [
+          {
+            "AtoB": "NodeB"
+          }
+        ]
+      },
+      {
+        "NodeB": [
+          {
+            "BtoC": "NodeC"
+          }
+        ]
+      },
+      {
+        "NodeC": [
+          {
+            "CtoA": "NodeA",
+            "CtoB": "NodeB"
+          }
+        ]
+      }
+    ]
+  }

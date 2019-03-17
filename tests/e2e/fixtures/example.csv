@@ -1,0 +1,3 @@
+Id,Cost,Response Time,Reliability
+config-1,10,40,0.98
+config-2,30,14,0.99
