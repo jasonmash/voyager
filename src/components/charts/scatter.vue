@@ -10,7 +10,7 @@
 <script lang="ts">
 import { Prop, Component, Vue, Watch } from "vue-property-decorator";
 import { Report, Section } from "@/models/report";
-import { Attribute } from "@/models/Attribute";
+import { Attribute } from "@/models/attribute";
 import { ChartType, ChartData } from "@/models/chart-data";
 
 import { ExportSvg } from "./shared";
