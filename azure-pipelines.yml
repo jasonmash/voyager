@@ -24,6 +24,10 @@ steps:
   displayName: 'Build'
 
 - script: |
+    npm run lint
+  displayName: 'Lint'
+
+- script: |
     npm run test:unit
   displayName: 'Unit Test'
 
