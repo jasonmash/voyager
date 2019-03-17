@@ -34,3 +34,9 @@ steps:
 - script: |
     npm run test:ci
   displayName: 'E2E Test'
+
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: '**/test-*.xml' 
+    mergeTestResults: true
