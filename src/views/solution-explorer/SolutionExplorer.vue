@@ -25,17 +25,10 @@
     <div class="solution-explorer-col s-col-3">
       <configuration v-if="selectedConfiguration" :configuration="selectedConfiguration" @clearSelection="selectedConfiguration = null"/>
 
-      <div v-else-if="filters.length === 0" class="text-center">
-        <h6 class="my-3">To start, import some configurations with attributes.</h6>
-      </div>
-
-      <div v-else>
+      <div v-else-if="chartDimensions > 0">
         <h5 class="mb-3">Visualisations</h5>
       
         <b-tabs content-class="mt-0" no-fade lazy :key="chartDimensions">
-          <b-tab title="Info" key="1" v-if="chartDimensions == 0">
-            <p v-if="chartDimensions == 0" class="pt-2">Change the selected attribute filters to visualise the solution space, or select a configuration.</p>
-          </b-tab>
           <b-tab title="Line" key="2" v-if="chartDimensions == 1">
             <chart-1d type="line" :data="chartData"/>
           </b-tab>
@@ -51,10 +44,21 @@
           <b-tab title="Surface" key="6" v-if="chartDimensions == 3">
             <surface-chart :data="chartData"/>
           </b-tab>
-          <b-tab title="Radar" key="7" v-if="filteredConfigurations.length > 0 && filteredConfigurations.length < 10">
+          <b-tab title="Radar" key="7" v-if="filteredConfigurations.length < 10">
             <radar-chart :data="filteredConfigurations" />
           </b-tab>
         </b-tabs>
+      </div>
+
+      <div v-else-if="filteredConfigurations.length > 0">
+        <h4 class="text-center mt-5">No attributes selected</h4>
+        <p class="text-center px-4">To visualise your solution space, select an attribute by ticking a checkbox in the left-hand column, or click on a configuration from the list. <br><br>
+        For more guidance, see the <router-link to="/help">help</router-link> page.</p>
+      </div>
+
+      <div v-else>
+        <h4 class="text-center mt-5">Getting started</h4>
+        <p class="text-center px-4">To get started, import data into Voyager using the "Import" button in the top-right corner. For more guidance, see the <router-link to="/help">help</router-link> page.</p>
       </div>
     </div>
 

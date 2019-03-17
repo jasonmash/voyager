@@ -13,7 +13,7 @@
           </b-dropdown-item>
           <b-dropdown-item disabled v-if="reports.length === 0"><span class="text-muted">No reports found</span></b-dropdown-item>
         </b-nav-item-dropdown>
-        <b-nav-item to="/about">About</b-nav-item>
+        <b-nav-item to="/help">Help</b-nav-item>
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>

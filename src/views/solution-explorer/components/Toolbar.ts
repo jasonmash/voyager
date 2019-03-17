@@ -39,6 +39,8 @@ export default class Toolbar extends Vue {
     if (!input.files || input.files.length < 1) { return; }
 
     this.processedFiles = 0;
+    this.successful = 0;
+    this.failedFiles = [];
 
     this.$message({
       content: `Importing data...`,
