@@ -9,8 +9,7 @@ import { Report } from "@/models/report";
 
 import { Optimality } from "@/utils/optimality";
 
-import BarChart from "@/components/charts/bar.vue";
-import LineChart from "@/components/charts/line.vue";
+import Chart1D from "@/components/charts/1d.vue";
 import RadarChart from "@/components/charts/radar.vue";
 import ScatterChart from "@/components/charts/scatter.vue";
 import Scatter3DChart from "@/components/charts/scatter-3d.vue";
@@ -28,8 +27,7 @@ import Toolbar from "./components/Toolbar";
     ConfigurationList,
     Toolbar,
     "scatter3d-chart": Scatter3DChart,
-    BarChart,
-    LineChart,
+    "chart-1d": Chart1D,
     RadarChart,
     ScatterChart,
     SurfaceChart,

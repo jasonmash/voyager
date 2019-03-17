@@ -17,8 +17,8 @@
       <div v-for="(section, i) in report.sections" no-body :key="'section-' + i" :header="section.title" class="mb-3" style="height: 500px">
         <scatter-chart :data="section.data" :title="section.title" v-if="section.type == 0 && !!section.data" />
         <scatter3d-chart :data="section.data" :title="section.title" v-if="section.type == 1 && !!section.data" />
-        <bar-chart :data="section.data" :title="section.title" v-if="section.type == 2 && !!section.data" />
-        <line-chart :data="section.data" :title="section.title" v-if="section.type == 3 && !!section.data" />
+        <chart-1d v-if="section.type == 2 && !!section.data" type="bar" :data="section.data"/>
+        <chart-1d v-if="section.type == 3 && !!section.data" type="line" :data="section.data"/>
       </div>
     </b-card-group>
 

@@ -37,10 +37,10 @@
             <p v-if="chartDimensions == 0" class="pt-2">Change the selected attribute filters to visualise the solution space, or select a configuration.</p>
           </b-tab>
           <b-tab title="Line" key="2" v-if="chartDimensions == 1">
-            <line-chart :data="chartData"/>
+            <chart-1d type="line" :data="chartData"/>
           </b-tab>
           <b-tab title="Bar" key="3" v-if="chartDimensions == 1">
-            <bar-chart :data="chartData"/>
+            <chart-1d type="bar" :data="chartData"/>
           </b-tab>
           <b-tab title="2D Scatter" key="4" v-if="chartDimensions >= 2 && chartDimensions < 5">
             <scatter-chart :data="chartData" />

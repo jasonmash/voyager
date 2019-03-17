@@ -13,11 +13,17 @@
             </b-list-group-item>
           </b-list-group>
         </b-card>
-        <radar-chart :data="[configuration]" height="330" v-if="configuration.structure.components.length > 0" />
+        <b-card header="Properties" v-if="configuration.structure.components.length > 0" no-body>
+          <radar-chart :data="[configuration]" height="312" />
+        </b-card>
       </b-col>
-      <b-col sm="6">
-          <structure-chart v-if="configuration.structure.components.length > 0" :data="configuration.structure" :height="(350 + (46 * attributes.length)).toPrecision(3)"/>
-          <radar-chart :data="[configuration]" v-else />
+      <b-col sm="6" class="pl-0">
+        <b-card v-if="configuration.structure.components.length > 0" header="Structure" no-body>
+          <structure-chart :data="configuration.structure" :height="(350 + (46 * attributes.length)).toPrecision(3)"/>
+        </b-card>
+        <b-card v-else header="Properties" no-body>
+          <radar-chart :data="[configuration]" />
+        </b-card>
       </b-col>
     </b-row>
   </div>

@@ -1,22 +1,12 @@
 <template>
-  <b-card no-body>
-    <div slot="header" class="chart-header">
-      <b-dropdown right class="float-right" size="sm" variant="outline-secondary">
-        <b-dropdown-item @click="exportChart">Export (.png)</b-dropdown-item>
-      </b-dropdown>
-      <span v-if="title">{{title}}</span>
-      <span v-else>Structure Chart</span>
-    </div>
-    <e-chart :options="chartData" ref="chart" :init-options="{renderer: 'canvas'}" autoresize class="structure-chart" :style="height ? 'height: ' + height + 'px' : ''" />
-  </b-card>
+  <div>
+    <b-dropdown right class="float-right" size="sm" variant="outline-secondary">
+      <b-dropdown-item @click="exportChart">Export (.png)</b-dropdown-item>
+    </b-dropdown>
+    <br>
+    <e-chart :options="chartData" ref="chart" :init-options="{renderer: 'canvas'}" autoresize class="chart" :style="height ? 'height: ' + height + 'px' : ''" />
+  </div>
 </template>
-
-<style scoped>
-  .structure-chart {
-    width:auto;
-    height: 400px;
-  }
-</style>
 
 <script lang="ts">
 import { Prop, Component, Vue } from "vue-property-decorator";
@@ -27,12 +17,20 @@ import { ExportCanvas } from "./shared";
 
 import "./charts.css";
 
+/**
+ * Structure chart, used to show how architecture components are linked for a configuration
+ */
 @Component
 export default class StructureChart extends Vue {
+  // ChartData object, with all info required to render chart
   @Prop(Object) public readonly data!: ConfigurationStructure;
-  @Prop(String) public readonly title!: string | undefined;
+
+  // Height of the chart in pixels, optional
   @Prop(String) public readonly height!: string | undefined;
 
+  /**
+   * Getter for chartData object in echarts format
+   */
   get chartData() {
 
     const data = this.data.components.map((c) => {
@@ -49,11 +47,12 @@ export default class StructureChart extends Vue {
         {
           type: "graph",
           layout: "force",
-          symbolSize: 50,
+          symbolSize: 40,
           symbol: "circle",
           animation: false,
-          animationDuration: 100,
+          focusNodeAdjacency: true,
           draggable: true,
+          roam: true,
           label: {
             normal: {
               show: true,
@@ -64,6 +63,7 @@ export default class StructureChart extends Vue {
           },
           edgeLabel: {
             normal: {
+              position: "middle",
               textStyle: {
                 fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',sans-serif",
                 color: "black",
@@ -74,8 +74,8 @@ export default class StructureChart extends Vue {
           force: {
             initLayout: "force",
             edgeLength: 0.25,
-            gravity: 0.5,
-            repulsion: 0.25,
+            gravity: 0.9,
+            repulsion: 0.3,
             layoutAnimation: false
           },
           edgeSymbol: ["arrow"],
@@ -94,6 +94,9 @@ export default class StructureChart extends Vue {
     };
   }
 
+  /**
+   * Downloads the chart as a png file
+   */
   public exportChart() {
     ExportCanvas(this.$refs.chart, "Structure.png");
   }

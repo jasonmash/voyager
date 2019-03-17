@@ -1,14 +1,11 @@
 <template>
-  <b-card no-body>
-    <div slot="header" class="chart-header">
-      <b-dropdown right class="float-right" size="sm" variant="outline-secondary">
-        <b-dropdown-item @click="exportChart">Export (.svg)</b-dropdown-item>
-      </b-dropdown>
-      <span v-if="title">{{title}}</span>
-      <span v-else>Radar Chart</span>
-    </div>
-    <e-chart :options="chartData" :init-options="{renderer: 'canvas'}" autoresize class="radar-chart" ref="chart" :style="height ? 'height: ' + height + 'px' : ''"/>
-  </b-card>
+  <div>
+    <b-dropdown right class="float-right" size="sm" variant="outline-secondary">
+      <b-dropdown-item @click="exportChart">Export (.svg)</b-dropdown-item>
+    </b-dropdown>
+    <br>
+    <e-chart :options="chartData" :init-options="{renderer: 'canvas'}" autoresize class="chart" ref="chart" :style="height ? 'height: ' + height + 'px' : ''"/>
+  </div>
 </template>
 
 <script lang="ts">
@@ -21,16 +18,27 @@ import { ExportSvg } from "./shared";
 
 import "./charts.css";
 
+/**
+ * Radar chart, renders properties for a given list of configurations
+ */
 @Component
 export default class RadarChart extends Vue {
+  // ChartData object, with all info required to render chart
   @Prop(Array) public readonly data!: Configuration[];
-  @Prop(String) public readonly title!: string | undefined;
+
+  // Height of the chart in pixels (optional)
   @Prop(String) public readonly height!: string | undefined;
 
+  /**
+   * List of attributes from store, used for chart labels
+   */
   get attributes() {
     return this.$store.getters.attributes;
   }
 
+  /**
+   * Getter for chartData object in echarts format
+   */
   get chartData() {
     const configuration = this.data;
     const series: any[] = [];
@@ -69,6 +77,9 @@ export default class RadarChart extends Vue {
     };
   }
 
+  /**
+   * Downloads the chart as a svg file
+   */
   public exportChart() {
     ExportSvg(this.$refs.chart, "Chart.svg");
   }

@@ -6,13 +6,15 @@ import { Report, Section } from "@/models/report";
 import { ChartType, ChartData } from "@/models/chart-data";
 import { Configuration } from "@/models/configuration";
 import { Attribute } from "@/models/attribute";
-import BarChart from "@/components/charts/bar.vue";
-import LineChart from "@/components/charts/line.vue";
+import Chart1D from "@/components/charts/1d.vue";
 import ScatterChart from "@/components/charts/scatter.vue";
 import Scatter3DChart from "@/components/charts/scatter-3d.vue";
 
 @Component({
-  components: { BarChart, LineChart, ScatterChart, "scatter3d-chart": Scatter3DChart }
+  components: {
+    ScatterChart,
+    "chart-1d": Chart1D,
+    "scatter3d-chart": Scatter3DChart }
 })
 export default class ReportComponent extends Vue {
   public newSectionData: any = {};

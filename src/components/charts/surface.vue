@@ -1,18 +1,15 @@
 <template>
-  <b-card no-body>
-    <div slot="header" class="chart-header">
-      <b-dropdown right class="float-right" size="sm" variant="outline-secondary">
-        <b-dropdown-header>Projection</b-dropdown-header>
-        <b-dropdown-item :active="chartData.grid3D.viewControl.projection === 'perspective'" @click="switchPerspective('perspective')">Perspective</b-dropdown-item>
-        <b-dropdown-item :active="chartData.grid3D.viewControl.projection === 'orthographic'" @click="switchPerspective('orthographic')">Orthographic</b-dropdown-item>
-        <b-dropdown-divider />
-        <b-dropdown-item @click="exportChart">Export (.png)</b-dropdown-item>
-      </b-dropdown>
-      <span v-if="title">{{title}}</span>
-      <span v-else>Surface Chart</span>
-    </div>
-    <e-chart :options="chartData" :init-options="{renderer: 'canvas'}" autoresize class="surface-chart" ref="chart" />
-  </b-card>
+  <div>
+    <b-dropdown right class="float-right" size="sm" variant="outline-secondary">
+      <b-dropdown-header>Projection</b-dropdown-header>
+      <b-dropdown-item :active="chartData.grid3D.viewControl.projection === 'perspective'" @click="switchPerspective('perspective')">Perspective</b-dropdown-item>
+      <b-dropdown-item :active="chartData.grid3D.viewControl.projection === 'orthographic'" @click="switchPerspective('orthographic')">Orthographic</b-dropdown-item>
+      <b-dropdown-divider />
+      <b-dropdown-item @click="exportChart">Export (.png)</b-dropdown-item>
+    </b-dropdown>
+    <br>
+    <e-chart :options="chartData" :init-options="{renderer: 'canvas'}" autoresize class="chart" ref="chart" />
+  </div>
 </template>
 
 <script lang="ts">
@@ -29,11 +26,13 @@ import "./charts.css";
 
 @Component
 export default class SurfaceChart extends Vue {
+  // ChartData object, with all info required to render chart
   @Prop(Object) public readonly data!: ChartData;
-  @Prop(String) public readonly title!: string | undefined;
 
+  // Flag indicating if chart is currently updating, used for limiting update rate
   public isUpdating = false;
 
+  // Chart data in echarts object format
   public chartData: any = {
     animation: false,
     textStyle: {
@@ -104,30 +103,46 @@ export default class SurfaceChart extends Vue {
     }]
   };
 
+  /**
+   * Load chart data when mounted in UI
+   */
   public mounted() {
     this.updateChartData();
   }
 
+  /**
+   * Dispose of chart object if this component is removed
+   */
   public beforeDestroy() {
     const chart: any = this.$refs.chart;
     chart.dispose();
   }
 
+  /**
+   * Switch perspective of 3D chart (orthographic, perspective)
+   */
   public switchPerspective(perspective: string) {
     this.chartData.grid3D.viewControl.projection = perspective;
   }
 
+  /**
+   * Watch for changes to the input data
+   */
   @Watch("data")
   public onDataUpdate() {
     if (this.isUpdating) { return; }
     this.isUpdating = true;
 
+    // Update after 200ms to reduce number of expensive ui redraws
     setTimeout(() => {
       this.updateChartData();
       this.isUpdating = false;
     }, 200);
   }
 
+  /**
+   * Refreshes chart data, performs all necessary calculations
+   */
   public updateChartData() {
     if (!this.data) { return; }
     const data: any = this.data;
@@ -153,6 +168,7 @@ export default class SurfaceChart extends Vue {
       this.chartData.visualMap.max = data.attributes[2].scaleMax;
     }
 
+    // Step through x and y, and calculate z value
     this.chartData.series[0].equation = {
       x: {
         step: (data.attributes[0].scaleMax - data.attributes[0].scaleMin) / 20,
@@ -165,6 +181,7 @@ export default class SurfaceChart extends Vue {
         max: data.attributes[1].scaleMax
       },
       z: (x: number, y: number) => {
+        // Get z value for point
         return Optimality.getAttrValAtPoint([{
           attribute: data.attributes[0],
           value: x
@@ -177,6 +194,9 @@ export default class SurfaceChart extends Vue {
     };
   }
 
+  /**
+   * Downloads the chart as a png file
+   */
   public exportChart() {
     ExportCanvas(this.$refs.chart, "Chart.png");
   }

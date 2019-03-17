@@ -1,18 +1,15 @@
 <template>
-  <b-card no-body>
-    <div slot="header" class="chart-header">
-      <b-dropdown right class="float-right" size="sm" variant="outline-secondary">
-        <b-dropdown-item @click="exportChart">Export (.svg)</b-dropdown-item>
-      </b-dropdown>
-      <span v-if="title">{{title}}</span>
-      <span v-else>Scatter Chart</span>
-    </div>
-    <e-chart :options="chartData" :init-options="{renderer: 'svg'}" autoresize class="scatter-chart" ref="chart" />
-  </b-card>
+  <div>
+    <b-dropdown right class="float-right" size="sm" variant="outline-secondary">
+      <b-dropdown-item @click="exportChart">Export (.svg)</b-dropdown-item>
+    </b-dropdown>
+    <br>
+    <e-chart :options="chartData" :init-options="{renderer: 'svg'}" autoresize class="chart" ref="chart" />
+  </div>
 </template>
 
 <script lang="ts">
-import { Prop, Component, Vue } from "vue-property-decorator";
+import { Prop, Component, Vue, Watch } from "vue-property-decorator";
 import { Report, Section } from "@/models/report";
 import { Attribute } from "@/models/Attribute";
 import { ChartType, ChartData } from "@/models/chart-data";
@@ -23,17 +20,92 @@ import "./charts.css";
 
 @Component
 export default class ScatterChart extends Vue {
+  // ChartData object, with all info required to render chart
   @Prop(Object) public readonly data!: ChartData;
-  @Prop(String) public readonly title!: string | undefined;
 
-  get chartData() {
+  // Flag indicating if chart is currently updating, used for limiting update rate
+  public isUpdating = false;
+
+  // Chart data in echarts object format
+  public chartData: any = {
+    animation: false,
+    textStyle: {
+      fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
+      fontSize: 12
+    },
+    grid: {
+      top: 30,
+      left: 70,
+      bottom: 60
+    },
+    xAxis: {
+      type: "value",
+      nameLocation: "middle",
+      nameGap: 35
+    },
+    yAxis: {
+      type: "value",
+      nameLocation: "middle",
+      nameGap: 40
+    },
+    tooltip: {},
+    series: [{
+      data: [],
+      type: "scatter",
+      symbolSize: 4,
+      showAllSymbol: true,
+      tooltip: {
+        formatter: (params: any) => params.value[params.value.length - 1]
+      }
+    }]
+  };
+
+  /**
+   * Load chart data when mounted in UI
+   */
+  public mounted() {
+    this.updateChartData();
+  }
+
+  /**
+   * Watch for changes to the input data
+   */
+  @Watch("data")
+  public onDataUpdate() {
+    if (this.isUpdating) { return; }
+    this.isUpdating = true;
+
+    // Update after 50ms to reduce number of expensive ui redraws
+    setTimeout(() => {
+      this.updateChartData();
+      this.isUpdating = false;
+    }, 50);
+  }
+
+  /**
+   * Refreshes chart data, performs all necessary calculations
+   */
+  public updateChartData() {
     if (!this.data) { return; }
     const data: ChartData = this.data;
+
+    if (this.chartData.xAxis.name !== data.attributes[0].friendlyName) {
+      this.chartData.xAxis.min = data.attributes[0].scaleMin;
+      this.chartData.xAxis.max = data.attributes[0].scaleMax;
+      this.chartData.xAxis.name = data.attributes[0].friendlyName;
+    }
+
+    if (this.chartData.yAxis.name !== data.attributes[1].friendlyName) {
+      this.chartData.yAxis.min = data.attributes[1].scaleMin;
+      this.chartData.yAxis.max = data.attributes[1].scaleMax;
+      this.chartData.yAxis.name = data.attributes[1].friendlyName;
+    }
 
     let sizeAttribute: Attribute | undefined;
     let colourAttribute: Attribute | undefined;
     let normalisationFactor = 0;
 
+    // Detect if additional dimensions need to be represented
     if (data.attributes.length > 2 && !!data.attributes[2]) {
       sizeAttribute = data.attributes[2];
       normalisationFactor = (sizeAttribute.maxValue - sizeAttribute.minValue);
@@ -42,11 +114,13 @@ export default class ScatterChart extends Vue {
       colourAttribute = data.attributes[3];
     }
 
+
+    // Load visual maps if necessary (colour/size scales)
     const visualMaps = [];
     if (sizeAttribute) {
       visualMaps.push({
         top: "5%",
-        right: "15",
+        right: "0",
         dimension: 2,
         min: sizeAttribute.scaleMin,
         max: sizeAttribute.scaleMax,
@@ -69,7 +143,7 @@ export default class ScatterChart extends Vue {
 
     if (colourAttribute) {
       visualMaps.push({
-        right: "15",
+        right: "0",
         top: "50%",
         dimension: 3,
         min: colourAttribute.scaleMin,
@@ -96,49 +170,17 @@ export default class ScatterChart extends Vue {
       });
     }
 
-    const chartData = {
-      animation: false,
-      textStyle: {
-        fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
-        fontSize: 12
-      },
-      grid: {
-        top: 30,
-        left: 70,
-        right: visualMaps.length > 0 ? 100 : 50,
-        bottom: 60
-      },
-      xAxis: {
-        type: "value",
-        min: data.attributes[0].scaleMin,
-        max: data.attributes[0].scaleMax,
-        name: data.attributes[0].friendlyName,
-        nameLocation: "middle",
-        nameGap: 35
-      },
-      yAxis: {
-        type: "value",
-        min: data.attributes[1].scaleMin,
-        max: data.attributes[1].scaleMax,
-        name: data.attributes[1].friendlyName,
-        nameLocation: "middle",
-        nameGap: 40
-      },
-      visualMap: visualMaps.length > 0 ? visualMaps : undefined,
-      tooltip: {},
-      series: [{
-        data: data.values,
-        type: "scatter",
-        symbolSize: 4,
-        showAllSymbol: true,
-        tooltip: {
-          formatter: (params: any) => params.value[params.value.length - 1]
-        }
-      }]
-    };
-    return chartData;
+    // Update layout
+    this.chartData.grid.right = visualMaps.length > 0 ? 120 : 50;
+    this.chartData.visualMap = visualMaps.length > 0 ? visualMaps : undefined;
+
+    // Update data
+    this.chartData.series[0].data = data.values;
   }
 
+  /**
+   * Downloads the chart as a svg file
+   */
   public exportChart() {
     ExportSvg(this.$refs.chart, "Chart.svg");
   }

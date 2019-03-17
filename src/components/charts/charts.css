@@ -1,38 +1,9 @@
-.chart-header {
-  line-height: 30px;
-  height: 31px;
-}
-
-.card-header {
-  padding: 0.5rem 0.5rem 0.5rem 1rem;
-}
-
-.bar-chart {
+.chart {
   width: auto;
   height: 450px;
+  margin-top: 10px;
 }
 
-.line-chart {
-  width: auto;
-  height: 450px;
-}
-
-.scatter3d-chart {
-  width: auto;
-  height: 450px;
-}
-
-.scatter-chart {
-  width: auto;
-  height: 450px;
-}
-
-.radar-chart {
-  width: auto;
-  height: 450px;
-}
-
-.surface-chart {
-  width: auto;
-  height: 450px;
+.tab-content > .active:focus {
+  outline: none !important;
 }

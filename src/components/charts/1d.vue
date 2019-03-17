@@ -1,14 +1,11 @@
 <template>
-  <b-card no-body>
-    <div slot="header" class="chart-header">
-      <b-dropdown right class="float-right" size="sm" variant="outline-secondary">
-        <b-dropdown-item @click="exportChart">Export (.svg)</b-dropdown-item>
-      </b-dropdown>
-      <span v-if="title">{{title}}</span>
-      <span v-else>Bar Chart</span>
-    </div>
-    <e-chart :options="chartData" :init-options="{renderer: 'svg'}" autoresize class="bar-chart" ref="chart" />
-  </b-card>
+  <div>
+    <b-dropdown right class="float-right" size="sm" variant="outline-secondary">
+      <b-dropdown-item @click="exportChart">Export (.svg)</b-dropdown-item>
+    </b-dropdown>
+    <br>
+    <e-chart :options="chartData" :init-options="{renderer: 'svg'}" autoresize class="chart" ref="chart" />
+  </div>
 </template>
 
 <script lang="ts">
@@ -20,11 +17,20 @@ import { ExportSvg } from "./shared";
 
 import "./charts.css";
 
+/**
+ * 1-dimensional chart, displays as a bar or line chart
+ */
 @Component
-export default class BarChart extends Vue {
+export default class Chart1D extends Vue {
+  // ChartData object, with all info required to render chart
   @Prop(Object) public readonly data!: ChartData;
-  @Prop(String) public readonly title!: string | undefined;
 
+  // Type string, options: 'bar' and 'line'
+  @Prop(String) public readonly type!: string;
+
+  /**
+   * Getter for chartData object in echarts format
+   */
   get chartData() {
     if (!this.data) { return; }
     const data: ChartData = this.data;
@@ -58,13 +64,16 @@ export default class BarChart extends Vue {
       },
       series: [{
         data: data.values,
-        type: "bar",
+        type: this.type,
         showAllSymbol: true
       }]
     };
     return chartData;
   }
 
+  /**
+   * Downloads the chart as a svg file
+   */
   public exportChart() {
     ExportSvg(this.$refs.chart, "Chart.svg");
   }
