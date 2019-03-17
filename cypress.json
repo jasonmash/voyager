@@ -1,5 +1,6 @@
 {
   "pluginsFile": "tests/e2e/plugins/index.js",
   "viewportWidth": 1300,
-  "viewportHeight": 660
+  "viewportHeight": 660,
+  "reporter": "mocha-junit-reporter"
 }
