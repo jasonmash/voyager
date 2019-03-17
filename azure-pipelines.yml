@@ -34,3 +34,27 @@ steps:
 - script: |
     npm run test:ci
   displayName: 'E2E Test'
+
+- task: PublishTestResults@2
+  condition: succeededOrFailed()
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: '**/test-*.xml'
+
+- task: CopyFiles@2
+  condition: succeededOrFailed()
+  inputs:
+    sourceFolder: '$(Build.SourcesDirectory)/dist'
+    contents: '**/$(BuildConfiguration)/**/?(*.exe|*.dll|*.pdb)'
+
+- task: CopyFiles@2
+  condition: succeededOrFailed()
+  inputs:
+    sourceFolder: '$(Build.SourcesDirectory)/tests/e2e/videos'
+    contents: '**/$(BuildConfiguration)/**/?(*.exe|*.dll|*.pdb)'
+
+- task: PublishBuildArtifacts@1
+  condition: succeededOrFailed()
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    artifactName: drop
