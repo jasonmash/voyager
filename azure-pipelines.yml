@@ -34,3 +34,22 @@ steps:
 - script: |
     npm run test:ci
   displayName: 'E2E Test'
+
+- task: PublishTestResults@2
+  condition: succeededOrFailed()
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: '**/test-*.xml' 
+    mergeTestResults: true
+
+- task: PublishPipelineArtifact@0
+  condition: succeededOrFailed()
+  inputs:
+    artifactName: 'TestResults'
+    targetPath: '/tests/e2e/videos'
+
+- task: PublishPipelineArtifact@0
+  condition: succeededOrFailed()
+  inputs:
+    artifactName: 'Build'
+    targetPath: '/dist'
