@@ -9,8 +9,8 @@
       <h5>Attributes</h5>
       <p>Order by priority</p>
 
-      <draggable class="border-top" v-model="filters" handle=".handle" @start="drag = true" @end="drag = false" :animation='200'>
-        <transition-group type="transition" :name="!drag ? 'flip-list' : null">
+      <draggable class="border-top" v-model="filters" handle=".handle" @start="isReorderingFilters = true" @end="isReorderingFilters = false" :animation='200'>
+        <transition-group type="transition" :name="!isReorderingFilters ? 'flip-list' : null">
           <attribute v-for="(filter, i) in filters" :key="filter.attribute.key" :filter="filter" :index="i"/> 
         </transition-group>
       </draggable>
@@ -18,7 +18,7 @@
     <div class="border-right solution-explorer-col s-col-2">
       <b-btn size="sm" variant="outline-primary" class="float-right" v-b-modal.newreport>Create report</b-btn>
       <h5>Configurations</h5>
-      <p class="mb-2">Showing {{filteredConfigurations.length}} of {{totalCount}}</p>
+      <p class="mb-2">Showing {{configurations.length}} of {{totalCount}}</p>
       <b-form-input type="text" placeholder="Search..." size="sm" v-model="searchQuery" autofocus name="search"></b-form-input>
       <configuration-list :list="list" :filters="filters" :selectedConfiguration="selectedConfiguration" @select="selectedConfiguration=$event"/>
     </div>
@@ -47,13 +47,13 @@
           <b-tab title="Map" key="7" v-if="chartDimensions == 3">
             <map-chart :data="chartData"/>
           </b-tab>
-          <b-tab title="Radar" key="8" v-if="filteredConfigurations.length < 10">
-            <radar-chart :data="filteredConfigurations" />
+          <b-tab title="Radar" key="8" v-if="configurations.length < 10">
+            <radar-chart :data="configurations" />
           </b-tab>
         </b-tabs>
       </div>
 
-      <div v-else-if="filteredConfigurations.length > 0">
+      <div v-else-if="configurations.length > 0">
         <h4 class="text-center mt-5">No attributes selected</h4>
         <p class="text-center px-4">To visualise your solution space, select an attribute by ticking a checkbox in the left-hand column, or click on a configuration from the list. <br><br>
         For more guidance, see the <router-link to="/help">help</router-link> page.</p>
