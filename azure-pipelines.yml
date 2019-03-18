@@ -23,13 +23,13 @@ steps:
     npm run build
   displayName: 'Build'
 
-- task: PublishPipelineArtifact@0
+- task: PublishBuildArtifacts@1
   inputs:
-    artifactName: 'build'
-    targetPath: 'dest'
+    PathtoPublish: '$(System.DefaultWorkingDirectory)/dist'
 
 - script: |
     npm run lint
+  condition: succeededOrFailed()
   displayName: 'Lint'
 
 - script: |
@@ -45,5 +45,6 @@ steps:
 - task: PublishTestResults@2
   condition: succeededOrFailed()
   inputs:
+    mergeTestResults: true
     testRunner: JUnit
     testResultsFiles: '**/test-*.xml'
