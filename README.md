@@ -1,11 +1,12 @@
 # Voyager
+[![Build Status](https://dev.azure.com/jasonmash/voyager/_apis/build/status/jasonmash.voyager?branchName=master)](https://dev.azure.com/jasonmash/voyager/_build/latest?definitionId=3&branchName=master)
 
 ## Prerequisites
 - Node.js & npm
 - Vue CLI
 
 ### Recommended
-- Visual Studio Code (with extensions: Vetur, TSLint, Chrome debugger)
+- Visual Studio Code (with extensions: Vetur, TSLint)
 
 ## Project setup
 ```
@@ -22,20 +23,24 @@ npm start
 npm run build
 ```
 
-### Run your tests
-```
-npm run test
-```
+## Testing
 
 ### Lints and fixes files
+Follows standard TSLint code style rules for consistency.
 ```
 npm run lint
 ```
 
-### Run your end-to-end tests
+### Unit tests
+Unit tests are written using mocha.
 ```
-npm run test:e2e
+npm run test:unit
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### End-to-end tests
+End-to-end tests run using Cypress, with mocha test scripts.
+```
+npm run test:e2e
+
+npm run test:ci
+```
