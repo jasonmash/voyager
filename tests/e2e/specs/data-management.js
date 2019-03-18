@@ -27,7 +27,7 @@ describe('Data Management', () => {
     cy.contains("Reliability");
     cy.contains("config-1");
     cy.contains("config-2");
-    cy.get(".list-group-item").contains("config-1").click();
+    cy.get(".list-group-item").contains("config-1").parent().click();
     cy.contains("h5", "config-1");
     cy.contains(".list-group-item", "Cost").contains("10.784824500000001");
   });
@@ -39,7 +39,7 @@ describe('Data Management', () => {
     cy.get('#fileinput[type="file"]').trigger('change', { force: true });
     cy.contains("Importing data...");
     cy.contains("Successfully imported data from 1 file(s)");
-    cy.get(".list-group-item").contains("config-1").click();
+    cy.get(".list-group-item").contains("config-1").parent().click();
     cy.contains("h5", "config-1");
     cy.contains("Structure");
     cy.get(".echarts.chart");
@@ -57,7 +57,7 @@ describe('Data Management', () => {
     cy.contains("Reliability");
     cy.contains("config-1");
     cy.contains("config-2");
-    cy.get(".list-group-item").contains("config-1").click();
+    cy.get(".list-group-item").contains("config-1").parent().click();
     cy.contains("h5", "config-1");
     cy.contains(".list-group-item", "Cost").contains("10");
   });

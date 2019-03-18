@@ -6,9 +6,9 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "start": "vue-cli-service serve",
-    "test:ci": "vue-cli-service test:e2e --headless",
+    "test:ci": "vue-cli-service test:e2e --headless --reporter mocha-junit-reporter --reporter-options mochaFile=results/test-e2e-[hash].xml,toConsole=true",
     "test:e2e": "vue-cli-service test:e2e",
-    "test:unit": "vue-cli-service test:unit --reporter=mocha-junit-reporter"
+    "test:unit": "vue-cli-service test:unit --reporter=mocha-junit-reporter --reporter-options mochaFile=results/test-unit.xml,toConsole=true"
   },
   "dependencies": {
     "@types/downloadjs": "^1.4.1",
