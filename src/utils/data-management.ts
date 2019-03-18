@@ -16,13 +16,24 @@ export default class DataManagement {
   }
 
   /**
+   * Returns all store data as JSON string
+   * @static
+   * @param {Store<any>} store Vuex store reference
+   * @returns {string} Resulting JSON string
+   * @memberof DataManagement
+   */
+  public static getStoreData(store: Store<any>): string {
+    return JSON.stringify(store.state);
+  }
+
+  /**
    * Exports all data stored in application to .json file
    * @static
    * @param {Store<any>} store Vuex store reference
    * @memberof DataManagement
    */
   public static exportAllData(store: Store<any>) {
-    const data = JSON.stringify(store.state);
+    const data = this.getStoreData(store);
     const fileName = "export_" + new Date().toLocaleDateString() + ".json";
     download(data, fileName, "application/json");
   }

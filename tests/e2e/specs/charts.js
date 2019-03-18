@@ -1,4 +1,15 @@
 describe('Charts', () => {
+
+  const hasWebGlSupport = () => { 
+    try {
+     var canvas = document.createElement('canvas'); 
+     return !!window.WebGLRenderingContext &&
+       (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'));
+    } catch(e) {
+      return false;
+    }
+  };
+
   it('Shows configuration radar chart', () => {
     cy.loadCsvData();
     cy.visit("/");
@@ -100,10 +111,12 @@ describe('Charts', () => {
     cy.contains(".custom-checkbox", "Response Time").children().last().click();
 
     // Verify 3D scatter chart
-    cy.contains(".nav-item", "3D Scatter").click();
-    cy.get(".echarts.chart").should('have.length', 1);
-    cy.get(".tab-pane.active").children().find("button.dropdown-toggle").click();
-    cy.get(".tab-pane.active").children().contains("Export (.png)");
+    if (hasWebGlSupport) {
+      cy.contains(".nav-item", "3D Scatter").click();
+      cy.get(".echarts.chart").should('have.length', 1);
+      cy.get(".tab-pane.active").children().find("button.dropdown-toggle").click();
+      cy.get(".tab-pane.active").children().contains("Export (.png)");
+    }
   });
 
 
@@ -117,10 +130,12 @@ describe('Charts', () => {
     cy.contains(".custom-checkbox", "Response Time").children().last().click();
 
     // Verify Surface chart
-    cy.contains(".nav-item", "Surface").click();
-    cy.get(".echarts.chart").should('have.length', 1);
-    cy.get(".tab-pane.active").children().find("button.dropdown-toggle").click();
-    cy.get(".tab-pane.active").children().contains("Export (.png)");
+    if (hasWebGlSupport) {
+      cy.contains(".nav-item", "Surface").click();
+      cy.get(".echarts.chart").should('have.length', 1);
+      cy.get(".tab-pane.active").children().find("button.dropdown-toggle").click();
+      cy.get(".tab-pane.active").children().contains("Export (.png)");
+    }
   });
 
   it('3D: configuration map plot', () => {
