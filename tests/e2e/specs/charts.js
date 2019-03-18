@@ -10,7 +10,8 @@ describe('Charts', () => {
 
     it('Can export radar chart', () => {
       cy.loadCsvData();
-      cy.get(".list-group-item").contains("config-1").parent().click();
+      cy.visit("/");
+      cy.contains("config-1").parent().click();
       cy.contains("h5", "config-1");
       cy.contains(".list-group-item", "Cost").contains("10");
       cy.contains(".card", "Properties").parent().children().get(".echarts.chart");
@@ -21,7 +22,8 @@ describe('Charts', () => {
     it('Shows configuration structure chart', () => {
       cy.loadCsvData();
       cy.loadStructureData();
-      cy.get(".list-group-item").contains("config-1").parent().click();
+      cy.visit('/');
+      cy.contains("config-1").parent().click();
       cy.contains("h5", "config-1");
       cy.contains(".list-group-item", "Cost").contains("10");
       cy.contains(".card", "Properties").parent().children().get(".echarts.chart");
@@ -31,7 +33,8 @@ describe('Charts', () => {
     it('Can export structure chart', () => {
       cy.loadCsvData();
       cy.loadStructureData();
-      cy.get(".list-group-item").contains("config-1").parent().click();
+      cy.visit('/');
+      cy.contains("config-1").parent().click();
       cy.contains(".card", "Structure").parent().children().find("button.dropdown-toggle").click();
       cy.contains(".card", "Structure").parent().children().contains("Export (.png)");
     });
