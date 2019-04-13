@@ -61,7 +61,8 @@
 
       <div v-else>
         <h4 class="text-center mt-5">Getting started</h4>
-        <p class="text-center px-4">To get started, import data into Voyager using the "Import" button in the top-right corner. For more guidance, see the <router-link to="/help">help</router-link> page.</p>
+        <p class="text-center px-4">To get started, import data into Voyager using the "Import" button in the top-right corner,<br> or <a @click="loadDemoData" href="#">load some example data</a>.</p>
+        <p class="text-center px-4">For more guidance, see the <router-link to="/help">help</router-link> page.</p>
       </div>
     </div>
 

@@ -82,5 +82,19 @@ describe('Data Management', () => {
       cy.contains("config-2").should('not.exist');
     });
   });
+
+  it('Allows loading example data', () => {
+    cy.visit('/');
+    cy.contains("Cost").should('not.exist');
+    cy.contains("Response Time").should('not.exist');
+
+    cy.contains('load some example data').click();
+
+    cy.contains("Cost").should('exist');
+    cy.contains("Response Time").should('exist');
+    cy.contains("Reliability").should('exist');
+    cy.contains("Config-1").should('exist');
+    cy.contains("Config-2").should('exist');
+  });
 });
   

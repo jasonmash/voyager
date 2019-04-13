@@ -1,6 +1,9 @@
 import { Store } from "vuex";
 import download from "downloadjs";
 
+import demoData from "@/assets/demo-data/tas-demo-data.json";
+import Importer from "./importer";
+
 export default class DataManagement {
 
   /**
@@ -36,5 +39,14 @@ export default class DataManagement {
     const data = this.getStoreData(store);
     const fileName = "export_" + new Date().toLocaleDateString() + ".json";
     download(data, fileName, "application/json");
+  }
+
+  /**
+   * Replaces current data with demo sample data
+   * @param store Vuex store reference
+   */
+  public static loadDemoData(store: Store<any>) {
+    this.resetAllData(store);
+    Importer.processStoreObject(demoData, store);
   }
 }

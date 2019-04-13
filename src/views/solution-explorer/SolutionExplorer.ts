@@ -8,6 +8,7 @@ import { Configuration } from "@/models/configuration";
 import { Report } from "@/models/report";
 
 import { Optimality } from "@/utils/optimality";
+import DataManagement from "@/utils/data-management";
 
 import Chart1D from "@/components/charts/1d.vue";
 import RadarChart from "@/components/charts/radar.vue";
@@ -258,5 +259,14 @@ export default class SolutionExplorerComponent extends Vue {
       modal.hide();
       this.$router.push("/reports/" + report.id);
     });
+  }
+
+  /**
+   * Loads demo data
+   * @memberof SolutionExplorerComponent
+   */
+  public loadDemoData() {
+    DataManagement.loadDemoData(this.$store);
+    this.loadFilters();
   }
 }
