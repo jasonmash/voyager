@@ -62,11 +62,9 @@ export class Optimality {
       });
       return useConfig;
     });
-
     // Order possible configuration by desired attribute value (e.g. lower is better)
-    const order: any = attribute.isHigherBetter ? "dsc" : "asc";
+    const order: any = attribute.isHigherBetter ? "desc" : "asc";
     configs = _.orderBy(configs, ["attributes." + attribute.key], [order]);
-
     // Return optimal value at specified attribute if one exists
     return configs[0];
   }
