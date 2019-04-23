@@ -3,7 +3,7 @@
     <b-dropdown right class="float-right chart-dd" size="sm" variant="outline-secondary">
       <b-dropdown-item @click="exportChart">Export (.svg)</b-dropdown-item>
     </b-dropdown>
-    <e-chart :options="chartData" :init-options="{renderer: 'canvas'}" autoresize class="chart" ref="chart" :style="height ? 'height: ' + height + 'px' : ''"/>
+    <e-chart :options="chartData" :init-options="{renderer: 'svg'}" autoresize class="chart" ref="chart" :style="height ? 'height: ' + height + 'px' : ''"/>
   </div>
 </template>
 
