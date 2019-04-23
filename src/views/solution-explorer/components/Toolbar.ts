@@ -45,7 +45,7 @@ export default class Toolbar extends Vue {
    */
   public resetData() {
     const result = confirm("Are you sure you wish to remove all stored data? \n\n" +
-      "This will remove all configurations, attributes, and reports.");
+      "This will remove all configurations and attributes.");
     if (result) {
       DataManagement.resetAllData(this.$store);
       this.$emit("refreshData");

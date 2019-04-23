@@ -5,7 +5,6 @@ import draggable from "vuedraggable";
 
 import { Attribute } from "@/models/attribute";
 import { Configuration } from "@/models/configuration";
-import { Report } from "@/models/report";
 
 import { Optimality } from "@/utils/optimality";
 import DataManagement from "@/utils/data-management";
@@ -52,8 +51,6 @@ export default class SolutionExplorerComponent extends Vue {
   public paretoFront: string[] = [];
   // Selected configuration from list
   public selectedConfiguration: Configuration | null = null;
-  // Name entered by user for new report
-  public newReportName: string = "";
   // Flag indicating is user is currently reordering filter list
   public isReorderingFilters: boolean = false;
 
@@ -220,45 +217,6 @@ export default class SolutionExplorerComponent extends Vue {
       }
     }
     return data;
-  }
-
-  /**
-   * Check user has entered all required information for creating a new report
-   *
-   * @param {Event} evt
-   * @memberof SolutionExplorerComponent
-   */
-  public createReportOk(evt: Event) {
-    // Prevent modal from closing
-    evt.preventDefault();
-
-    if (!this.newReportName) {
-      alert("Please enter a report name");
-    } else {
-      this.createReportSubmit();
-    }
-  }
-
-  /**
-   * Create a new report
-   * @memberof SolutionExplorerComponent
-   */
-  public createReportSubmit() {
-    const report: Report = {
-      id: this.$store.getters.reports.length,
-      name: this.newReportName,
-      configurationIds: this.configurations.map((c: Configuration) => c.id),
-      sections: []
-    };
-
-    this.$store.commit("addReport", report);
-
-    this.$nextTick(() => {
-      // Wrapped in $nextTick to ensure DOM is rendered before closing
-      const modal: any = this.$refs.newreport;
-      modal.hide();
-      this.$router.push("/reports/" + report.id);
-    });
   }
 
   /**

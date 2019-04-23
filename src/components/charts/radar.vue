@@ -9,7 +9,6 @@
 
 <script lang="ts">
 import { Prop, Component, Vue } from "vue-property-decorator";
-import { Report, Section } from "@/models/report";
 import { Attribute } from "@/models/attribute";
 import { Configuration } from "@/models/configuration";
 

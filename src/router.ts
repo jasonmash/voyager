@@ -10,7 +10,6 @@ export default new Router({
   routes: [
     { path: "/", component: () => import("./views/solution-explorer/SolutionExplorer.vue") },
     { path: "/help", component: () => import("./views/About.vue") },
-    { path: "/reports/:id", component: () => import("./views/reports/Report.vue") },
     { path: "*", component: () => import("./views/404.vue") }
   ]
 });

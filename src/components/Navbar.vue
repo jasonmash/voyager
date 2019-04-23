@@ -6,13 +6,6 @@
     <b-collapse is-nav id="nav_collapse">
       <b-navbar-nav>
         <b-nav-item to="/">Solution Explorer</b-nav-item>
-        <b-nav-item-dropdown>
-          <template slot="button-content">Reports</template>
-          <b-dropdown-item v-for="report in reports" :key="report.id + '-report'" :to="'/reports/'+report.id">
-            {{report.name}}
-          </b-dropdown-item>
-          <b-dropdown-item disabled v-if="reports.length === 0"><span class="text-muted">No reports found</span></b-dropdown-item>
-        </b-nav-item-dropdown>
         <b-nav-item to="/help">Help</b-nav-item>
       </b-navbar-nav>
     </b-collapse>
@@ -24,10 +17,6 @@ import { Component, Vue } from "vue-property-decorator";
 
 @Component
 export default class Navbar extends Vue {
-  // Get list of reports to show in dropdown menu
-  get reports() {
-    return this.$store.getters.reports;
-  }
 }
 </script>
 
