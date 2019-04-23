@@ -3,7 +3,7 @@ import { Component, Vue, Prop } from "vue-property-decorator";
 import _ from "lodash";
 
 import { Configuration } from "@/models/configuration";
-import { AttributeFilter } from "./Attribute";
+import { Attribute } from "@/models/attribute";
 
 /**
  * List of configurations
@@ -30,10 +30,10 @@ export default class ConfigurationList extends Vue {
 
   /**
    * List of filters to apply to configuration list, determines which attributes are visible
-   * @type {AttributeFilter}
+   * @type {Attribute}
    * @memberof ConfigurationList
    */
-  @Prop(Array) public readonly filters!: AttributeFilter;
+  @Prop(Array) public readonly filters!: Attribute[];
 
   /**
    * Event handler when user selects a configuration

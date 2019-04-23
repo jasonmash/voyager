@@ -32,6 +32,9 @@ const mutations = {
         key: attribute.key,
         maxValue: attribute.value,
         minValue: attribute.value,
+        filterMaxValue: attribute.value,
+        filterMinValue: attribute.value,
+        isFiltered: false,
         scaleMax: attribute.value,
         scaleMin: attribute.value,
         isHigherBetter: true,
@@ -74,6 +77,9 @@ const mutations = {
         attrInfo.scaleMin = Math.floor(attrInfo.minValue -
           (attrInfo.step - (Math.floor(attrInfo.minValue) % attrInfo.step)));
       }
+
+      attrInfo.filterMinValue = attrInfo.scaleMin;
+      attrInfo.filterMaxValue = attrInfo.scaleMax;
 
       // Update attribute in store
       Vue.set(state.data, index, attrInfo);

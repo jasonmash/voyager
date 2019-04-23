@@ -8,7 +8,7 @@
         <p class="mb-0">
           {{item.id}}<br>
           <small>
-            <span v-for="a in filters.filter((a) => a.isFiltered)" :key="a.attribute.key"><b>{{a.attribute.friendlyName}}</b>: {{item.attributes[a.attribute.key]}}<br></span>
+            <span v-for="a in filters.filter((a) => a.isFiltered)" :key="a.key"><b>{{a.friendlyName}}</b>: {{item.attributes[a.key]}}<br></span>
           </small>
         </p>
       </b-list-group-item>
@@ -21,7 +21,7 @@
         <p class="mb-0">
           {{item.id}}<br>
           <small>
-            <span v-for="a in filters.filter((a) => a.isFiltered)" :key="a.attribute.key"><b>{{a.attribute.friendlyName}}</b>: {{item.attributes[a.attribute.key]}}<br></span>
+            <span v-for="a in filters.filter((a) => a.isFiltered)" :key="a.key"><b>{{a.friendlyName}}</b>: {{item.attributes[a.key]}}<br></span>
           </small>
         </p>
       </b-list-group-item>

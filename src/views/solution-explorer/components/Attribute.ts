@@ -5,41 +5,6 @@ import { Attribute } from "@/models/attribute";
 import RangeSlider from "@/components/RangeSlider.vue";
 
 /**
- * AttributeFilter represents user applied limits to an attribute
- * @export
- * @interface AttributeFilter
- */
-export interface AttributeFilter {
-  /**
-   * Attribute to apply filter to
-   * @type {Attribute}
-   * @memberof AttributeFilter
-   */
-  attribute: Attribute;
-
-  /**
-   * Minimum acceptable value of attribute
-   * @type {number}
-   * @memberof AttributeFilter
-   */
-  minValue: number;
-
-  /**
-   * Maximum acceptable value of attribute
-   * @type {number}
-   * @memberof AttributeFilter
-   */
-  maxValue: number;
-
-  /**
-   * Is filter enabled?
-   * @type {boolean}
-   * @memberof AttributeFilter
-   */
-  isFiltered: boolean;
-}
-
-/**
  * Attribute filter component, allows users to limit acceptable values
  * @export
  * @class AttributeComponent
@@ -52,11 +17,11 @@ export interface AttributeFilter {
 })
 export default class AttributeComponent extends Vue {
   /**
-   * Input filter to display and modify
-   * @type {AttributeFilter}
+   * Input attribute to show & filter
+   * @type {Attribute}
    * @memberof AttributeComponent
    */
-  @Prop(Object) public readonly filter!: AttributeFilter;
+  @Prop(Object) public readonly attribute!: Attribute;
 
   /**
    * Index of filter in the list
@@ -68,9 +33,12 @@ export default class AttributeComponent extends Vue {
   /**
    * Event handler for when user changes acceptable range of filter
    */
-  public onRangeChange(attr: any, event: any) {
-    attr.minValue = parseFloat(event.min);
-    attr.maxValue = parseFloat(event.max);
+  public onRangeChange(attr: Attribute, event: any) {
+    this.$store.commit("updateAttribute", {
+      key: attr.key,
+      filterMinValue: parseFloat(event.min),
+      filterMaxValue: parseFloat(event.max)
+    });
   }
 
   /**
@@ -80,7 +48,11 @@ export default class AttributeComponent extends Vue {
    * @param {boolean} isHigherBetter
    * @memberof AttributeComponent
    */
-  public setAttributeOptimality(attribute: Attribute, isHigherBetter: boolean) {
-    this.$store.commit("updateAttribute", { key: attribute.key, isHigherBetter });
+  public setAttributeOptimality(attr: Attribute, isHigherBetter: boolean) {
+    this.$store.commit("updateAttribute", { key: attr.key, isHigherBetter });
+  }
+
+  public onFilterToggle(attr: Attribute) {
+    this.$store.commit("updateAttribute", { key: attr.key, isFiltered: !attr.isFiltered });
   }
 }

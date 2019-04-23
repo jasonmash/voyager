@@ -11,7 +11,7 @@
 
       <draggable class="border-top" v-model="filters" handle=".handle" @start="isReorderingFilters = true" @end="isReorderingFilters = false" :animation='200'>
         <transition-group type="transition" :name="!isReorderingFilters ? 'flip-list' : null">
-          <attribute v-for="(filter, i) in filters" :key="filter.attribute.key" :filter="filter" :index="i"/> 
+          <attribute v-for="(attribute, i) in filters" :key="attribute.key" :attribute="attribute" :index="i"/> 
         </transition-group>
       </draggable>
     </div>

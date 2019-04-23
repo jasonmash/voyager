@@ -58,6 +58,27 @@ export interface Attribute {
    * @memberof Attribute
    */
   isHigherBetter?: boolean;
+
+  /**
+   * Boolean indicating if attribute is currently filtered
+   * @type {number}
+   * @memberof Attribute
+   */
+  isFiltered: boolean;
+
+  /**
+   * Max value of this attribute used for filter
+   * @type {number}
+   * @memberof Attribute
+   */
+  filterMaxValue: number;
+
+  /**
+   * Min value of this attribute used for filter
+   * @type {number}
+   * @memberof Attribute
+   */
+  filterMinValue: number;
 }
 
 

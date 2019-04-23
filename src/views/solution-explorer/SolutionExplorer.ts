@@ -16,7 +16,7 @@ import Scatter3DChart from "@/components/charts/scatter-3d.vue";
 import SurfaceChart from "@/components/charts/surface.vue";
 import MapChart from "@/components/charts/map.vue";
 
-import AttributeBox, { AttributeFilter } from "./components/Attribute";
+import AttributeBox from "./components/Attribute";
 import ConfigurationBox from "./components/Configuration";
 import ConfigurationList from "./components/ConfigurationList";
 import Toolbar from "./components/Toolbar";
@@ -40,7 +40,7 @@ import Toolbar from "./components/Toolbar";
 })
 export default class SolutionExplorerComponent extends Vue {
   // List of filters
-  public filters: AttributeFilter[] = [];
+  public filters: Attribute[] = [];
   // Number of selected data dimensions
   public chartDimensions: number = 0;
   // Search query for searching amongst configuration ids
@@ -78,9 +78,7 @@ export default class SolutionExplorerComponent extends Vue {
    */
   public loadFilters() {
     this.selectedConfiguration = null;
-    this.filters = this.$store.getters.attributes.map((a: Attribute) => {
-      return { attribute: a, minValue: a.scaleMin, maxValue: a.scaleMax, isFiltered: false };
-    });
+    this.filters = _.clone(this.$store.getters.attributes);
     this.sortFilters();
   }
 
@@ -90,8 +88,8 @@ export default class SolutionExplorerComponent extends Vue {
    * @memberof SolutionExplorerComponent
    */
   public sortFilters() {
-    this.filters = this.filters.sort((a, b) => {
-      if (!a.isFiltered && !b.isFiltered) { return a.attribute.friendlyName.localeCompare(b.attribute.friendlyName); }
+    this.filters = this.filters.sort((a: Attribute, b: Attribute) => {
+      if (!a.isFiltered && !b.isFiltered) { return a.friendlyName.localeCompare(b.friendlyName); }
       if (a.isFiltered && !b.isFiltered) { return -1; }
       if (!a.isFiltered && b.isFiltered) { return 1; }
       return 0;
@@ -105,8 +103,6 @@ export default class SolutionExplorerComponent extends Vue {
    * @memberof SolutionExplorerComponent
    */
   get list() {
-    // Get configuration list
-    const data: Configuration[] = this.$store.getters.configurations;
 
     // Get filters
     this.sortFilters();
@@ -114,16 +110,19 @@ export default class SolutionExplorerComponent extends Vue {
     _.reverse(filters);
 
     // Get applicable attributes for selected filters
-    const attributes = _.filter(this.filters, "isFiltered").map((config) => config.attribute);
-    this.chartDimensions = _.filter(this.filters, "isFiltered").map((a) => a.attribute).length;
+    const attributes = _.filter(this.filters, "isFiltered");
+    this.chartDimensions = attributes.length;
+
+    // Get configuration list
+    const data: Configuration[] = this.$store.getters.configurations;
 
     // Filter configuration list based on set parameters
     let result: Configuration[] = data.filter((item) => {
       let validAttributes = true;
       filters.forEach((filter) => {
         if (filter.isFiltered) {
-          const val = item.attributes[filter.attribute.key];
-          if (val && (val > filter.maxValue || val < filter.minValue)) { validAttributes = false; }
+          const val = item.attributes[filter.key];
+          if (val && (val > filter.filterMaxValue || val < filter.filterMinValue)) { validAttributes = false; }
         }
       });
       return validAttributes;
@@ -133,8 +132,8 @@ export default class SolutionExplorerComponent extends Vue {
     filters.forEach((filter) => {
       if (filter.isFiltered) {
         result = _.orderBy(result,
-          [((c: Configuration) => c.attributes[filter.attribute.key])],
-          [(filter.attribute.isHigherBetter ? "desc" : "asc")]);
+          [((c: Configuration) => c.attributes[filter.key])],
+          [(filter.isHigherBetter ? "desc" : "asc")]);
       }
     });
 
@@ -160,7 +159,7 @@ export default class SolutionExplorerComponent extends Vue {
    * @memberof SolutionExplorerComponent
    */
   get chartData() {
-    const attributes = _.filter(this.filters, "isFiltered").map((a) => a.attribute);
+    const attributes = _.filter(this.filters, "isFiltered");
     this.chartDimensions = attributes.length;
 
     const data: any = {
