@@ -34,6 +34,7 @@ const mutations = {
         minValue: attribute.value,
         filterMaxValue: attribute.value,
         filterMinValue: attribute.value,
+        filterPriority: 0,
         isFiltered: false,
         scaleMax: attribute.value,
         scaleMin: attribute.value,

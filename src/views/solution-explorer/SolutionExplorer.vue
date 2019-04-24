@@ -9,9 +9,9 @@
       <h5>Attributes</h5>
       <p>Order by priority</p>
 
-      <draggable class="border-top" v-model="filters" handle=".handle" @start="isReorderingFilters = true" @end="isReorderingFilters = false" :animation='200'>
+      <draggable class="border-top" v-model="filters" handle=".handle" @start="isReorderingFilters = true" @end="isReorderingFilters = false" @change="moveFilter" :animation='200'>
         <transition-group type="transition" :name="!isReorderingFilters ? 'flip-list' : null">
-          <attribute v-for="(attribute, i) in filters" :key="attribute.key" :attribute="attribute" :index="i"/> 
+          <attribute v-for="(attribute, i) in filters" :key="attribute.key" :attribute="attribute" :index="i" @toggleFilter="sortFilters"/> 
         </transition-group>
       </draggable>
     </div>

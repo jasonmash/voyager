@@ -92,8 +92,23 @@ export default class SolutionExplorerComponent extends Vue {
       if (!a.isFiltered && !b.isFiltered) { return a.friendlyName.localeCompare(b.friendlyName); }
       if (a.isFiltered && !b.isFiltered) { return -1; }
       if (!a.isFiltered && b.isFiltered) { return 1; }
-      return 0;
+      return b.filterPriority > a.filterPriority ? -1 : 1;
     });
+  }
+
+  /**
+   * Update state to reflect change to attribute priority ordering
+   * @param event Vue-draggable reordering event
+   */
+  public moveFilter(event: any) {
+    // Check if attribute filter reordered
+    if (event.moved.newIndex !== event.moved.oldIndex) {
+      let i = 0;
+      this.filters.forEach((f: Attribute) => {
+        this.$store.commit("updateAttribute", { key: f.key, filterPriority: i });
+        i++;
+      });
+    }
   }
 
   /**
@@ -105,7 +120,6 @@ export default class SolutionExplorerComponent extends Vue {
   get list() {
 
     // Get filters
-    this.sortFilters();
     const filters = _.clone(this.filters);
     _.reverse(filters);
 

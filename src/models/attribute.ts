@@ -79,6 +79,13 @@ export interface Attribute {
    * @memberof Attribute
    */
   filterMinValue: number;
+
+  /**
+   * Priority ordering of the attribute, used when filtered
+   * @type {number}
+   * @memberof Attribute
+   */
+  filterPriority: number;
 }
 
 

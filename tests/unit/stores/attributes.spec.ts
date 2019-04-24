@@ -16,6 +16,7 @@ describe("Store: Attributes", () => {
       filterMaxValue: 10,
       filterMinValue: 5,
       isFiltered: false,
+      filterPriority: 0,
       step: 1,
       friendlyName: "Attribute Key"
     };
@@ -57,6 +58,7 @@ describe("Store: Attributes", () => {
       scaleMin: 4,
       filterMaxValue: 10,
       filterMinValue: 5,
+      filterPriority: 0,
       isFiltered: false,
       step: 1,
       friendlyName: "Attribute Key"
@@ -90,6 +92,7 @@ describe("Store: Attributes", () => {
       scaleMin: 4,
       filterMaxValue: 10,
       filterMinValue: 4,
+      filterPriority: 0,
       isFiltered: false,
       step: 1,
       friendlyName: "Attribute Key"
@@ -115,6 +118,7 @@ describe("Store: Attributes", () => {
       scaleMin: 4,
       filterMaxValue: 10,
       filterMinValue: 4,
+      filterPriority: 0,
       isFiltered: false,
       step: 1,
       friendlyName: "Attribute Key"

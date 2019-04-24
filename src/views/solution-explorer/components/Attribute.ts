@@ -44,7 +44,7 @@ export default class AttributeComponent extends Vue {
   /**
    * Event handler for when user changes optimality aim of filter
    * E.g. higher is better, lower is better
-   * @param {Attribute} attribute
+   * @param {Attribute} attr
    * @param {boolean} isHigherBetter
    * @memberof AttributeComponent
    */
@@ -52,7 +52,12 @@ export default class AttributeComponent extends Vue {
     this.$store.commit("updateAttribute", { key: attr.key, isHigherBetter });
   }
 
+  /**
+   * Toggles between whether this attribute is filtered or not
+   * @param {Attribute} attr
+   */
   public onFilterToggle(attr: Attribute) {
     this.$store.commit("updateAttribute", { key: attr.key, isFiltered: !attr.isFiltered });
+    this.$emit("toggleFilter");
   }
 }
