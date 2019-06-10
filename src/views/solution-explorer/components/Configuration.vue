@@ -1,5 +1,5 @@
 <template>
-  <div v-if="configuration" class="mb-4 bg-light p-3 border rounded" style="box-shadow: 0px 2px 3px rgba(0,0,0,0.2)">
+  <div v-if="configuration">
     <b-btn size="sm" variant="outline-danger" class="float-right" @click="$emit('clearSelection')"><i class="fa fa-times fa-fw"></i></b-btn>
     <h6 class="text-muted">Selected Configuration</h6>
     <h5 class="mb-4">{{configuration.id}}</h5>

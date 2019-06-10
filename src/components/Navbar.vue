@@ -1,5 +1,5 @@
 <template>
-  <b-navbar type="dark" id="navbar">
+  <b-navbar type="dark" id="navbar" fixed="top">
     <b-navbar-brand>
       <svg style="margin-top: -3px" width="30px" height="30px" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
         <g id="Icon/B&amp;W" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -20,21 +20,72 @@
             {{report.name}}
           </b-dropdown-item>
           <b-dropdown-item disabled v-if="reports.length === 0"><span class="text-muted">No reports found</span></b-dropdown-item>
+          <b-dropdown-divider />
+          <b-dropdown-item v-b-modal.newreport>Add report</b-dropdown-item>
         </b-nav-item-dropdown>
-        <b-nav-item to="/help">Help</b-nav-item>
+        <b-nav-item to="/about">About</b-nav-item>
       </b-navbar-nav>
     </b-collapse>
+
+    
+    <b-modal id="newreport" title="Create Report" @ok="createReportOk" ref="newreport">
+      <b-form @submit.stop.prevent="createReportSubmit">
+        <b-form-group label="Report name:" label-for="name">
+          <b-form-input id="name" type="text" required v-model="newReportName" />
+        </b-form-group>
+      </b-form>
+    </b-modal>
   </b-navbar>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import { Report } from "../models/report";
 
 @Component
 export default class Navbar extends Vue {
   // Get list of reports to show in dropdown menu
   get reports() {
     return this.$store.getters.reports;
+  }
+
+  public newReportName: string = "";
+  /**
+   * Check user has entered all required information for creating a new report
+   *
+   * @param {Event} evt
+   * @memberof SolutionExplorerComponent
+   */
+  public createReportOk(evt: Event) {
+    // Prevent modal from closing
+    evt.preventDefault();
+
+    if (!this.newReportName) {
+      alert("Please enter a report name");
+    } else {
+      this.createReportSubmit();
+    }
+  }
+
+  /**
+   * Create a new report
+   * @memberof SolutionExplorerComponent
+   */
+  public createReportSubmit() {
+    const report: Report = {
+      id: this.$store.getters.reports.length,
+      name: this.newReportName,
+      sections: []
+    };
+
+    this.$store.commit("addReport", report);
+
+    this.$nextTick(() => {
+      // Wrapped in $nextTick to ensure DOM is rendered before closing
+      const modal: any = this.$refs.newreport;
+      modal.hide();
+      this.$router.push("/reports/" + report.id);
+    });
   }
 }
 </script>
@@ -47,5 +98,13 @@ export default class Navbar extends Vue {
 
 #navbar .navbar-brand {
   font-weight: 600;
+}
+
+#navbar .router-link-exact-active {
+  font-weight: 600;
+}
+
+#navbar .nav-link.router-link-exact-active {
+  color: white;
 }
 </style>

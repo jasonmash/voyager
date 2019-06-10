@@ -3,11 +3,9 @@
 <template>
   <b-container fluid id="solution-explorer" class="pt-3">
     <toolbar @refreshData="loadFilters" />
-    <h1 class="h3 mb-3">Solution Explorer</h1>
-
     <div class="border-right solution-explorer-col s-col-1">
+      <p class="float-right"><small>Order by priority</small></p>
       <h5>Attributes</h5>
-      <p>Order by priority</p>
 
       <draggable class="border-top" v-model="filters" handle=".handle" @start="isReorderingFilters = true" @end="isReorderingFilters = false" @change="moveFilter" :animation='200'>
         <transition-group type="transition" :name="!isReorderingFilters ? 'flip-list' : null">
@@ -16,9 +14,8 @@
       </draggable>
     </div>
     <div class="border-right solution-explorer-col s-col-2">
-      <b-btn size="sm" variant="outline-primary" class="float-right" v-b-modal.newreport>Create report</b-btn>
+      <p class="mb-1 float-right"><small>Showing {{configurations.length}} of {{totalCount}}</small></p>
       <h5>Configurations</h5>
-      <p class="mb-2">Showing {{configurations.length}} of {{totalCount}}</p>
       <b-form-input type="text" placeholder="Search..." size="sm" v-model="searchQuery" autofocus name="search"></b-form-input>
       <configuration-list :list="list" :filters="filters" :selectedConfiguration="selectedConfiguration" @select="selectedConfiguration=$event"/>
     </div>
@@ -65,14 +62,6 @@
         <p class="text-center px-4">For more guidance, see the <router-link to="/help">help</router-link> page.</p>
       </div>
     </div>
-    
-    <b-modal id="newreport" title="Create Report" @ok="createReportOk" ref="newreport">
-      <b-form @submit.stop.prevent="createReportSubmit">
-        <b-form-group label="Report name:" label-for="name">
-          <b-form-input id="name" type="text" required v-model="newReportName" />
-        </b-form-group>
-      </b-form>
-    </b-modal>
   </b-container>
 </template>
 
@@ -87,12 +76,12 @@
 
 .solution-explorer-col {
   position: absolute;
-  top: 70px;
+  top: 56px;
   bottom: 0;
   width: 350px;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 0 15px;
+  padding: 15px 15px 0;
 }
 .solution-explorer-col.s-col-1 {
   left: 0;

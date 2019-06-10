@@ -1,7 +1,3 @@
-#app {
-  min-width: 1250px;
-}
-
 body {
   font-size: .875rem;
   font-family: "Inter", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
@@ -11,3 +7,6 @@ body {
   font-feature-settings: 'cv01' 1, 'cv02' 1, 'cv03' 1, 'cv04' 1, 'cv09' 1, 'tnum' 1;
 }
 
+#app {
+  margin-top: 60px;
+}

@@ -2,9 +2,9 @@
 <b-container fluid>
   <b-row>
     <b-col></b-col>
-    <b-col sm="6">
+    <b-col lg="6" sm="8">
       <div class="py-4">
-        <h3>Help</h3>
+        <h2>About</h2>
         <h5 class="mt-4">Getting started</h5>
         <p>To start using Voyager, import some data using the "Import" button in the top-right corner of the Solution Explorer page.</p>
 

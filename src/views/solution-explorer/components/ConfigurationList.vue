@@ -34,7 +34,7 @@
     position: absolute;
     overflow-y: auto;
     bottom: 0;
-    top: 96px;
+    top: 80px;
     width: 350px;
     margin: 10px -15px 0;
   }
