@@ -2,6 +2,8 @@
   <div>
     <b-dropdown right class="float-right chart-dd" size="sm" variant="outline-secondary">
       <b-dropdown-item @click="exportChart">Export (.png)</b-dropdown-item>
+      <b-dropdown-divider />
+      <report-dropdown :section-index="this.sectionIndex"/>
     </b-dropdown>
     <e-chart :options="chartData" ref="chart" :init-options="{renderer: 'canvas'}" autoresize class="chart" :style="height ? 'height: ' + height + 'px' : ''" />
   </div>
@@ -11,6 +13,8 @@
 import { Prop, Component, Vue } from "vue-property-decorator";
 import { ConfigurationStructure } from "@/models/configuration";
 
+import ReportDropdown from "../ReportDropdown.vue";
+
 import { ExportCanvas } from "./shared";
 
 import "./charts.css";
@@ -18,13 +22,20 @@ import "./charts.css";
 /**
  * Structure chart, used to show how architecture components are linked for a configuration
  */
-@Component
+@Component({
+  components: {
+    ReportDropdown
+  }
+})
 export default class StructureChart extends Vue {
   // ChartData object, with all info required to render chart
   @Prop(Object) public readonly data!: ConfigurationStructure;
 
   // Height of the chart in pixels, optional
   @Prop(String) public readonly height!: string | undefined;
+
+  // Index of section if chart exists within a report (optional)
+  @Prop(Number) public readonly sectionIndex?: number;
 
   /**
    * Getter for chartData object in echarts format

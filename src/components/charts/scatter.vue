@@ -2,6 +2,8 @@
   <div>
     <b-dropdown right class="float-right chart-dd" size="sm" variant="outline-secondary">
       <b-dropdown-item @click="exportChart">Export (.svg)</b-dropdown-item>
+      <b-dropdown-divider />
+      <report-dropdown :section-index="this.sectionIndex"/>
     </b-dropdown>
     <e-chart :options="chartData" :init-options="{renderer: 'svg'}" autoresize class="chart" ref="chart" />
   </div>
@@ -12,14 +14,23 @@ import { Prop, Component, Vue, Watch } from "vue-property-decorator";
 import { Attribute } from "@/models/attribute";
 import { ChartType, ChartData } from "@/models/chart-data";
 
+import ReportDropdown from "../ReportDropdown.vue";
+
 import { ExportSvg } from "./shared";
 
 import "./charts.css";
 
-@Component
+@Component({
+  components: {
+    ReportDropdown
+  }
+})
 export default class ScatterChart extends Vue {
   // ChartData object, with all info required to render chart
   @Prop(Object) public readonly data!: ChartData;
+
+  // Index of section if chart exists within a report (optional)
+  @Prop(Number) public readonly sectionIndex?: number;
 
   // Flag indicating if chart is currently updating, used for limiting update rate
   public isUpdating = false;

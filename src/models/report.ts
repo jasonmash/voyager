@@ -19,13 +19,6 @@ export interface Report {
   name: string;
 
   /**
-   * Included configuration IDs
-   * @type {string[]}
-   * @memberof Report
-   */
-  configurationIds: string[];
-
-  /**
    * Included report sections
    * @type {Section[]}
    * @memberof Report

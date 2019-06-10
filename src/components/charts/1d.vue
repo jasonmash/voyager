@@ -2,6 +2,8 @@
   <div>
     <b-dropdown right class="float-right chart-dd" size="sm" variant="outline-secondary">
       <b-dropdown-item @click="exportChart">Export (.svg)</b-dropdown-item>
+      <b-dropdown-divider />
+      <report-dropdown :section-index="this.sectionIndex"/>
     </b-dropdown>
     <e-chart :options="chartData" :init-options="{renderer: 'svg'}" autoresize class="chart" ref="chart" />
   </div>
@@ -11,6 +13,8 @@
 import { Prop, Component, Vue } from "vue-property-decorator";
 import { ChartType, ChartData } from "@/models/chart-data";
 
+import ReportDropdown from "../ReportDropdown.vue";
+
 import { ExportSvg } from "./shared";
 
 import "./charts.css";
@@ -18,13 +22,20 @@ import "./charts.css";
 /**
  * 1-dimensional chart, displays as a bar or line chart
  */
-@Component
+@Component({
+  components: {
+    ReportDropdown
+  }
+})
 export default class Chart1D extends Vue {
   // ChartData object, with all info required to render chart
   @Prop(Object) public readonly data!: ChartData;
 
   // Type string, options: 'bar' and 'line'
   @Prop(String) public readonly type!: string;
+
+  // Index of section if chart exists within a report (optional)
+  @Prop(Number) public readonly sectionIndex?: number;
 
   /**
    * Getter for chartData object in echarts format

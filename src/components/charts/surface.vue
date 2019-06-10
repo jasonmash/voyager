@@ -6,6 +6,8 @@
       <b-dropdown-item :active="chartData.grid3D.viewControl.projection === 'orthographic'" @click="switchPerspective('orthographic')">Orthographic</b-dropdown-item>
       <b-dropdown-divider />
       <b-dropdown-item @click="exportChart">Export (.png)</b-dropdown-item>
+      <b-dropdown-divider />
+      <report-dropdown :section-index="this.sectionIndex"/>
     </b-dropdown>
     <e-chart :options="chartData" :init-options="{renderer: 'canvas'}" autoresize class="chart" ref="chart" />
   </div>
@@ -18,14 +20,23 @@ import { ChartType, ChartData } from "@/models/chart-data";
 
 import { Optimality } from "@/utils/optimality";
 
+import ReportDropdown from "../ReportDropdown.vue";
+
 import { ExportCanvas } from "./shared";
 
 import "./charts.css";
 
-@Component
+@Component({
+  components: {
+    ReportDropdown
+  }
+})
 export default class SurfaceChart extends Vue {
   // ChartData object, with all info required to render chart
   @Prop(Object) public readonly data!: ChartData;
+
+  // Index of section if chart exists within a report (optional)
+  @Prop(Number) public readonly sectionIndex?: number;
 
   // Flag indicating if chart is currently updating, used for limiting update rate
   public isUpdating = false;

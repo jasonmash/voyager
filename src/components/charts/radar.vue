@@ -2,6 +2,8 @@
   <div>
     <b-dropdown right class="float-right chart-dd" size="sm" variant="outline-secondary">
       <b-dropdown-item @click="exportChart">Export (.svg)</b-dropdown-item>
+      <b-dropdown-divider />
+      <report-dropdown :section-index="this.sectionIndex"/>
     </b-dropdown>
     <e-chart :options="chartData" :init-options="{renderer: 'svg'}" autoresize class="chart" ref="chart" :style="height ? 'height: ' + height + 'px' : ''"/>
   </div>
@@ -12,6 +14,8 @@ import { Prop, Component, Vue } from "vue-property-decorator";
 import { Attribute } from "@/models/attribute";
 import { Configuration } from "@/models/configuration";
 
+import ReportDropdown from "../ReportDropdown.vue";
+
 import { ExportSvg } from "./shared";
 
 import "./charts.css";
@@ -19,13 +23,20 @@ import "./charts.css";
 /**
  * Radar chart, renders properties for a given list of configurations
  */
-@Component
+@Component({
+  components: {
+    ReportDropdown
+  }
+})
 export default class RadarChart extends Vue {
   // ChartData object, with all info required to render chart
   @Prop(Array) public readonly data!: Configuration[];
 
   // Height of the chart in pixels (optional)
   @Prop(String) public readonly height!: string | undefined;
+
+  // Index of section if chart exists within a report (optional)
+  @Prop(Number) public readonly sectionIndex?: number;
 
   /**
    * List of attributes from store, used for chart labels

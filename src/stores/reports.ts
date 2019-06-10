@@ -60,6 +60,16 @@ const mutations = {
   },
 
   /**
+   * Remove a single report section at index
+   * @param {*} state Reference to state to update
+   * @param {*} payload Report ID and section index to add
+   */
+  deleteReportSection: (state: State, {id, sectionIndex}) => {
+    const index = _.findIndex(state.data, (d) => d.id === id);
+    state.data[index].sections.splice(sectionIndex, 1);
+  },
+
+  /**
    * Update report
    * @param {*} state Reference to state to update
    * @param {Report} payload Report to update

@@ -44,11 +44,7 @@ export default class ReportComponent extends Vue {
 
   get configurations() {
     if (!this.report) { return []; }
-
-    const report = this.report;
-    return this.$store.getters.configurations.filter((c: Configuration) => {
-      return report.configurationIds.includes(c.id);
-    });
+    return this.$store.getters.configurations;
   }
 
   public addSection() {

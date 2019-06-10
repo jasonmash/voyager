@@ -1,7 +1,7 @@
 <script lang="ts" src="./Report.ts" />
 
 <template>
-  <b-container fluid class="py-3" v-if="report">
+  <b-container class="py-3" v-if="report">
     <b-dropdown class="float-right ml-2" right variant="outline-secondary">
       <b-dropdown-item @click="deleteReport">Delete report</b-dropdown-item>
     </b-dropdown>
@@ -10,15 +10,14 @@
     </b-button>
     <h1>{{report.name}}</h1>
     
+    <p v-if="report.sections.length == 0">Select the dropdown on any visualisation to add it to this report.</p>
+
     <b-card-group columns>
-      <b-card no-body header="Possible Configurations" class="mb-3" style="height: 400px; overflow-y: auto">
-        <code>{{report.configurationIds}}</code>
-      </b-card>
       <b-card v-for="(section, i) in report.sections" no-body :key="'section-' + i" :header="section.title" class="mb-3" style="height: 400px">
-        <scatter-chart :data="section.data" :title="section.title" v-if="section.type == 0 && !!section.data" />
-        <scatter3d-chart :data="section.data" :title="section.title" v-if="section.type == 1 && !!section.data" />
-        <chart-1d v-if="section.type == 2 && !!section.data" type="bar" :data="section.data"/>
-        <chart-1d v-if="section.type == 3 && !!section.data" type="line" :data="section.data"/>
+        <scatter-chart :data="section.data" v-if="section.type == 0 && !!section.data" :section-index="i"/>
+        <scatter3d-chart :data="section.data" v-if="section.type == 1 && !!section.data" :section-index="i"/>
+        <chart-1d v-if="section.type == 2 && !!section.data" type="bar" :data="section.data" :section-index="i"/>
+        <chart-1d v-if="section.type == 3 && !!section.data" type="line" :data="section.data" :section-index="i"/>
       </b-card>
     </b-card-group>
 
