@@ -5,6 +5,7 @@ import draggable from "vuedraggable";
 
 import { Attribute } from "@/models/attribute";
 import { Configuration } from "@/models/configuration";
+import { Report } from "@/models/report";
 
 import { Optimality } from "@/utils/optimality";
 import DataManagement from "@/utils/data-management";
@@ -39,28 +40,6 @@ import Toolbar from "./components/Toolbar";
   }
 })
 export default class SolutionExplorerComponent extends Vue {
-  // List of filters
-  public filters: Attribute[] = [];
-  // Number of selected data dimensions
-  public chartDimensions: number = 0;
-  // Search query for searching amongst configuration ids
-  public searchQuery: string = "";
-  // List of filtered configurations
-  public configurations: Configuration[] = [];
-  // List of pareto optimal configurations
-  public paretoFront: string[] = [];
-  // Selected configuration from list
-  public selectedConfiguration: Configuration | null = null;
-  // Flag indicating is user is currently reordering filter list
-  public isReorderingFilters: boolean = false;
-
-  /**
-   * Initialise filter list when page is created
-   * @memberof SolutionExplorerComponent
-   */
-  public created() {
-    this.loadFilters();
-  }
 
   /**
    * Get the total configuration count
@@ -69,46 +48,6 @@ export default class SolutionExplorerComponent extends Vue {
    */
   get totalCount() {
     return this.$store.getters.configurations.length;
-  }
-
-  /**
-   * Load filters from vuex store
-   *
-   * @memberof SolutionExplorerComponent
-   */
-  public loadFilters() {
-    this.selectedConfiguration = null;
-    this.filters = _.clone(this.$store.getters.attributes);
-    this.sortFilters();
-  }
-
-  /**
-   * Sort the list of filters, by name, and put isFiltered ones first
-   *
-   * @memberof SolutionExplorerComponent
-   */
-  public sortFilters() {
-    this.filters = this.filters.sort((a: Attribute, b: Attribute) => {
-      if (!a.isFiltered && !b.isFiltered) { return a.friendlyName.localeCompare(b.friendlyName); }
-      if (a.isFiltered && !b.isFiltered) { return -1; }
-      if (!a.isFiltered && b.isFiltered) { return 1; }
-      return b.filterPriority > a.filterPriority ? -1 : 1;
-    });
-  }
-
-  /**
-   * Update state to reflect change to attribute priority ordering
-   * @param event Vue-draggable reordering event
-   */
-  public moveFilter(event: any) {
-    // Check if attribute filter reordered
-    if (event.moved.newIndex !== event.moved.oldIndex) {
-      let i = 0;
-      this.filters.forEach((f: Attribute) => {
-        this.$store.commit("updateAttribute", { key: f.key, filterPriority: i });
-        i++;
-      });
-    }
   }
 
   /**
@@ -232,6 +171,71 @@ export default class SolutionExplorerComponent extends Vue {
     return data;
   }
 
+  // List of filters
+  public filters: Attribute[] = [];
+  // Number of selected data dimensions
+  public chartDimensions: number = 0;
+  // Search query for searching amongst configuration ids
+  public searchQuery: string = "";
+  // List of filtered configurations
+  public configurations: Configuration[] = [];
+  // List of pareto optimal configurations
+  public paretoFront: string[] = [];
+  // Selected configuration from list
+  public selectedConfiguration: Configuration | null = null;
+  // Flag indicating is user is currently reordering filter list
+  public isReorderingFilters: boolean = false;
+
+  public newReportName: string = "";
+
+  /**
+   * Initialise filter list when page is created
+   * @memberof SolutionExplorerComponent
+   */
+  public created() {
+    this.loadFilters();
+  }
+
+  /**
+   * Load filters from vuex store
+   *
+   * @memberof SolutionExplorerComponent
+   */
+  public loadFilters() {
+    this.selectedConfiguration = null;
+    this.filters = _.clone(this.$store.getters.attributes);
+    this.sortFilters();
+  }
+
+  /**
+   * Sort the list of filters, by name, and put isFiltered ones first
+   *
+   * @memberof SolutionExplorerComponent
+   */
+  public sortFilters() {
+    this.filters = this.filters.sort((a: Attribute, b: Attribute) => {
+      if (!a.isFiltered && !b.isFiltered) { return a.friendlyName.localeCompare(b.friendlyName); }
+      if (a.isFiltered && !b.isFiltered) { return -1; }
+      if (!a.isFiltered && b.isFiltered) { return 1; }
+      return b.filterPriority > a.filterPriority ? -1 : 1;
+    });
+  }
+
+  /**
+   * Update state to reflect change to attribute priority ordering
+   * @param event Vue-draggable reordering event
+   */
+  public moveFilter(event: any) {
+    // Check if attribute filter reordered
+    if (event.moved.newIndex !== event.moved.oldIndex) {
+      let i = 0;
+      this.filters.forEach((f: Attribute) => {
+        this.$store.commit("updateAttribute", { key: f.key, filterPriority: i });
+        i++;
+      });
+    }
+  }
+
   /**
    * Loads demo data
    * @memberof SolutionExplorerComponent
@@ -240,4 +244,43 @@ export default class SolutionExplorerComponent extends Vue {
     DataManagement.loadDemoData(this.$store);
     this.loadFilters();
   }
+  /**
+   * Check user has entered all required information for creating a new report
+   *
+   * @param {Event} evt
+   * @memberof SolutionExplorerComponent
+   */
+  public createReportOk(evt: Event) {
+    // Prevent modal from closing
+    evt.preventDefault();
+
+    if (!this.newReportName) {
+      alert("Please enter a report name");
+    } else {
+      this.createReportSubmit();
+    }
+  }
+
+  /**
+   * Create a new report
+   * @memberof SolutionExplorerComponent
+   */
+  public createReportSubmit() {
+    const report: Report = {
+      id: this.$store.getters.reports.length,
+      name: this.newReportName,
+      configurationIds: this.configurations.map((c: Configuration) => c.id),
+      sections: []
+    };
+
+    this.$store.commit("addReport", report);
+
+    this.$nextTick(() => {
+      // Wrapped in $nextTick to ensure DOM is rendered before closing
+      const modal: any = this.$refs.newreport;
+      modal.hide();
+      this.$router.push("/reports/" + report.id);
+    });
+  }
+
 }

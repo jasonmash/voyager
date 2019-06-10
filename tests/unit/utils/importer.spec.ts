@@ -81,7 +81,8 @@ describe("Utils: Importer", () => {
             friendlyName: "Cost"
           }
         ]
-      }
+      },
+      reports: { data: [] }
     };
 
     // apply action

@@ -158,6 +158,7 @@ export default class Importer {
     // Load new data
     $store.commit("addConfigurations", inputData.configurations.data);
     $store.commit("addAttributes", inputData.attributes.data);
+    $store.commit("addReports", inputData.reports.data);
   }
 
   /**
@@ -171,16 +172,31 @@ export default class Importer {
   private static processDataArray(data: object[], $store: Store<any>) {
     const configurations: Configuration[] = [];
     data.forEach((config: any) => {
-      Object.keys(config).forEach((id: string) => {
-        const index = configurations.findIndex((c: Configuration) => c.id === id);
+      if (typeof config === "object" && !!config.id && !!config.attributes) {
+        const index = configurations.findIndex((c: Configuration) => c.id === config.id);
         if (index >= 0) {
-          configurations[index].setAttributes(config[id], $store);
+          config.attributes.forEach((attribute: any) => {
+            configurations[index].addAttribute(attribute.key, attribute.value, $store);
+          });
         } else {
-          const c = new Configuration({ id });
-          c.setAttributes(config[id], $store);
+          const c = new Configuration({ id: config.id });
+          config.attributes.forEach((attribute: any) => {
+            c.addAttribute(attribute.key, attribute.value, $store);
+          });
           configurations.push(c);
         }
-      });
+      } else {
+        Object.keys(config).forEach((id: any) => {
+          const index = configurations.findIndex((c: Configuration) => c.id === id);
+          if (index >= 0) {
+            configurations[index].setAttributes(config[id], $store);
+          } else {
+            const c = new Configuration({ id });
+            c.setAttributes(config[id], $store);
+            configurations.push(c);
+          }
+        });
+      }
     });
     $store.commit("addConfigurations", configurations);
   }

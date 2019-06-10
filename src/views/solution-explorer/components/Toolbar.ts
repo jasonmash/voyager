@@ -1,5 +1,6 @@
 import { Component, Vue } from "vue-property-decorator";
 import _ from "lodash";
+import axios from "axios";
 
 import DataManagement from "@/utils/data-management";
 import Importer from "@/utils/importer";
@@ -45,7 +46,7 @@ export default class Toolbar extends Vue {
    */
   public resetData() {
     const result = confirm("Are you sure you wish to remove all stored data? \n\n" +
-      "This will remove all configurations and attributes.");
+      "This will remove all configurations, attributes and reports.");
     if (result) {
       DataManagement.resetAllData(this.$store);
       this.$emit("refreshData");
@@ -134,5 +135,21 @@ export default class Toolbar extends Vue {
         });
       }
     }
+  }
+
+  public async api() {
+    DataManagement.resetAllData(this.$store);
+
+    const configurations = await axios.get("https://localhost:5001/api/configurations");
+    if (configurations.status !== 200) {
+      this.$message({
+        content: `Unable to load configurations from API`,
+        type: "error"
+      });
+      return;
+    }
+    Importer.importFile(configurations.data, this.$store);
+
+    this.$emit("refreshData");
   }
 }

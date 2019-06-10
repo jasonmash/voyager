@@ -16,6 +16,7 @@
       </draggable>
     </div>
     <div class="border-right solution-explorer-col s-col-2">
+      <b-btn size="sm" variant="outline-primary" class="float-right" v-b-modal.newreport>Create report</b-btn>
       <h5>Configurations</h5>
       <p class="mb-2">Showing {{configurations.length}} of {{totalCount}}</p>
       <b-form-input type="text" placeholder="Search..." size="sm" v-model="searchQuery" autofocus name="search"></b-form-input>
@@ -64,6 +65,14 @@
         <p class="text-center px-4">For more guidance, see the <router-link to="/help">help</router-link> page.</p>
       </div>
     </div>
+    
+    <b-modal id="newreport" title="Create Report" @ok="createReportOk" ref="newreport">
+      <b-form @submit.stop.prevent="createReportSubmit">
+        <b-form-group label="Report name:" label-for="name">
+          <b-form-input id="name" type="text" required v-model="newReportName" />
+        </b-form-group>
+      </b-form>
+    </b-modal>
   </b-container>
 </template>
 

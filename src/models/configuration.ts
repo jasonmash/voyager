@@ -66,6 +66,21 @@ export class Configuration {
   }
 
   /**
+   * Load a single attribute value into this configuration
+   * @param {string} key Key of attribute to add
+   * @param {any} value Value of attribute to add
+   * @param {*} store Reference to vuex store to update
+   * @memberof Configuration
+   */
+  public addAttribute(key: string, value: any, store: any) {
+    if (key.toLowerCase() === "id") { return; }
+    this.attributes[key] = parseFloat(value);
+
+    // Use processAttribute mutation to update associated Attribute info (e.g. maxValue seen so far)
+    store.commit("processAttributeValue", { key, value: this.attributes[key]});
+  }
+
+  /**
    * Load graph information for configuration
    * @param {*} graphData Information about configuration structure
    * @memberof Configuration

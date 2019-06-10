@@ -6,8 +6,11 @@
     <b-btn right size="sm" class="mr-3" variant="outline-secondary" @click="exportData">
       <i class="fa fa-fw fa-download mr-2"></i>Export
     </b-btn>
-    <b-btn right size="sm" variant="outline-secondary" @click="resetData">
+    <b-btn right size="sm" class="mr-3" variant="outline-secondary" @click="resetData">
       <i class="fa fa-fw fa-trash-alt mr-2"></i>Reset
+    </b-btn>
+    <b-btn right size="sm" variant="outline-secondary" @click="api">
+      <i class="fa fa-fw fa-cloud mr-2"></i>Load from API
     </b-btn>
     <b-form-file plain id="fileinput" ref="fileinput" v-model="files" multiple @change="uploadFile" accept=".json, .csv"/>
   </div>
