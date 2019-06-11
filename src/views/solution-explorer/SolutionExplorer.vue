@@ -50,16 +50,18 @@
         </b-tabs>
       </div>
 
-      <div v-else-if="configurations.length > 0">
-        <h4 class="text-center mt-5">No attributes selected</h4>
-        <p class="text-center px-4">To visualise your solution space, select an attribute by ticking a checkbox in the left-hand column, or click on a configuration from the list. <br><br>
+      <div class="text-center" v-else-if="configurations.length > 0">
+        <img class="mt-4" width="150px" src="@/assets/Logo.svg"/>
+        <h4 class="mt-3">No attributes selected</h4>
+        <p class="px-4">To visualise your solution space, select an attribute by ticking a checkbox in the left-hand column, or click on a configuration from the list. <br><br>
         For more guidance, see the <router-link to="/help">help</router-link> page.</p>
       </div>
 
-      <div v-else>
-        <h4 class="text-center mt-5">Getting started</h4>
-        <p class="text-center px-4">To get started, import data into Voyager using the "Import" button in the top-right corner,<br> or <a @click="loadDemoData" href="#">load some example data</a>.</p>
-        <p class="text-center px-4">For more guidance, see the <router-link to="/help">help</router-link> page.</p>
+      <div class="text-center" v-else>
+        <img class="mt-4" width="150px" src="@/assets/Logo.svg"/>
+        <h4 class="mt-3">Getting started</h4>
+        <p class="px-4">To get started, import data into Voyager using the "Import" button in the top-right corner, or <a @click="loadDemoData" href="#">load some example data</a>.</p>
+        <p class="px-4">For more guidance, see the <router-link to="/help">help</router-link> page.</p>
       </div>
     </div>
   </b-container>
