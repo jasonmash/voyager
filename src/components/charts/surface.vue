@@ -7,7 +7,7 @@
       <b-dropdown-divider />
       <b-dropdown-item @click="exportChart">Export (.png)</b-dropdown-item>
       <b-dropdown-divider />
-      <report-dropdown :section-index="this.sectionIndex"/>
+      <report-dropdown :section-index="this.sectionIndex" @addToReport="addToReport"/>
     </b-dropdown>
     <e-chart :options="chartData" :init-options="{renderer: 'canvas'}" autoresize class="chart" ref="chart" />
   </div>
@@ -17,6 +17,7 @@
 import { Prop, Component, Vue, Watch } from "vue-property-decorator";
 import { Attribute } from "@/models/attribute";
 import { ChartType, ChartData } from "@/models/chart-data";
+import { Section } from "@/models/report";
 
 import { Optimality } from "@/utils/optimality";
 
@@ -209,6 +210,18 @@ export default class SurfaceChart extends Vue {
    */
   public exportChart() {
     ExportCanvas(this.$refs.chart, "Chart.png");
+  }
+
+  /**
+   * Add current chart to report with given ID with provided section title
+   */
+  public addToReport(title: string, reportId: number) {
+    const section: Section = {
+      title,
+      type: ChartType.Surface,
+      data: this.data
+    };
+    this.$store.commit("addReportSection", { id: reportId, section});
   }
 }
 </script>

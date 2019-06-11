@@ -1,77 +1,53 @@
 <script lang="ts" src="./Report.ts" />
 
 <template>
-  <b-container class="py-3" v-if="report">
-    <b-dropdown class="float-right ml-2" right variant="outline-secondary">
-      <b-dropdown-item @click="deleteReport">Delete report</b-dropdown-item>
-    </b-dropdown>
-    <b-button @click="addSection" class="float-right" variant="primary" v-b-modal.addSectionModal>
-      <i class="fa fa-fw mr-2 fa-plus"></i>Add section
-    </b-button>
-    <h1>{{report.name}}</h1>
-    
-    <p v-if="report.sections.length == 0">Select the dropdown on any visualisation to add it to this report.</p>
+  <div v-if="report">
+    <div class="fixed-top w-100 px-3 pb-1 bg-light" id="toolbar">
+      <div class="float-right">
+        <b-btn right size="sm" class="mr-3" variant="outline-secondary" @click="deleteReport" v-b-tooltip.hover title="Delete this report">
+          <i class="fa fa-fw fa-trash mr-2"></i>Delete
+        </b-btn>
+      </div>
+      <h1 class="h4 pt-1">{{report.name}}</h1>
+    </div>
+    <b-container class="py-3" id="report-container">
+      <p v-if="report.sections.length == 0">Select the dropdown on any visualisation to add it to this report.</p>
 
-    <b-card-group columns>
-      <b-card v-for="(section, i) in report.sections" no-body :key="'section-' + i" :header="section.title" class="mb-3" style="height: 400px">
-        <scatter-chart :data="section.data" v-if="section.type == 0 && !!section.data" :section-index="i"/>
-        <scatter3d-chart :data="section.data" v-if="section.type == 1 && !!section.data" :section-index="i"/>
-        <chart-1d v-if="section.type == 2 && !!section.data" type="bar" :data="section.data" :section-index="i"/>
-        <chart-1d v-if="section.type == 3 && !!section.data" type="line" :data="section.data" :section-index="i"/>
-      </b-card>
-    </b-card-group>
-
-    <b-modal title="New section" id="addSectionModal" ref="addSectionModal" @ok="saveNewSection">
-      <b-form @submit.stop.prevent="saveNewSection">
-        <b-form-group label="Title">
-          <b-form-input v-model="newSection.title" type="text" placeholder="Enter a title" />
-        </b-form-group>
-
-        <b-form-group label="Type">
-          <b-select v-model="newSectionData.type">
-            <option :value="2">Bar chart</option>
-            <option :value="3">Line chart</option>
-            <option :value="0">2D scatter chart</option>
-            <option :value="1">3D scatter chart</option>
-          </b-select>
-        </b-form-group>
-
-        <b-form-group label="Axis: X">
-          <b-select v-model="newSectionData.x">
-            <option v-for="attr in attributes" :key="attr.key" :value="attr.key">{{attr.friendlyName}}</option>
-          </b-select>
-        </b-form-group>
-
-        <div v-if="newSectionData.type == 0 || newSectionData.type == 1">
-          <b-form-group label="Axis: Y">
-            <b-select v-model="newSectionData.y">
-              <option v-for="attr in attributes" :key="attr.key" :value="attr.key">{{attr.friendlyName}}</option>
-            </b-select>
-          </b-form-group>
-        </div>
-
-        <div v-if="newSectionData.type == 1">
-          <b-form-group label="Axis: Z">
-            <b-select v-model="newSectionData.z">
-              <option v-for="attr in attributes" :key="attr.key" :value="attr.key">{{attr.friendlyName}}</option>
-            </b-select>
-          </b-form-group>
-        </div>
-
-        <div v-if="(newSectionData.type == 0 && newSectionData.y) || (newSectionData.type == 1 && newSectionData.z)">
-          <b-form-group label="Bubble Size">
-            <b-select v-model="newSectionData.size">
-              <option v-for="attr in attributes" :key="attr.key" :value="attr.key">{{attr.friendlyName}}</option>
-            </b-select>
-          </b-form-group>
-
-          <b-form-group v-if="newSectionData.size" label="Bubble Colour">
-            <b-select v-model="newSectionData.colour">
-              <option v-for="attr in attributes" :key="attr.key" :value="attr.key">{{attr.friendlyName}}</option>
-            </b-select>
-          </b-form-group>
-        </div>
-      </b-form>
-    </b-modal>
-  </b-container>
+      <b-row>
+        <b-col sm="12" md="6" xl="4" v-for="(section, i) in report.sections" :key="'section-' + i">
+          <b-card no-body :header="section.title" class="mb-3" style="height: 400px">
+            <scatter-chart :data="section.data" v-if="section.type == 0 && !!section.data" :section-index="i"/>
+            <scatter3d-chart :data="section.data" v-if="section.type == 1 && !!section.data" :section-index="i"/>
+            <chart-1d v-if="section.type == 2 && !!section.data" type="bar" :data="section.data" :section-index="i"/>
+            <chart-1d v-if="section.type == 3 && !!section.data" type="line" :data="section.data" :section-index="i"/>
+            <map-chart v-if="section.type == 4 && !!section.data" :data="section.data" :section-index="i"/>
+            <radar-chart v-if="section.type == 5 && !!section.data" :data="section.data" :section-index="i"/>
+            <surface-chart v-if="section.type == 6 && !!section.data" :data="section.data" :section-index="i"/>
+            <structure-chart v-if="section.type == 7 && !!section.data" :data="section.data" :section-index="i"/>
+          </b-card>
+        </b-col>
+      </b-row>
+    </b-container>
+  </div>
 </template>
+
+<style scoped>
+  #toolbar {
+    margin-top: 56px;
+    z-index: 3;
+    padding-top: 12px;
+    box-shadow: 0 2px 4px -2px rgba(0,0,0,0.3);
+  }
+
+  #toolbar h1 {
+    font-weight: 600;
+  }
+
+  #toolbar .float-right {
+    padding-top: 2px;
+  }
+
+  #report-container {
+    margin-top: 120px;
+  }
+</style>

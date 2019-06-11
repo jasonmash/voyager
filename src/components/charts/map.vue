@@ -3,7 +3,7 @@
     <b-dropdown right class="float-right chart-dd" size="sm" variant="outline-secondary">
       <b-dropdown-item @click="exportChart">Export (.svg)</b-dropdown-item>
       <b-dropdown-divider />
-      <report-dropdown :section-index="this.sectionIndex"/>
+      <report-dropdown :section-index="this.sectionIndex" @addToReport="addToReport"/>
     </b-dropdown>
     <e-chart :options="chartData" :init-options="{renderer: 'svg'}" autoresize class="chart" ref="chart" />
   </div>
@@ -12,6 +12,7 @@
 <script lang="ts">
 import { Prop, Component, Vue, Watch } from "vue-property-decorator";
 import { Attribute } from "@/models/attribute";
+import { Section } from "@/models/report";
 import { ChartType, ChartData } from "@/models/chart-data";
 
 import { Optimality } from "@/utils/optimality";
@@ -229,6 +230,18 @@ export default class MapChart extends Vue {
    */
   public exportChart() {
     ExportSvg(this.$refs.chart, "Chart.svg");
+  }
+
+  /**
+   * Add current chart to report with given ID with provided section title
+   */
+  public addToReport(title: string, reportId: number) {
+    const section: Section = {
+      title,
+      type: ChartType.Map,
+      data: this.data
+    };
+    this.$store.commit("addReportSection", { id: reportId, section});
   }
 }
 </script>

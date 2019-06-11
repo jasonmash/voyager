@@ -7,7 +7,7 @@
       <b-dropdown-divider />
       <b-dropdown-item @click="exportChart">Export (.png)</b-dropdown-item>
       <b-dropdown-divider />
-      <report-dropdown :section-index="this.sectionIndex"/>
+      <report-dropdown :section-index="this.sectionIndex" @addToReport="addToReport"/>
     </b-dropdown>
     <e-chart :options="chartData" :init-options="{renderer: 'canvas', pixelRatio: 2}" autoresize class="chart" ref="chart" />
   </div>
@@ -16,6 +16,7 @@
 <script lang="ts">
 import { Prop, Component, Vue, Watch } from "vue-property-decorator";
 import { Attribute } from "@/models/attribute";
+import { Section } from "@/models/report";
 import { ChartType, ChartData } from "@/models/chart-data";
 
 import ReportDropdown from "../ReportDropdown.vue";
@@ -231,6 +232,18 @@ export default class Scatter3DChart extends Vue {
    */
   public exportChart() {
     ExportCanvas(this.$refs.chart, "Chart.png");
+  }
+
+  /**
+   * Add current chart to report with given ID with provided section title
+   */
+  public addToReport(title: string, reportId: number) {
+    const section: Section = {
+      title,
+      type: ChartType.Scatter3D,
+      data: this.data
+    };
+    this.$store.commit("addReportSection", { id: reportId, section});
   }
 }
 </script>

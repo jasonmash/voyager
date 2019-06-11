@@ -46,8 +46,8 @@ export interface Section {
 
   /**
    * Chart data
-   * @type {ChartData | null}
+   * @type any
    * @memberof Section
    */
-  data: ChartData | null;
+  data: any;
 }

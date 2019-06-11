@@ -3,7 +3,7 @@
     <b-dropdown right class="float-right chart-dd" size="sm" variant="outline-secondary">
       <b-dropdown-item @click="exportChart">Export (.png)</b-dropdown-item>
       <b-dropdown-divider />
-      <report-dropdown :section-index="this.sectionIndex"/>
+      <report-dropdown :section-index="this.sectionIndex" @addToReport="addToReport"/>
     </b-dropdown>
     <e-chart :options="chartData" ref="chart" :init-options="{renderer: 'canvas'}" autoresize class="chart" :style="height ? 'height: ' + height + 'px' : ''" />
   </div>
@@ -12,6 +12,8 @@
 <script lang="ts">
 import { Prop, Component, Vue } from "vue-property-decorator";
 import { ConfigurationStructure } from "@/models/configuration";
+import { ChartType, ChartData } from "@/models/chart-data";
+import { Section } from "@/models/report";
 
 import ReportDropdown from "../ReportDropdown.vue";
 
@@ -108,6 +110,18 @@ export default class StructureChart extends Vue {
    */
   public exportChart() {
     ExportCanvas(this.$refs.chart, "Structure.png");
+  }
+
+  /**
+   * Add current chart to report with given ID with provided section title
+   */
+  public addToReport(title: string, reportId: number) {
+    const section: Section = {
+      title,
+      type: ChartType.Structure,
+      data: this.data
+    };
+    this.$store.commit("addReportSection", { id: reportId, section});
   }
 }
 </script>
