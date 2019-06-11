@@ -6,6 +6,7 @@ import DataManagement from "@/utils/data-management";
 import Importer from "@/utils/importer";
 
 import { Message } from "@/components/messages/Message";
+import { SettingsState } from "@/stores/settings";
 
 /**
  * Toolbar component, provides user options to configure solution explorer
@@ -31,6 +32,12 @@ export default class Toolbar extends Vue {
   // Number of successful files
   private successful = 0;
 
+  private settings: SettingsState = new SettingsState();
+
+  public mounted() {
+    this.settings.configurationURL = this.$store.getters.settings.configurationURL;
+    this.settings.visualisationURL = this.$store.getters.settings.visualisationURL;
+  }
 
   /**
    * Function to export all system data to .json file
@@ -138,18 +145,26 @@ export default class Toolbar extends Vue {
   }
 
   public async api() {
-    DataManagement.resetAllData(this.$store);
+    if (!this.settings) { return; }
 
-    const configurations = await axios.get("https://localhost:5001/api/configurations");
-    if (configurations.status !== 200) {
-      this.$message({
-        content: `Unable to load configurations from API`,
-        type: "error"
-      });
-      return;
+    this.$store.commit("updateSettings", this.settings);
+
+    if (this.settings.configurationURL) {
+      DataManagement.resetAllData(this.$store);
+      this.$emit("refreshData");
+
+      try {
+        const configurations = await axios.get(this.settings.configurationURL);
+        if (configurations.status === 200) {
+          Importer.importFile(configurations.data, this.$store);
+          this.$emit("refreshData");
+        }
+      } catch (e) {
+        this.$message({
+          content: `Unable to load configurations from provided URL`,
+          type: "danger"
+        });
+      }
     }
-    Importer.importFile(configurations.data, this.$store);
-
-    this.$emit("refreshData");
   }
 }

@@ -36,8 +36,29 @@ export default class ConfigurationBox extends Vue {
 
   @Watch("configuration.id")
   public async loadApiData() {
-    const configurations = await axios.get("https://localhost:5001/api/configurations/" + this.configuration.id);
-    this.content = configurations.data.content;
+    if (this.$store.getters.settings.visualisationURL) {
+      const url = this.$store.getters.settings.visualisationURL.replace("{id}", this.configuration.id);
+      try {
+        const configurations = await axios.get(url);
+        if (Array.isArray(configurations.data.content)) {
+          this.content = configurations.data.content;
+        } else {
+          this.$message({
+            content: `Unable to process visualisation data sent from provided URL`,
+            type: "warning"
+          });
+          this.content = [];
+        }
+      } catch (err) {
+        this.$message({
+          content: `Unable to load visualisations from provided URL`,
+          type: "danger"
+        });
+        this.content = [];
+      }
+    } else {
+      this.content = [];
+    }
   }
 
   /**

@@ -9,8 +9,8 @@
       <div class="mb-2"><b>Optimisation Aim:</b>
         <div class="d-flex justify-content-center pt-1">
           <b-form-radio-group :checked="attribute.isHigherBetter" @input="setAttributeOptimality(attribute, $event)">
-            <b-form-radio :value="true">Higher is better</b-form-radio>
-            <b-form-radio :value="false" class="mr-0">Lower is better</b-form-radio>
+            <b-form-radio :value="false">Lower is better</b-form-radio>
+            <b-form-radio :value="true" class="mr-0">Higher is better</b-form-radio>
           </b-form-radio-group>   
         </div>           
       </div>

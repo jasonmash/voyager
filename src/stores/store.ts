@@ -6,6 +6,7 @@ import createPersistedState from "./persisted-state";
 import { attributes } from "./attributes";
 import { configurations } from "./configurations";
 import { reports } from "./reports";
+import { settings } from "./settings";
 
 Vue.use(Vuex);
 
@@ -16,7 +17,8 @@ export default new Vuex.Store({
   modules: {
     attributes,
     configurations,
-    reports
+    reports,
+    settings
   },
   // Use createPersistedState to store data in localStorage across browser sessions
   plugins: [createPersistedState()],
