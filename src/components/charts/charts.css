@@ -1,6 +1,6 @@
 .chart {
   width: auto;
-  height: 50vh;
+  height: calc(90vh - 160px);
   margin-top: 0;
 }
 

@@ -4,6 +4,7 @@ declare module "*.vue" {
 }
 
 declare module "papaparse";
+declare module "echarts";
 declare module "vue-echarts";
 declare module "deepmerge";
 declare module "vuedraggable";

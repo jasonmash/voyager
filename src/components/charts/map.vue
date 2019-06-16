@@ -156,7 +156,7 @@ export default class MapChart extends Vue {
     if (!data.configs) { return; }
 
     // Function for calculating data point colour scales
-    const colours = [[220, 53, 69], [255, 193, 7], [124, 224, 147], [30, 60, 230]];
+    const colours = [[0x31, 0x36, 0x95], [0xab, 0xd9, 0xe9], [0xfd, 0xae, 0x61], [0xa5, 0x00, 0x26]];
     const interpolateColor = (factor: number) => {
       if (factor < 0.33) {
         const result = colours[0].slice();
