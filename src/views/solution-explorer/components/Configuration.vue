@@ -7,7 +7,7 @@
     <b-tabs>
       <b-tab title="Attributes" key="0" class="p-0">
         <b-row>
-          <b-col sm="6">
+          <b-col sm="6" class="pt-2">
             <b-list-group flush>
               <b-list-group-item v-for="attribute in attributes" :key="`attr-${attribute.key}`">
                 <span>{{attribute.friendlyName}}:</span>

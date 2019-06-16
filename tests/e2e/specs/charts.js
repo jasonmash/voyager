@@ -16,7 +16,7 @@ describe('Charts', () => {
     cy.get(".list-group-item").contains("config-1").click();
     cy.contains("h5", "config-1");
     cy.contains(".list-group-item", "Cost").contains("10");
-    cy.contains(".card", "Properties").parent().children().get(".echarts.chart");
+    cy.contains(".nav-item", "Attributes").parent().children().get(".echarts.chart");
   });
 
   it('Can export radar chart', () => {
@@ -25,9 +25,9 @@ describe('Charts', () => {
     cy.contains("config-1").parent().click();
     cy.contains("h5", "config-1");
     cy.contains(".list-group-item", "Cost").contains("10");
-    cy.contains(".card", "Properties").parent().children().get(".echarts.chart");
-    cy.contains(".card", "Properties").parent().children().find("button.dropdown-toggle").click();
-    cy.contains(".card", "Properties").parent().children().contains("Export (.svg)");
+    cy.get(".echarts.chart");
+    cy.get(".tabs").children().find("button.dropdown-toggle").click();
+    cy.contains("Export (.svg)");
   });
 
   it('Shows configuration structure chart', () => {
@@ -37,8 +37,8 @@ describe('Charts', () => {
     cy.contains("config-1").parent().click();
     cy.contains("h5", "config-1");
     cy.contains(".list-group-item", "Cost").contains("10");
-    cy.contains(".card", "Properties").parent().children().get(".echarts.chart");
-    cy.contains(".card", "Structure").parent().children().get(".echarts.chart");
+    cy.contains(".nav-item", "Structure").click();
+    cy.get(".tab-pane.active").children().get(".echarts.chart");
   });
 
   it('Can export structure chart', () => {
@@ -46,8 +46,10 @@ describe('Charts', () => {
     cy.loadStructureData();
     cy.visit('/');
     cy.contains("config-1").parent().click();
-    cy.contains(".card", "Structure").parent().children().find("button.dropdown-toggle").click();
-    cy.contains(".card", "Structure").parent().children().contains("Export (.png)");
+    cy.contains(".nav-item", "Structure").click();
+    cy.wait(500);
+    cy.get(".tab-pane.active").children().find("button.dropdown-toggle").click();
+    cy.contains("Export (.png)");
   });
     
   it('1D: bar and line charts', () => {

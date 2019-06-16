@@ -32,7 +32,7 @@ describe('Filters', () => {
     cy.get(".config-list").children().should('have.length', 2);
     cy.get(".config-list").children().first().contains("config-2");
     cy.get(".config-list").children().last().contains("config-1");
-    cy.get("p.mb-2").contains("Showing 2 of 2");
+    cy.get("small").contains("Showing 2 of 2");
 
     // Change selected range
     cy.get("input.multirange.ghost").as('range')
@@ -41,7 +41,7 @@ describe('Filters', () => {
     cy.get(".config-list").children().first().children().should('have.length', 2);
     cy.get(".config-list").children().last().children().should('have.length', 1);
     cy.get(".config-list").children().first().contains("config-1");
-    cy.get("p.mb-2").contains("Showing 1 of 2");
+    cy.get("small").contains("Showing 1 of 2");
 
     // Change selected range
     cy.get("input.multirange.original").as('range')
@@ -49,6 +49,6 @@ describe('Filters', () => {
     cy.get(".config-list").children().should('have.length', 2);
     cy.get(".config-list").children().first().children().should('have.length', 1);
     cy.get(".config-list").children().last().children().should('have.length', 1);
-    cy.get("p.mb-2").contains("Showing 0 of 2");
+    cy.get("small").contains("Showing 0 of 2");
   });
 });

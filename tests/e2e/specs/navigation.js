@@ -14,6 +14,6 @@ describe('Navigation', () => {
 
   it('Visits the about page', () => {
     cy.visit('/about');
-    cy.contains('h3', 'About');
+    cy.contains('h2', 'About');
   });
 });
