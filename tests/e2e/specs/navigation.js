@@ -12,8 +12,8 @@ describe('Navigation', () => {
     cy.contains('h4', 'Getting started');
   });
 
-  it('Visits the help page', () => {
-    cy.visit('/help');
-    cy.contains('h3', 'Help');
+  it('Visits the about page', () => {
+    cy.visit('/about');
+    cy.contains('h3', 'About');
   });
 });
