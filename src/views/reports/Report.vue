@@ -14,8 +14,8 @@
       <p v-if="report.sections.length == 0">Select the dropdown on any visualisation to add it to this report.</p>
 
       <b-row>
-        <b-col sm="12" md="6" xl="4" v-for="(section, i) in report.sections" :key="'section-' + i">
-          <b-card no-body :header="section.title" class="mb-3" style="height: 400px">
+        <b-col sm="12" md="6" :xl="(report.sections.length % 3 == 0 ? '4' : '6')" v-for="(section, i) in report.sections" :key="'section-' + i">
+          <b-card no-body :header="section.title" class="mb-3">
             <scatter-chart :data="section.data" v-if="section.type == 0 && !!section.data" :section-index="i"/>
             <scatter3d-chart :data="section.data" v-if="section.type == 1 && !!section.data" :section-index="i"/>
             <chart-1d v-if="section.type == 2 && !!section.data" type="bar" :data="section.data" :section-index="i"/>

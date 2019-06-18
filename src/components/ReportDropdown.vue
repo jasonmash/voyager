@@ -78,8 +78,11 @@ export default class ReportDropdown extends Vue {
     if (this.onReportPage) { return; }
     if (this.selectedReport > -1 && this.title !== "") {
       this.$emit("addToReport", this.title, this.selectedReport);
-      const modal: any = this.$refs["add-modal"];
-      modal.hide();
+      setTimeout(() => {
+        const modal: any = this.$refs["add-modal"];
+        modal.hide();
+        this.$router.push(`/reports/${this.selectedReport}`);
+      }, 100);
     }
   }
 }
