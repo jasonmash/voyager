@@ -156,27 +156,17 @@ export default class MapChart extends Vue {
     if (!data.configs) { return; }
 
     // Function for calculating data point colour scales
-    const colours = [[0x31, 0x36, 0x95], [0xab, 0xd9, 0xe9], [0xfd, 0xae, 0x61], [0xa5, 0x00, 0x26]];
+    const colours = [[0x31, 0x36, 0x95], [0x45, 0x75, 0xb4], [0x74, 0xad, 0xd1], [0xab, 0xd9, 0xe9],
+          [0xe0, 0xf3, 0xf8], [0xff, 0xff, 0xbf], [0xfe, 0xe0, 0x90], [0xfd, 0xae, 0x61], [0xf4, 0x6d, 0x43],
+          [0xd7, 0x30, 0x27], [0xa5, 0x00, 0x26]];
     const interpolateColor = (factor: number) => {
-      if (factor < 0.33) {
-        const result = colours[0].slice();
-        for (let i = 0; i < 3; i++) {
-          result[i] = Math.round(result[i] + (factor * 3) * (colours[1][i] - colours[0][i]));
-        }
-        return result;
-      } else if (factor < 0.66) {
-        const result = colours[1].slice();
-        for (let i = 0; i < 3; i++) {
-          result[i] = Math.round(result[i] + (factor * 1.5) * (colours[2][i] - colours[1][i]));
-        }
-        return result;
-      } else {
-        const result = colours[2].slice();
-        for (let i = 0; i < 3; i++) {
-          result[i] = Math.round(result[i] + ((factor - 0.66) * 3) * (colours[3][i] - colours[2][i]));
-        }
-        return result;
+      const colour1 = colours[Math.floor(factor * 10)];
+      const colour2 = colours[Math.ceil(factor * 10)];
+      const result = colour1.slice();
+      for (let i = 0; i < 10; i++) {
+        result[i] = Math.round(result[i] + (factor) * (colour2[i] - colour1[i]));
       }
+      return result;
     };
 
     // Calculate data points
