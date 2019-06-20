@@ -11,7 +11,12 @@
       <h1 class="h4 pt-1">{{report.name}}</h1>
     </div>
     <b-container class="py-3" id="report-container">
-      <p v-if="report.sections.length == 0">Select the dropdown on any visualisation to add it to this report.</p>
+      <b-row v-if="report.sections.length == 0">
+        <b-col md="8" offset-md="2"> 
+          <h2 class="text-secondary">No content found</h2>
+          Add visualisations to this report using the dropdown in the right-hand corner of any visualisation in the Solution Explorer.
+        </b-col>
+      </b-row>
 
       <b-row>
         <b-col sm="12" md="6" :xl="(report.sections.length % 3 == 0 ? '4' : '6')" v-for="(section, i) in report.sections" :key="'section-' + i">
