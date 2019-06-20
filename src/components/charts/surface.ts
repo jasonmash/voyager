@@ -1,14 +1,12 @@
-import echarts from "echarts";
 import { Prop, Component, Vue, Watch } from "vue-property-decorator";
 
-import { Attribute } from "@/models/attribute";
 import { ChartType, ChartData } from "@/models/chart-data";
-import { ConfigurationStructure } from "@/models/configuration";
 import { Section } from "@/models/report";
 import { Optimality } from "@/utils/optimality";
 
 import ReportDropdown from "../ReportDropdown.vue";
 import { ExportCanvas } from "./shared";
+import { GetTooltipContent } from "./tooltip";
 
 import "./charts.css";
 
@@ -73,29 +71,21 @@ export default class SurfaceChart extends Vue {
     tooltip: {
       show: true,
       backgroundColor: "rgba(255,255,255,0.8)",
-      extraCssText: "max-width: 180px;overflow-y: hidden;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)",
       borderColor: "#ddd",
       borderWidth: 1,
       textStyle: {
         color: "#000"
       },
       padding: 8,
-      position: ["70%", "10%"],
+      extraCssText: "width: 300px;overflow-y: hidden;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)",
+      position: (pos: any, params: any, dom: any, rect: any, size: any) => {
+        const obj: any = {top: 30};
+        obj[["left", "right"][+(pos[0] < size.viewSize[0] / 2)]] = 5;
+        return obj;
+      },
       triggerOn: "click",
       formatter: (data: any) => {
-        let attrHtml = "";
-        this.$store.getters.attributes.forEach((a: Attribute) => {
-          attrHtml = `${attrHtml}<b>${a.friendlyName}</b>:<br>${data.name.attributes[a.key]}<br>`;
-        });
-        if (data.name.structure && data.name.structure.components.length > 0) {
-          setTimeout(() => {
-            const structureChart = echarts.init(document.getElementById("tooltip-canvas"));
-            structureChart.setOption(this.getStructureChartData(data.name.structure));
-          });
-          return `<h5 class="mb-1">${data.name.id}</h5>${attrHtml}` +
-           `<div id="tooltip-canvas" style="width: 150px; height:150px"></div>`;
-        }
-        return `<h5 class="mb-1">${data.name.id}</h5>${attrHtml}`;
+        return GetTooltipContent(this.$store, data.name);
       }
     },
     series: [{
@@ -201,8 +191,9 @@ export default class SurfaceChart extends Vue {
       }
     };
 
-    const getPrecision = (opts: any) => Math.max(
-      getPrecisionSafe(opts.min), getPrecisionSafe(opts.max), getPrecisionSafe(opts.step)) + 1;
+    const getPrecision = (opts: any) => {
+      return Math.max(getPrecisionSafe(opts.min), getPrecisionSafe(opts.max), getPrecisionSafe(opts.step)) + 1;
+    };
 
     const roundToPrecision = (x: any, precision: number) => {
       if (precision == null) { precision = 10; }
@@ -262,61 +253,5 @@ export default class SurfaceChart extends Vue {
       data: this.data
     };
     this.$store.commit("addReportSection", { id: reportId, section});
-  }
-
-  /**
-   * Getter for chartData object in echarts format
-   */
-  public getStructureChartData(structure: ConfigurationStructure) {
-
-    const data = structure.components.map((c) => {
-      return { name: c, x: 300, y: 300 };
-    });
-
-    const links = structure.connections.map((c) => {
-      return { target: c.from, source: c.to, label: { formatter: c.label, show: false, fontSize: 10 } };
-    });
-
-    return {
-      tooltip: {},
-      series: [
-        {
-          type: "graph",
-          layout: "force",
-          symbolSize: 20,
-          symbol: "circle",
-          animation: false,
-          focusNodeAdjacency: true,
-          draggable: true,
-          roam: true,
-          label: {
-            normal: {
-              show: true,
-              textStyle: {
-                fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',sans-serif"
-              }
-            }
-          },
-          force: {
-            initLayout: "force",
-            edgeLength: 0.25,
-            gravity: 0.9,
-            repulsion: 0.3,
-            layoutAnimation: false
-          },
-          edgeSymbol: ["arrow"],
-          edgeSymbolSize: 9,
-          data,
-          links,
-          lineStyle: {
-            normal: {
-              opacity: 0.9,
-              width: 2,
-              curveness: 0.2
-            }
-          }
-        }
-      ]
-    };
   }
 }

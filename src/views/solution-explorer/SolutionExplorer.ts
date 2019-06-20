@@ -129,7 +129,7 @@ export default class SolutionExplorerComponent extends Vue {
         data.values = this.configurations.map((c: Configuration) => [
           c.attributes[attributes[0].key],
           c.attributes[attributes[1].key],
-          c.id
+          c
         ]);
         break;
       }
@@ -139,7 +139,7 @@ export default class SolutionExplorerComponent extends Vue {
           c.attributes[attributes[0].key],
           c.attributes[attributes[1].key],
           c.attributes[attributes[2].key],
-          c.id
+          c
         ]);
         data.configs = this.configurations;
         break;
@@ -151,7 +151,7 @@ export default class SolutionExplorerComponent extends Vue {
           c.attributes[attributes[1].key],
           c.attributes[attributes[2].key],
           c.attributes[attributes[3].key],
-          c.id
+          c
         ]);
         break;
       }
@@ -163,7 +163,7 @@ export default class SolutionExplorerComponent extends Vue {
           c.attributes[attributes[2].key],
           c.attributes[attributes[3].key],
           c.attributes[attributes[4].key],
-          c.id
+          c
         ]);
         break;
       }

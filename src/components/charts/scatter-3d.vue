@@ -22,6 +22,7 @@ import { ChartType, ChartData } from "@/models/chart-data";
 import ReportDropdown from "../ReportDropdown.vue";
 
 import { ExportCanvas } from "./shared";
+import { GetTooltipContent } from "./tooltip";
 
 import "./charts.css";
 
@@ -73,18 +74,34 @@ export default class Scatter3DChart extends Vue {
         fontSize: 12
       }
     },
-    tooltip: {},
+    tooltip: {
+      show: true,
+      backgroundColor: "rgba(255,255,255,0.8)",
+      borderColor: "#ddd",
+      borderWidth: 1,
+      textStyle: {
+        color: "#000"
+      },
+      padding: 8,
+      extraCssText: "width: 300px;overflow-y: hidden;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)",
+      position: (pos: any, params: any, dom: any, rect: any, size: any) => {
+        const obj: any = {top: 30};
+        obj[["left", "right"][+(pos[0] < size.viewSize[0] / 2)]] = 5;
+        return obj;
+      },
+      triggerOn: "click",
+      formatter: (params: any) => {
+        return GetTooltipContent(this.$store, params.data[params.data.length - 1]);
+      }
+    },
     series: [{
       data: [],
       symbol: "circle",
       maxSize: 30,
-      encode: {
-        tooltip: []
-      },
-      tooltip: {
-        formatter: (params: any) => params.value[params.value.length - 1]
-      },
-      type: "scatter3D"
+      type: "scatter3D",
+      emphasis: {
+        label: { show: false }
+      }
     }],
     dataset: {}
   };
@@ -137,21 +154,18 @@ export default class Scatter3DChart extends Vue {
       this.chartData.xAxis3D.min = data.attributes[0].scaleMin;
       this.chartData.xAxis3D.max = data.attributes[0].scaleMax;
       this.chartData.xAxis3D.name = data.attributes[0].friendlyName;
-      this.chartData.series[0].encode.x = data.attributes[0].friendlyName;
     }
 
     if (this.chartData.yAxis3D.name !== data.attributes[1].friendlyName) {
       this.chartData.yAxis3D.min = data.attributes[1].scaleMin;
       this.chartData.yAxis3D.max = data.attributes[1].scaleMax;
       this.chartData.yAxis3D.name = data.attributes[1].friendlyName;
-      this.chartData.series[0].encode.y = data.attributes[1].friendlyName;
     }
 
     if (this.chartData.zAxis3D.name !== data.attributes[2].friendlyName) {
       this.chartData.zAxis3D.min = data.attributes[2].scaleMin;
       this.chartData.zAxis3D.max = data.attributes[2].scaleMax;
       this.chartData.zAxis3D.name = data.attributes[2].friendlyName;
-      this.chartData.series[0].encode.z = data.attributes[2].friendlyName;
     }
 
     const visualMaps = [];

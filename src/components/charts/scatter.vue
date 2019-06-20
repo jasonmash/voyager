@@ -18,6 +18,7 @@ import { ChartType, ChartData } from "@/models/chart-data";
 import ReportDropdown from "../ReportDropdown.vue";
 
 import { ExportSvg } from "./shared";
+import { GetTooltipContent } from "./tooltip";
 
 import "./charts.css";
 
@@ -58,14 +59,33 @@ export default class ScatterChart extends Vue {
       nameLocation: "middle",
       nameGap: 40
     },
-    tooltip: {},
+    tooltip: {
+      triggerOn: "click"
+    },
     series: [{
       data: [],
       type: "scatter",
       symbolSize: 4,
       showAllSymbol: true,
       tooltip: {
-        formatter: (params: any) => params.value[params.value.length - 1]
+        show: true,
+        backgroundColor: "rgba(255,255,255,0.8)",
+        extraCssText: "width: 300px;overflow-y: hidden;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)",
+        position: (pos: any, params: any, dom: any, rect: any, size: any) => {
+          const obj: any = {top: 30};
+          obj[["left", "right"][+(pos[0] < size.viewSize[0] / 2)]] = 5;
+          return obj;
+        },
+        borderColor: "#ddd",
+        borderWidth: 1,
+        textStyle: {
+          color: "#000"
+        },
+        padding: 8,
+        triggerOn: "click",
+        formatter: (params: any) => {
+          return GetTooltipContent(this.$store, params.data[params.data.length - 1]);
+        }
       }
     }]
   };

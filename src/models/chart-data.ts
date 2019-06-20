@@ -11,7 +11,7 @@ export enum ChartType { Scatter2D, Scatter3D, Bar, Line, Map, Radar, Surface, St
  */
 export interface ChartData {
   attributes: Attribute[];
-  values: number[];
+  values: any[];
   configs?: Configuration[];
   categories?: any[];
 }

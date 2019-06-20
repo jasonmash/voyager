@@ -20,6 +20,7 @@ import { Optimality } from "@/utils/optimality";
 import ReportDropdown from "../ReportDropdown.vue";
 
 import { ExportSvg } from "./shared";
+import { GetTooltipContent } from "./tooltip";
 
 import "./charts.css";
 
@@ -68,7 +69,24 @@ export default class MapChart extends Vue {
       nameGap: 40
     },
     tooltip: {
-      show: true
+      show: true,
+      backgroundColor: "rgba(255,255,255,0.8)",
+      extraCssText: "width: 300px;overflow-y: hidden;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)",
+      position: (pos: any, params: any, dom: any, rect: any, size: any) => {
+        const obj: any = {top: 30};
+        obj[["left", "right"][+(pos[0] < size.viewSize[0] / 2)]] = 5;
+        return obj;
+      },
+      borderColor: "#ddd",
+      borderWidth: 1,
+      textStyle: {
+        color: "#000"
+      },
+      padding: 8,
+      triggerOn: "click",
+      formatter: (data: any) => {
+        return GetTooltipContent(this.$store, data.value[3]);
+      }
     },
     series: [{
       type: "custom",
@@ -98,6 +116,9 @@ export default class MapChart extends Vue {
     chart.dispose();
   }
 
+  /**
+   * Render each optimal configuration as a rectangle to show in the visualisation
+   */
   public renderItem(params: any, api: any) {
     const xStep = (this.data.attributes[0].scaleMax - this.data.attributes[0].scaleMin) / 20;
     const yStep = (this.data.attributes[1].scaleMax - this.data.attributes[1].scaleMin) / 20;
@@ -200,7 +221,7 @@ export default class MapChart extends Vue {
                 color: `rgb(${colour[0]}, ${colour[1]}, ${colour[2]})`
               }
             },
-            value: [x, y, z.attributes[data.attributes[2].key], z.id]
+            value: [x, y, z.attributes[data.attributes[2].key], z]
           });
         }
       }
