@@ -25,6 +25,9 @@
         </b-nav-item-dropdown>
         <b-nav-item to="/about">About</b-nav-item>
       </b-navbar-nav>
+      <b-navbar-nav class="ml-auto">
+        <b-nav-item href="https://www.github.com/jasonmash/voyager" title="GitHub"><i class="fab fa-github"></i></b-nav-item>
+      </b-navbar-nav>
     </b-collapse>
 
     

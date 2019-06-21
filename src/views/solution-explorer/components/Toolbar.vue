@@ -18,7 +18,7 @@
     <h1 class="h4 pt-1">Solution Explorer</h1>
 
     <b-modal id="manage-extensions" title="Manage Extensions" @ok="api" ok-only>
-      <p>Voyager can connect to external HTTP API endpoints to load configuration lists or additional visualisations. <a href="#">Learn more</a></p>
+      <p>Voyager can connect to external HTTP API endpoints to load configuration lists or additional visualisations. <a target="_blank" href="https://github.com/jasonmash/voyager#extensions">Learn more</a></p>
       <h6>Configurations</h6>
       <label>Provide a URL that returns a list of configurations</label>
       <b-input v-model="settings.configurationURL" size="sm" placeholder="Enter URL..." class="mb-4"/>
