@@ -13,7 +13,7 @@ describe('Navigation', () => {
   });
 
   it('Visits the about page', () => {
-    cy.visit('/about');
+    cy.visit('/#/about');
     cy.contains('h2', 'About');
   });
 });
