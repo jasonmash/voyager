@@ -45,18 +45,15 @@
 
   .config-list .list-group-item:hover {
     background: rgba(0,0,0,0.01);
-    border-top: 1px solid transparent;
   }
 
   .config-list .list-group-item:active {
     background: rgba(0,0,0,0.03);
-    border-top: 1px solid transparent;
   }
 
   .config-list .list-group-item.selected {
     border-left: 3px solid #007bff;
     background: rgba(0,0,0,0.03);
-    border-top: 1px solid transparent;
   }
 
   .config-list .list-section-header,

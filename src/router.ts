@@ -5,7 +5,7 @@ Vue.use(Router);
 
 // Initialise route list (determines what each URL does)
 export default new Router({
-  mode: "history",
+  mode: "hash",
   base: process.env.BASE_URL,
   routes: [
     { path: "/", component: () => import("./views/solution-explorer/SolutionExplorer.vue") },
