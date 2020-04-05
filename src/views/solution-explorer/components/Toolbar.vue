@@ -1,3 +1,5 @@
+<script lang="ts" src="./Toolbar.ts" />
+
 <template>
   <div class="fixed-top w-100 px-3 pb-1 bg-light" id="se-toolbar">
     <div class="float-right">
@@ -32,8 +34,6 @@
     </b-modal>
   </div>
 </template>
-
-<script lang="ts" src="./Toolbar.ts" />
 
 <style scoped>
   #se-toolbar {
