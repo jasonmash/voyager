@@ -1,0 +1,539 @@
+{
+    "attributes": {
+        "data": [
+            {
+                "key": "reliability",
+                "maxValue": 13,
+                "minValue": 1,
+                "filterMaxValue": 15,
+                "filterMinValue": 0,
+                "filterPriority": 0,
+                "isFiltered": false,
+                "scaleMax": 15,
+                "scaleMin": 0,
+                "isHigherBetter": true,
+                "friendlyName": "Reliability",
+                "step": 1
+            },
+            {
+                "key": "battery life",
+                "maxValue": 24,
+                "minValue": 4,
+                "filterMaxValue": 25,
+                "filterMinValue": 0,
+                "filterPriority": 0,
+                "isFiltered": false,
+                "scaleMax": 25,
+                "scaleMin": 0,
+                "isHigherBetter": true,
+                "friendlyName": "Battery Life",
+                "step": 1
+            },
+            {
+                "key": "cost",
+                "maxValue": 22,
+                "minValue": 3,
+                "filterMaxValue": 25,
+                "filterMinValue": 0,
+                "filterPriority": 0,
+                "isFiltered": false,
+                "scaleMax": 25,
+                "scaleMin": 0,
+                "isHigherBetter": false,
+                "friendlyName": "Cost",
+                "step": 1
+            },
+            {
+                "key": "range",
+                "maxValue": 12,
+                "minValue": 0,
+                "filterMaxValue": 12,
+                "filterMinValue": 0,
+                "filterPriority": 0,
+                "isFiltered": false,
+                "scaleMax": 15,
+                "scaleMin": 0,
+                "isHigherBetter": true,
+                "friendlyName": "Range",
+                "step": 1
+            }
+        ]
+    },
+    "configurations": {
+        "data": [
+            {
+                "id": "Config-1",
+                "attributes": {
+                    "reliability": 1,
+                    "battery life": 20,
+                    "cost": 11,
+                    "range": 7
+                },
+                "structure": {
+                    "connections": [
+                        { "label": "", "from": "Battery (1400mAh)", "to": "Sensor" },
+                        { "label": "Mesh Network [0..n]", "from": "Sensor", "to": "Hub" },
+                        { "label": "", "from": "Hub", "to": "Mobile Network" }, { "label": "", "from": "Mobile Network", "to": "Cloud Server" }
+                    ],
+                    "components": ["Cloud Server", "Sensor", "Battery (1400mAh)", "Hub", "Mobile Network"]
+                }
+            },
+            {
+                "id": "Config-2",
+                "attributes": {
+                    "reliability": 3,
+                    "battery life": 22,
+                    "cost": 8,
+                    "range": 4
+                },
+                "structure": {
+                    "connections": [
+                        { "label": "", "from": "Battery (1400mAh)", "to": "Sensor" },
+                        { "label": "Mesh Network [0..n]", "from": "Sensor", "to": "Hub" },
+                        { "label": "", "from": "Hub", "to": "Wired Connection" }, { "label": "", "from": "Wired Connection", "to": "Cloud Server" }
+                    ],
+                    "components": ["Cloud Server", "Sensor", "Battery (1400mAh)", "Hub", "Wired Connection"]
+                }
+            },
+            {
+                "id": "Config-3",
+                "attributes": {
+                    "reliability": 6,
+                    "battery life": 19,
+                    "cost": 12,
+                    "range": 7
+                },
+                "structure": {
+                    "connections": [
+                        { "label": "", "from": "Battery (1400mAh)", "to": "Sensor" },
+                        { "label": "Mesh Network [0..n]", "from": "Sensor", "to": "Hub" },
+                        { "label": "", "from": "Hub", "to": "Mobile Network" }, { "label": "", "from": "Mobile Network", "to": "Cloud Server" },
+                        { "label": "", "from": "Hub", "to": "Wired Connection" }, { "label": "", "from": "Wired Connection", "to": "Cloud Server" }
+                    ],
+                    "components": ["Cloud Server", "Sensor", "Battery (1400mAh)", "Hub", "Mobile Network", "Wired Connection"]
+                }
+            },
+            {
+                "id": "Config-4",
+                "attributes": {
+                    "reliability": 1,
+                    "battery life": 10,
+                    "cost": 6,
+                    "range": 7
+                },
+                "structure": {
+                    "connections": [
+                        { "label": "", "from": "Battery (1150mAh)", "to": "Sensor" },
+                        { "label": "Mesh Network [0..n]", "from": "Sensor", "to": "Hub" },
+                        { "label": "", "from": "Hub", "to": "Mobile Network" }, { "label": "", "from": "Mobile Network", "to": "Cloud Server" }
+                    ],
+                    "components": ["Cloud Server", "Sensor", "Battery (1150mAh)", "Hub", "Mobile Network"]
+                }
+            },
+            {
+                "id": "Config-5",
+                "attributes": {
+                    "reliability": 3,
+                    "battery life": 12,
+                    "cost": 3,
+                    "range": 4
+                },
+                "structure": {
+                    "connections": [
+                        { "label": "", "from": "Battery (1150mAh)", "to": "Sensor" },
+                        { "label": "Mesh Network [0..n]", "from": "Sensor", "to": "Hub" },
+                        { "label": "", "from": "Hub", "to": "Wired Connection" }, { "label": "", "from": "Wired Connection", "to": "Cloud Server" }
+                    ],
+                    "components": ["Cloud Server", "Sensor", "Battery (1150mAh)", "Hub", "Wired Connection"]
+                }
+            },
+            {
+                "id": "Config-6",
+                "attributes": {
+                    "reliability": 6,
+                    "battery life": 9,
+                    "cost": 7,
+                    "range": 7
+                },
+                "structure": {
+                    "connections": [
+                        { "label": "", "from": "Battery (1150mAh)", "to": "Sensor" },
+                        { "label": "Mesh Network [0..n]", "from": "Sensor", "to": "Hub" },
+                        { "label": "", "from": "Hub", "to": "Mobile Network" }, { "label": "", "from": "Mobile Network", "to": "Cloud Server" },
+                        { "label": "", "from": "Hub", "to": "Wired Connection" }, { "label": "", "from": "Wired Connection", "to": "Cloud Server" }
+                    ],
+                    "components": ["Cloud Server", "Sensor", "Battery (1150mAh)", "Hub", "Mobile Network", "Wired Connection"]
+                }
+            },
+            {
+                "id": "Config-7",
+                "attributes": {
+                    "reliability": 5,
+                    "battery life": 22,
+                    "cost": 16,
+                    "range": 3
+                },
+                "structure": {
+                    "connections": [
+                        { "label": "", "from": "Battery (1400mAh)", "to": "Sensor" },
+                        { "label": "", "from": "Sensor", "to": "Mobile Network" }, { "label": "", "from": "Mobile Network", "to": "Cloud Server" }
+                    ],
+                    "components": ["Cloud Server", "Sensor", "Battery (1400mAh)", "Mobile Network"]
+                }
+            },
+            {
+                "id": "Config-8",
+                "attributes": {
+                    "reliability": 7,
+                    "battery life": 24,
+                    "cost": 13,
+                    "range": 0
+                },
+                "structure": {
+                    "connections": [
+                        { "label": "", "from": "Battery (1400mAh)", "to": "Sensor" },
+                        { "label": "", "from": "Sensor", "to": "Wired Connection" }, { "label": "", "from": "Wired Connection", "to": "Cloud Server" }
+                    ],
+                    "components": ["Cloud Server", "Sensor", "Battery (1400mAh)", "Wired Connection"]
+                }
+            },
+            {
+                "id": "Config-9",
+                "attributes": {
+                    "reliability": 10,
+                    "battery life": 21,
+                    "cost": 17,
+                    "range": 3
+                },
+                "structure": {
+                    "connections": [
+                        { "label": "", "from": "Battery (1400mAh)", "to": "Sensor" },
+                        { "label": "", "from": "Sensor", "to": "Mobile Network" }, { "label": "", "from": "Mobile Network", "to": "Cloud Server" },
+                        { "label": "", "from": "Sensor", "to": "Wired Connection" }, { "label": "", "from": "Wired Connection", "to": "Cloud Server" }
+                    ],
+                    "components": ["Cloud Server", "Sensor", "Battery (1400mAh)", "Mobile Network", "Wired Connection"]
+                }
+            },
+            {
+                "id": "Config-10",
+                "attributes": {
+                    "reliability": 5,
+                    "battery life": 12,
+                    "cost": 11,
+                    "range": 3
+                },
+                "structure": {
+                    "connections": [
+                        { "label": "", "from": "Battery (1150mAh)", "to": "Sensor" },
+                        { "label": "", "from": "Sensor", "to": "Mobile Network" }, { "label": "", "from": "Mobile Network", "to": "Cloud Server" }
+                    ],
+                    "components": ["Cloud Server", "Sensor", "Battery (1150mAh)", "Mobile Network"]
+                }
+            },
+            {
+                "id": "Config-11",
+                "attributes": {
+                    "reliability": 7,
+                    "battery life": 14,
+                    "cost": 8,
+                    "range": 0
+                },
+                "structure": {
+                    "connections": [
+                        { "label": "", "from": "Battery (1150mAh)", "to": "Sensor" },
+                        { "label": "", "from": "Sensor", "to": "Wired Connection" }, { "label": "", "from": "Wired Connection", "to": "Cloud Server" }
+                    ],
+                    "components": ["Cloud Server", "Sensor", "Battery (1150mAh)", "Wired Connection"]
+                }
+            },
+            {
+                "id": "Config-12",
+                "attributes": {
+                    "reliability": 10,
+                    "battery life": 11,
+                    "cost": 12,
+                    "range": 3
+                },
+                "structure": {
+                    "connections": [
+                        { "label": "", "from": "Battery (1150mAh)", "to": "Sensor" },
+                        { "label": "", "from": "Sensor", "to": "Mobile Network" }, { "label": "", "from": "Mobile Network", "to": "Cloud Server" },
+                        { "label": "", "from": "Sensor", "to": "Wired Connection" }, { "label": "", "from": "Wired Connection", "to": "Cloud Server" }
+                    ],
+                    "components": ["Cloud Server", "Sensor", "Battery (1150mAh)", "Mobile Network", "Wired Connection"]
+                }
+            },
+            {
+                "id": "Config-13",
+                "attributes": {
+                    "reliability": 1,
+                    "battery life": 18,
+                    "cost": 12,
+                    "range": 9
+                },
+                "structure": {
+                    "connections": [
+                        { "label": "", "from": "Battery (1400mAh)", "to": "Sensor" },
+                        { "label": "Mesh Network [0..n]", "from": "Sensor", "to": "Hub" },
+                        { "label": "", "from": "Hub", "to": "Satellite" }, { "label": "", "from": "Satellite", "to": "Cloud Server" }
+                    ],
+                    "components": ["Cloud Server", "Sensor", "Battery (1400mAh)", "Hub", "Satellite"]
+                }
+            },
+            {
+                "id": "Config-14",
+                "attributes": {
+                    "reliability": 4,
+                    "battery life": 15,
+                    "cost": 16,
+                    "range": 12
+                },
+                "structure": {
+                    "connections": [
+                        { "label": "", "from": "Battery (1400mAh)", "to": "Sensor" },
+                        { "label": "Mesh Network [0..n]", "from": "Sensor", "to": "Hub" },
+                        { "label": "", "from": "Hub", "to": "Mobile Network" }, { "label": "", "from": "Mobile Network", "to": "Cloud Server" },
+                        { "label": "", "from": "Hub", "to": "Satellite" }, { "label": "", "from": "Satellite", "to": "Cloud Server" }
+                    ],
+                    "components": ["Cloud Server", "Sensor", "Battery (1400mAh)", "Hub", "Mobile Network", "Satellite"]
+                }
+            },
+            {
+                "id": "Config-15",
+                "attributes": {
+                    "reliability": 6,
+                    "battery life": 17,
+                    "cost": 13,
+                    "range": 9
+                },
+                "structure": {
+                    "connections": [
+                        { "label": "", "from": "Battery (1400mAh)", "to": "Sensor" },
+                        { "label": "Mesh Network [0..n]", "from": "Sensor", "to": "Hub" },
+                        { "label": "", "from": "Hub", "to": "Satellite" }, { "label": "", "from": "Satellite", "to": "Cloud Server" },
+                        { "label": "", "from": "Hub", "to": "Wired Connection" }, { "label": "", "from": "Wired Connection", "to": "Cloud Server" }
+                    ],
+                    "components": ["Cloud Server", "Sensor", "Battery (1400mAh)", "Hub", "Wired Connection", "Satellite"]
+                }
+            },
+            {
+                "id": "Config-16",
+                "attributes": {
+                    "reliability": 9,
+                    "battery life": 14,
+                    "cost": 17,
+                    "range": 12
+                },
+                "structure": {
+                    "connections": [
+                        { "label": "", "from": "Battery (1400mAh)", "to": "Sensor" },
+                        { "label": "Mesh Network [0..n]", "from": "Sensor", "to": "Hub" },
+                        { "label": "", "from": "Hub", "to": "Satellite" }, { "label": "", "from": "Satellite", "to": "Cloud Server" },
+                        { "label": "", "from": "Hub", "to": "Mobile Network" }, { "label": "", "from": "Mobile Network", "to": "Cloud Server" },
+                        { "label": "", "from": "Hub", "to": "Wired Connection" }, { "label": "", "from": "Wired Connection", "to": "Cloud Server" }
+                    ],
+                    "components": ["Cloud Server", "Sensor", "Battery (1400mAh)", "Hub", "Mobile Network", "Wired Connection", "Satellite"]
+                }
+            },
+            {
+                "id": "Config-17",
+                "attributes": {
+                    "reliability": 1,
+                    "battery life": 8,
+                    "cost": 7,
+                    "range": 9
+                },
+                "structure": {
+                    "connections": [
+                        { "label": "", "from": "Battery (1150mAh)", "to": "Sensor" },
+                        { "label": "Mesh Network [0..n]", "from": "Sensor", "to": "Hub" },
+                        { "label": "", "from": "Hub", "to": "Satellite" }, { "label": "", "from": "Satellite", "to": "Cloud Server" }
+                    ],
+                    "components": ["Cloud Server", "Sensor", "Battery (1150mAh)", "Hub", "Satellite"]
+                }
+            },
+            {
+                "id": "Config-18",
+                "attributes": {
+                    "reliability": 4,
+                    "battery life": 5,
+                    "cost": 11,
+                    "range": 12
+                },
+                "structure": {
+                    "connections": [
+                        { "label": "", "from": "Battery (1150mAh)", "to": "Sensor" },
+                        { "label": "Mesh Network [0..n]", "from": "Sensor", "to": "Hub" },
+                        { "label": "", "from": "Hub", "to": "Mobile Network" }, { "label": "", "from": "Mobile Network", "to": "Cloud Server" },
+                        { "label": "", "from": "Hub", "to": "Satellite" }, { "label": "", "from": "Satellite", "to": "Cloud Server" }
+                    ],
+                    "components": ["Cloud Server", "Sensor", "Battery (1150mAh)", "Hub", "Satellite", "Mobile Network"]
+                }
+            },
+            {
+                "id": "Config-19",
+                "attributes": {
+                    "reliability": 6,
+                    "battery life": 7,
+                    "cost": 8,
+                    "range": 9
+                },
+                "structure": {
+                    "connections": [
+                        { "label": "", "from": "Battery (1150mAh)", "to": "Sensor" },
+                        { "label": "Mesh Network [0..n]", "from": "Sensor", "to": "Hub" },
+                        { "label": "", "from": "Hub", "to": "Satellite" }, { "label": "", "from": "Satellite", "to": "Cloud Server" },
+                        { "label": "", "from": "Hub", "to": "Wired Connection" }, { "label": "", "from": "Wired Connection", "to": "Cloud Server" }
+                    ],
+                    "components": ["Cloud Server", "Sensor", "Battery (1150mAh)", "Hub", "Satellite", "Wired Connection"]
+                }
+            },
+            {
+                "id": "Config-20",
+                "attributes": {
+                    "reliability": 9,
+                    "battery life": 4,
+                    "cost": 12,
+                    "range": 12
+                },
+                "structure": {
+                    "connections": [
+                        { "label": "", "from": "Battery (1150mAh)", "to": "Sensor" },
+                        { "label": "Mesh Network [0..n]", "from": "Sensor", "to": "Hub" },
+                        { "label": "", "from": "Hub", "to": "Satellite" }, { "label": "", "from": "Satellite", "to": "Cloud Server" },
+                        { "label": "", "from": "Hub", "to": "Mobile Network" }, { "label": "", "from": "Mobile Network", "to": "Cloud Server" },
+                        { "label": "", "from": "Hub", "to": "Wired Connection" }, { "label": "", "from": "Wired Connection", "to": "Cloud Server" }
+                    ],
+                    "components": ["Cloud Server", "Sensor", "Battery (1150mAh)", "Hub", "Mobile Network", "Wired Connection", "Satellite"]
+                }
+            },
+            {
+                "id": "Config-21",
+                "attributes": {
+                    "reliability": 5,
+                    "battery life": 20,
+                    "cost": 17,
+                    "range": 5
+                },
+                "structure": {
+                    "connections": [
+                        { "label": "", "from": "Battery (1400mAh)", "to": "Sensor" },
+                        { "label": "", "from": "Sensor", "to": "Satellite" }, { "label": "", "from": "Satellite", "to": "Cloud Server" }
+                    ],
+                    "components": ["Cloud Server", "Sensor", "Battery (1400mAh)", "Satellite"]
+                }
+            },
+            {
+                "id": "Config-22",
+                "attributes": {
+                    "reliability": 8,
+                    "battery life": 17,
+                    "cost": 21,
+                    "range": 8
+                },
+                "structure": {
+                    "connections": [
+                        { "label": "", "from": "Battery (1400mAh)", "to": "Sensor" },
+                        { "label": "", "from": "Sensor", "to": "Satellite" }, { "label": "", "from": "Satellite", "to": "Cloud Server" },
+                        { "label": "", "from": "Sensor", "to": "Mobile Network" }, { "label": "", "from": "Mobile Network", "to": "Cloud Server" }
+                    ],
+                    "components": ["Cloud Server", "Sensor", "Battery (1400mAh)", "Satellite", "Mobile Network"]
+                }
+            },
+            {
+                "id": "Config-23",
+                "attributes": {
+                    "reliability": 10,
+                    "battery life": 19,
+                    "cost": 18,
+                    "range": 5
+                },
+                "structure": {
+                    "connections": [
+                        { "label": "", "from": "Battery (1400mAh)", "to": "Sensor" },
+                        { "label": "", "from": "Sensor", "to": "Wired Connection" }, { "label": "", "from": "Wired Connection", "to": "Cloud Server" },
+                        { "label": "", "from": "Sensor", "to": "Satellite" }, { "label": "", "from": "Satellite", "to": "Cloud Server" }
+                    ],
+                    "components": ["Cloud Server", "Sensor", "Battery (1400mAh)", "Wired Connection", "Satellite"]
+                }
+            },
+            {
+                "id": "Config-24",
+                "attributes": {
+                    "reliability": 13,
+                    "battery life": 16,
+                    "cost": 22,
+                    "range": 8
+                },
+                "structure": {
+                    "connections": [
+                        { "label": "", "from": "Battery (1400mAh)", "to": "Sensor" },
+                        { "label": "", "from": "Sensor", "to": "Wired Connection" }, { "label": "", "from": "Wired Connection", "to": "Cloud Server" },
+                        { "label": "", "from": "Sensor", "to": "Mobile Network" }, { "label": "", "from": "Mobile Network", "to": "Cloud Server" },
+                        { "label": "", "from": "Sensor", "to": "Satellite" }, { "label": "", "from": "Satellite", "to": "Cloud Server" }
+                    ],
+                    "components": ["Cloud Server", "Sensor", "Battery (1400mAh)", "Wired Connection", "Mobile Network", "Satellite"]
+                }
+            },
+            {
+                "id": "Config-25",
+                "attributes": {
+                    "reliability": 8,
+                    "battery life": 7,
+                    "cost": 16,
+                    "range": 8
+                },
+                "structure": {
+                    "connections": [
+                        { "label": "", "from": "Battery (1150mAh)", "to": "Sensor" },
+                        { "label": "", "from": "Sensor", "to": "Mobile Network" }, { "label": "", "from": "Mobile Network", "to": "Cloud Server" },
+                        { "label": "", "from": "Sensor", "to": "Satellite" }, { "label": "", "from": "Satellite", "to": "Cloud Server" }
+                    ],
+                    "components": ["Cloud Server", "Sensor", "Battery (1150mAh)", "Mobile Network", "Satellite"]
+                }
+            },
+            {
+                "id": "Config-26",
+                "attributes": {
+                    "reliability": 10,
+                    "battery life": 9,
+                    "cost": 13,
+                    "range": 5
+                },
+                "structure": {
+                    "connections": [
+                        { "label": "", "from": "Battery (1150mAh)", "to": "Sensor" },
+                        { "label": "", "from": "Sensor", "to": "Satellite" }, { "label": "", "from": "Satellite", "to": "Cloud Server" },
+                        { "label": "", "from": "Sensor", "to": "Wired Connection" }, { "label": "", "from": "Wired Connection", "to": "Cloud Server" }
+                    ],
+                    "components": ["Cloud Server", "Sensor", "Battery (1150mAh)", "Satellite", "Wired Connection"]
+                }
+            },
+            {
+                "id": "Config-27",
+                "attributes": {
+                    "reliability": 13,
+                    "battery life": 6,
+                    "cost": 17,
+                    "range": 8
+                },
+                "structure": {
+                    "connections": [
+                        { "label": "", "from": "Battery (1150mAh)", "to": "Sensor" },
+                        { "label": "", "from": "Sensor", "to": "Wired Connection" }, { "label": "", "from": "Wired Connection", "to": "Cloud Server" },
+                        { "label": "", "from": "Sensor", "to": "Mobile Network" }, { "label": "", "from": "Mobile Network", "to": "Cloud Server" },
+                        { "label": "", "from": "Sensor", "to": "Satellite" }, { "label": "", "from": "Satellite", "to": "Cloud Server" }
+                    ],
+                    "components": ["Cloud Server", "Sensor", "Battery (1150mAh)", "Wired Connection", "Mobile Network", "Satellite"]
+                }
+            }
+        ]
+    },
+    "reports": {
+        "data": []
+    },
+    "settings": {
+        "configurationURL": "",
+        "visualisationURL": ""
+    }
+}

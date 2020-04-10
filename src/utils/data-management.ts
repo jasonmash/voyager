@@ -1,7 +1,7 @@
 import { Store } from "vuex";
 import download from "downloadjs";
 
-import demoData from "@/assets/demo-data/tas-demo-data.json";
+import demoData from "@/assets/demo-data/voy-study-data.json";
 import Importer from "./importer";
 
 export default class DataManagement {
