@@ -38,7 +38,7 @@
 <style scoped>
   #se-toolbar {
     margin-top: 56px;
-    z-index: 1;
+    z-index: 10;
     padding-top: 12px;
     box-shadow: 0 2px 4px -2px rgba(0,0,0,0.3);
   }

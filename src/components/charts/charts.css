@@ -18,3 +18,12 @@
   margin-right: 8px;
   height: 30px;
 }
+
+.table thead th {
+  font-weight: 400 !important;
+  font-size: 0.75rem !important;
+  vertical-align: middle !important;
+  line-height: 1rem !important;
+  color: #666 !important;
+  padding-right: 1.3rem !important;
+}

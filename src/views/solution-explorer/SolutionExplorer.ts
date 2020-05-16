@@ -16,6 +16,8 @@ import ScatterChart from "@/components/charts/scatter.vue";
 import Scatter3DChart from "@/components/charts/scatter-3d.vue";
 import SurfaceChart from "@/components/charts/surface.vue";
 import MapChart from "@/components/charts/map.vue";
+import ConfigStructures from "@/components/charts/config-structures.vue";
+import ConfigComparison from "@/components/charts/config-comparison.vue";
 
 import AttributeBox from "./components/Attribute.vue";
 import ConfigurationBox from "./components/Configuration.vue";
@@ -36,6 +38,8 @@ import Toolbar from "./components/Toolbar.vue";
     ConfigurationList, Toolbar, draggable,
     "scatter3d-chart": Scatter3DChart,
     "chart-1d": Chart1D,
+    "config-structures": ConfigStructures,
+    "config-comparison": ConfigComparison,
     RadarChart, ScatterChart, SurfaceChart, MapChart
   }
 })
@@ -191,6 +195,9 @@ export default class SolutionExplorerComponent extends Vue {
    * @memberof SolutionExplorerComponent
    */
   public created() {
+    if (this.$store.getters.attributes.length === 0) {
+      this.loadDemoData();
+    }
     this.loadFilters();
   }
 

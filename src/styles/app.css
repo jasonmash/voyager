@@ -10,3 +10,7 @@ body {
 #app {
   margin-top: 60px;
 }
+
+.custom-switch .custom-control-label::after {
+  top: calc(0.25rem - 1px);
+}

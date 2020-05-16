@@ -20,9 +20,11 @@
       <configuration-list :list="list" :filters="filters" :selectedConfiguration="selectedConfiguration" @select="selectedConfiguration=$event"/>
     </div>
     <div class="solution-explorer-col s-col-3">
-      <configuration v-if="selectedConfiguration" :configuration="selectedConfiguration" @clearSelection="selectedConfiguration = null"/>
+      <transition name="slide-fade">
+        <configuration v-if="selectedConfiguration" :configuration="selectedConfiguration" @clearSelection="selectedConfiguration = null"/>
+      </transition>
 
-      <div v-else-if="chartDimensions > 0">
+      <div v-if="chartDimensions > 0" v-show="!selectedConfiguration">
         <h5 class="mb-3">Visualisations</h5>
       
         <b-tabs content-class="mt-0" no-fade lazy :key="chartDimensions">
@@ -44,8 +46,14 @@
           <b-tab title="Map" key="7" v-if="chartDimensions == 3">
             <map-chart :data="chartData"/>
           </b-tab>
-          <b-tab title="Radar" key="8" v-if="configurations.length < 10">
-            <radar-chart :data="configurations" />
+          <b-tab title="Radar" key="8" v-if="list.true.length < 10">
+            <radar-chart :data="list.true" />
+          </b-tab>
+          <b-tab title="Structures" key="9" v-if="list.true.length < 10">
+            <config-structures :data="list.true" />
+          </b-tab>
+          <b-tab title="Comparison" key="10" v-if="list.true.length < 10">
+            <config-comparison :data="list" />
           </b-tab>
         </b-tabs>
       </div>
