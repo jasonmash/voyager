@@ -56,6 +56,7 @@ export default class ConfigComparison extends Vue {
     if (!this.showOptimalOnly) {
       configurations = configurations.concat(this.data.false);
     }
+    configurations = configurations.filter((c) => !!c);
 
     let allComponents: string[] = [];
     const allAttributes: string[] = this.attributes

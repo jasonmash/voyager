@@ -52,7 +52,7 @@
           <b-tab title="Structures" key="9" v-if="list.true.length < 10">
             <config-structures :data="list.true" />
           </b-tab>
-          <b-tab title="Comparison" key="10" v-if="list.true.length < 10">
+          <b-tab title="Comparison" key="10">
             <config-comparison :data="list" />
           </b-tab>
         </b-tabs>
