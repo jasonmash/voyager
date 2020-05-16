@@ -3,13 +3,12 @@
     <b-col>
       <div class="float-right pb-2">
         <b-form-checkbox v-model="showOptimalOnly" switch class="d-inline-block mr-3">
-          Show optimal configurations only
+          Optimal configurations only
         </b-form-checkbox>
         <b-form-checkbox v-model="showDifferencesOnly" switch class="d-inline-block">
-          Show differences only
+          Structural differences only
         </b-form-checkbox>
       </div>
-      <h6>Comparison Table</h6>
       <b-table :items="chartData.items" small :fields="chartData.fields" responsive>
         <template v-slot:cell()="data">
           <i v-if="data.value === true" class="fa fa-fw fa-check text-success"></i>
