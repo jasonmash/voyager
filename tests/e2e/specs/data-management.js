@@ -48,6 +48,7 @@ describe('Data Management', () => {
 
   it('Allows importing a previously exported file', () => {
     cy.visit('/');
+    cy.contains('Reset').click();
     cy.contains('Import').click();
     cy.uploadFile("example_export.json", '#fileinput[type="file"]');
     cy.get('#fileinput[type="file"]').trigger('change', { force: true });
@@ -85,14 +86,15 @@ describe('Data Management', () => {
 
   it('Allows loading example data', () => {
     cy.visit('/');
+    cy.contains('Reset').click();
     cy.contains("Cost").should('not.exist');
     cy.contains("Response Time").should('not.exist');
 
     cy.contains('load some example data').click();
 
     cy.contains("Cost").should('exist');
-    cy.contains("Response Time").should('exist');
-    cy.contains("Reliability").should('exist');
+    cy.contains("Range").should('exist');
+    cy.contains("Battery Life").should('exist');
     cy.contains("Config-1").should('exist');
     cy.contains("Config-2").should('exist');
   });

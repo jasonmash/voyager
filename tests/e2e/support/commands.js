@@ -69,6 +69,7 @@ function b64toBlob(b64Data, contentType, sliceSize) {
 
 Cypress.Commands.add('loadCsvData', () => {
     cy.visit('/');
+    cy.contains('Reset').click();
     cy.contains('Import').click();
     cy.uploadFile("example.csv", '#fileinput[type="file"]');
     cy.get('#fileinput[type="file"]').trigger('change', { force: true });

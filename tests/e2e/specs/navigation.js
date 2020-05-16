@@ -8,6 +8,7 @@ describe('Navigation', () => {
 
   it('Visits the solution explorer page', () => {
     cy.visit('/');
+    cy.contains('Reset').click()
     cy.contains('h1', 'Solution Explorer');
     cy.contains('h4', 'Getting started');
   });
