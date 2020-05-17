@@ -3,7 +3,7 @@
     <button type="button" aria-label="Close" class="close text-dark float-left mr-2" @click="$emit('clearSelection')"><svg viewBox="0 0 16 16" width="1em" height="1em" focusable="false" role="img" alt="icon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi-x b-icon bi"><g><path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 010 .708l-7 7a.5.5 0 01-.708-.708l7-7a.5.5 0 01.708 0z" clip-rule="evenodd"></path><path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 000 .708l7 7a.5.5 0 00.708-.708l-7-7a.5.5 0 00-.708 0z" clip-rule="evenodd"></path></g></svg></button>
     <h5 class="mb-3">{{configuration.id}}</h5>
 
-    <b-tabs>
+    <b-tabs lazy>
       <b-tab title="Attributes" key="0" class="tab-style p-0">
         <b-row>
           <b-col sm="6" class="pt-2">
