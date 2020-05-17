@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts">
-import { Prop, Component, Vue } from "vue-property-decorator";
+import { Prop, Component, Vue, Watch } from "vue-property-decorator";
 import { Attribute } from "@/models/attribute";
 import { Section } from "@/models/report";
 import { Configuration } from "@/models/configuration";
@@ -32,6 +32,18 @@ export default class ConfigStructures extends Vue {
   // ChartData object, with all info required to render chart
   @Prop(Array) public readonly data!: Configuration[];
 
+  // Flag indicating if chart is currently updating, used for limiting update rate
+  public isUpdating = false;
+
+  public chartData: any = [];
+
+  /**
+   * Load chart data when mounted in UI
+   */
+  public mounted() {
+    this.updateChartData();
+  }
+
   /**
    * List of attributes from store, used for chart labels
    */
@@ -40,9 +52,24 @@ export default class ConfigStructures extends Vue {
   }
 
   /**
+   * Watch for changes to the input data
+   */
+  @Watch("data")
+  public onDataUpdate() {
+    if (this.isUpdating) { return; }
+    this.isUpdating = true;
+
+    // Update after 100ms to reduce number of expensive ui redraws
+    setTimeout(() => {
+      this.updateChartData();
+      this.isUpdating = false;
+    }, 250);
+  }
+
+  /**
    * Getter for chartData object in echarts format
    */
-  get chartData() {
+  public updateChartData() {
 
     const result = this.data.map((config: Configuration) => {
       const data = config.structure.components.map((c) => {
@@ -105,7 +132,8 @@ export default class ConfigStructures extends Vue {
         }]
       };
     });
-    return result;
+
+    this.chartData = result;
   }
 }
 </script>

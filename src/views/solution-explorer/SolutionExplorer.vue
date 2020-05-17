@@ -46,10 +46,10 @@
           <b-tab title="Map" key="7" v-if="chartDimensions == 3">
             <map-chart :data="chartData"/>
           </b-tab>
-          <b-tab title="Radar" key="8" v-if="!!list.true && list.true.length < 7">
+          <b-tab title="Radar" key="8" v-if="!!list.true && list.true.length <= 8">
             <radar-chart :data="list.true" />
           </b-tab>
-          <b-tab title="Structures" key="9" v-if="!!list.true && list.true.length < 7">
+          <b-tab title="Structures" key="9" v-if="!!list.true && list.true.length <= 12">
             <config-structures :data="list.true" />
           </b-tab>
           <b-tab title="Comparison" key="10">
