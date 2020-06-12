@@ -79,7 +79,9 @@ export default class SolutionExplorerComponent extends Vue {
       filters.forEach((filter) => {
         if (filter.isFiltered) {
           const val = item.attributes[filter.key];
-          if (val && (val > filter.filterMaxValue || val < filter.filterMinValue)) { validAttributes = false; }
+          if (val !== undefined && (val > filter.filterMaxValue || val < filter.filterMinValue)) {
+            validAttributes = false;
+          }
         }
       });
       return validAttributes;
