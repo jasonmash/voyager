@@ -6,6 +6,8 @@
   A hosted version of the Voyager tool can be found here: [https://jasonmash.github.io/voyager](https://jasonmash.github.io/voyager)
   
   A video demonstration can be found on YouTube at the following link: [https://www.youtube.com/watch?v=eyIniJblsPo](https://www.youtube.com/watch?v=eyIniJblsPo)
+
+  The data collected during our user study comparing Voyager to the ClaferMoo Visualizer tool can be found in `user-study-results.csv` within this repository.
  
 
 [![Build Status](https://dev.azure.com/jasonmash/voyager/_apis/build/status/jasonmash.voyager?branchName=master)](https://dev.azure.com/jasonmash/voyager/_build/latest?definitionId=4&branchName=master)
