@@ -58,9 +58,9 @@ export default class ConfigComparison extends Vue {
     configurations = configurations.filter((c) => !!c);
 
     let allComponents: string[] = [];
-    const allAttributes: string[] = this.attributes
-      .filter((a) => a.isFiltered).map((a) => a.key)
-      .sort((a, b) => a.localeCompare(b));
+    const allAttributes: Attribute[] = this.attributes
+      .filter((a) => a.isFiltered)
+      .sort((a, b) => a.friendlyName.localeCompare(b.friendlyName));
 
     configurations.forEach((config: Configuration) => {
       config.structure.components.forEach((c) => {
@@ -76,13 +76,13 @@ export default class ConfigComparison extends Vue {
       allComponents.map((c: string) => {
         r[c] = !!config.structure.components.includes(c);
       });
-      allAttributes.forEach((key) => {
-        r[key] = config.attributes[key];
+      allAttributes.forEach((attr) => {
+        r[attr.key] = config.attributes[attr.key];
       });
       return r;
     });
 
-    const fields = [
+    const fields: any[] = [
       { key: "configuration", sortable: true }
     ];
     allComponents.forEach((c: string) => {
@@ -94,7 +94,12 @@ export default class ConfigComparison extends Vue {
         fields.push({ key: c, sortable: true });
       }
     });
-    allAttributes.forEach((c: string) => fields.push({ key: c, sortable: true }));
+    allAttributes.forEach((c: Attribute) => fields.push({
+      key: c.key,
+      label: c.friendlyName,
+      sortable: true,
+      tdClass: "text-right number-text"
+    }));
 
     return {
       fields,
