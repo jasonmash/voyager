@@ -14,7 +14,7 @@
     "@fortawesome/fontawesome-free": "^5.13.0",
     "@types/downloadjs": "^1.4.1",
     "@types/lodash": "^4.14.149",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bootstrap": "^4.5.0",
     "bootstrap-vue": "^2.14.0",
     "core-js": "^3.6.4",
